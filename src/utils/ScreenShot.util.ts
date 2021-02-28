@@ -3,7 +3,7 @@ import { NativeModules, NativeEventEmitter, EventEmitter } from 'react-native';
 let screenCaptureEmitter: EventEmitter | undefined;
 const EVENT = 'ScreenshotTaken';
 
-export default class ScreenShotShareUtil {
+export class ScreenShot {
   static startListener(callback: Function) {
     const FeedbackReporter = NativeModules.FeedbackReporter;
 

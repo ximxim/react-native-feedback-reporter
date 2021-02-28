@@ -1,7 +1,9 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Modal, View, Image, Text } from 'react-native';
+import { ThemeProvider } from 'styled-components';
 
-import ScreenShot from './ScreenShot.util';
+import { ScreenShot } from './utils';
+import { theme } from './theme';
 
 interface IOptional {
   defaultValue?: string;
@@ -70,17 +72,19 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporter> = ({
   );
 
   return (
-    <View>
-      <Modal
-        visible={isModalOpen}
-        presentationStyle="formSheet"
-        onDismiss={() => setIsModalOpen(false)}
-        onRequestClose={() => setIsModalOpen(false)}
-      >
-        <Text>Wanna talk about it?</Text>
-        {ScreenShotImage}
-      </Modal>
-    </View>
+    <ThemeProvider theme={theme.base}>
+      <View>
+        <Modal
+          visible={isModalOpen}
+          presentationStyle="formSheet"
+          onDismiss={() => setIsModalOpen(false)}
+          onRequestClose={() => setIsModalOpen(false)}
+        >
+          <Text>Wanna talk about it?</Text>
+          {ScreenShotImage}
+        </Modal>
+      </View>
+    </ThemeProvider>
   );
 };
 
