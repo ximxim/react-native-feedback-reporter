@@ -4,15 +4,12 @@ import { StyleSheet, View, Text } from 'react-native';
 import FeedbackReporter from 'react-native-feedback-reporter';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    FeedbackReporter.multiply(3, 7).then(setResult);
-  }, []);
+  const [result] = React.useState<number | undefined>();
 
   return (
     <View style={styles.container}>
       <Text>Result: {result}</Text>
+      <FeedbackReporter isEnabled />
     </View>
   );
 }
