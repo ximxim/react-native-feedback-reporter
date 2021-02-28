@@ -2,8 +2,9 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Modal, View, Image, Text } from 'react-native';
 import { ThemeProvider } from 'styled-components';
 
-import { ScreenShot } from './utils';
 import { theme } from './theme';
+import { ScreenShot } from './utils';
+import { DropListPicker } from './components';
 
 interface IOptional {
   defaultValue?: string;
@@ -72,16 +73,24 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporter> = ({
   );
 
   return (
-    <ThemeProvider theme={theme.base}>
+    <ThemeProvider theme={theme.dark}>
       <View>
         <Modal
           visible={isModalOpen}
-          presentationStyle="formSheet"
+          presentationStyle="fullScreen"
           onDismiss={() => setIsModalOpen(false)}
           onRequestClose={() => setIsModalOpen(false)}
         >
           <Text>Wanna talk about it?</Text>
           {ScreenShotImage}
+          <DropListPicker
+            options={[
+              { key: 'one', value: 'One' },
+              { key: 'two', value: 'Two' },
+              { key: 'three', value: 'Three' },
+            ]}
+            onChange={console.log}
+          />
         </Modal>
       </View>
     </ThemeProvider>
