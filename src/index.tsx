@@ -6,6 +6,8 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 
 import { theme } from './theme';
 import { ScreenShot } from './utils';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 import {
   ReportForm,
   IReportFormValues,
@@ -13,6 +15,8 @@ import {
   GlobalProps,
   IGlobalProps,
 } from './components';
+
+const queryClient = new QueryClient();
 
 const FeedbackReporter: FunctionComponent<IGlobalProps> = ({ isEnabled }) => {
   const formProps = useForm<IReportFormValues>({
@@ -39,20 +43,22 @@ const FeedbackReporter: FunctionComponent<IGlobalProps> = ({ isEnabled }) => {
   }, [isEnabled]);
 
   return (
-    <GlobalProps.Provider value={{ isEnabled: true }}>
-      <ThemeProvider theme={theme.dark}>
-        <View>
-          <Modal
-            visible={isModalOpen}
-            presentationStyle="fullScreen"
-            onDismiss={() => setIsModalOpen(false)}
-            onRequestClose={() => setIsModalOpen(false)}
-          >
-            <ReportForm {...formProps} />
-          </Modal>
-        </View>
-      </ThemeProvider>
-    </GlobalProps.Provider>
+    <QueryClientProvider client={queryClient}>
+      <GlobalProps.Provider value={{ isEnabled }}>
+        <ThemeProvider theme={theme.dark}>
+          <View>
+            <Modal
+              visible={isModalOpen}
+              presentationStyle="fullScreen"
+              onDismiss={() => setIsModalOpen(false)}
+              onRequestClose={() => setIsModalOpen(false)}
+            >
+              <ReportForm {...formProps} />
+            </Modal>
+          </View>
+        </ThemeProvider>
+      </GlobalProps.Provider>
+    </QueryClientProvider>
   );
 };
 

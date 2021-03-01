@@ -1,38 +1,20 @@
-import { View, Image, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import React, { FunctionComponent } from 'react';
 
 import type { IReportFormProps } from './ReportForm.types';
+import { ProjectSelector, IssueTypeSelector } from './components';
 
-import { DropListPicker } from '../../data';
+import { ScreenshotPreview } from '../../ui';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   getValues,
 }) => {
-  const ScreenShotImage = (
-    <Image
-      source={{ uri: `data:image/png;base64,${getValues('uri')}` }}
-      style={{
-        resizeMode: 'contain',
-        borderWidth: 1,
-        borderColor: 'red',
-        width: 250,
-        height: 500,
-      }}
-    />
-  );
-
   return (
     <View>
       <Text>Wanna talk about it?</Text>
-      {ScreenShotImage}
-      <DropListPicker
-        options={[
-          { key: 'one', value: 'One' },
-          { key: 'two', value: 'Two' },
-          { key: 'three', value: 'Three' },
-        ]}
-        onChange={console.log}
-      />
+      <ScreenshotPreview uri={`data:image/png;base64,${getValues('uri')}`} />
+      <ProjectSelector />
+      <IssueTypeSelector />
     </View>
   );
 };
