@@ -25,9 +25,9 @@ export const IconWrapper = styled.View`
   justify-content: center;
 `;
 
-export const Icon = styled.View`
-  color: ${({ theme }) => theme.colors.brandSecondary};
-`;
+// export const Icon = styled(MaterialIcon)`
+//   color: ${({ theme }) => theme.colors.brandSecondary};
+// `;
 
 export const IconPulse = styled(Animated.View)`
   width: 1px;
