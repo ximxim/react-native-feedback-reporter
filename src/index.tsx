@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { ThemeProvider } from 'styled-components';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,6 +20,12 @@ import {
 const queryClient = new QueryClient();
 
 const FeedbackReporter: FunctionComponent<IGlobalProps> = ({ isEnabled }) => {
+  // TODO: use props to set these headers
+  axios.defaults.headers.common = {
+    Accept: 'application/json',
+    Authorization:
+      'Basic YXppbS5haG1lZDdAZ21haWwuY29tOjJyRUtraGlpdDN4M2tnR0FwWGVQOTQ5NQ==',
+  };
   const formProps = useForm<IReportFormValues>({
     resolver: yupResolver(ReportFormValidation),
     reValidateMode: 'onChange',

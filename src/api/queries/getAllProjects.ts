@@ -21,12 +21,5 @@ export interface IAllProjectsResponse {
 
 export const getAllProjects = () =>
   axios.get<IAllProjectsResponse[]>(
-    'https://ximxim.atlassian.net/rest/api/3/project',
-    {
-      headers: {
-        Accept: 'application/json',
-        Authorization:
-          'Basic YXppbS5haG1lZDdAZ21haWwuY29tOjJyRUtraGlpdDN4M2tnR0FwWGVQOTQ5NQ==',
-      },
-    }
+    'https://ximxim.atlassian.net/rest/api/3/project'
   );
