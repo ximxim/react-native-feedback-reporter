@@ -44,7 +44,6 @@ const FeedbackReporter: FunctionComponent<IGlobalProps> = ({ isEnabled }) => {
     ScreenShot.startListener((res?: { uri: string; code: number }) => {
       if (res?.code === 200) {
         setIsModalOpen(true);
-        console.log(res);
         formProps.setValue('uri', res.uri);
       }
     });

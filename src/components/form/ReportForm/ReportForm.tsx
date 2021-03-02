@@ -8,11 +8,11 @@ import { ScreenshotPreview } from '../../ui';
 import { TextInput } from '../../data';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
-  getValues,
   register,
   unregister,
   errors,
   setValue,
+  watch,
 }) => {
   useEffect(() => {
     register({ name: 'stepsToRecreate' });
@@ -29,10 +29,12 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       ]);
   }, [register]);
 
+  console.log(`data:image/png;base64,${watch('uri')}`);
+
   return (
     <ScrollView>
       <Text>Wanna talk about it?</Text>
-      <ScreenshotPreview uri={`data:image/png;base64,${getValues('uri')}`} />
+      <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
       <TextInput
         multiline
         label="Steps to recreate"
