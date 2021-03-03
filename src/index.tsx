@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Modal, TouchableOpacity, Text } from 'react-native';
+import { Modal } from 'react-native';
 import { useForm, FormProvider } from 'react-hook-form';
 import { ThemeProvider } from 'styled-components';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -61,15 +61,11 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
           <Modal
             visible={isModalOpen}
             animationType="slide"
-            presentationStyle="pageSheet"
             onDismiss={handleClose}
             onRequestClose={handleClose}
           >
-            <TouchableOpacity onPress={handleClose}>
-              <Text>Close</Text>
-            </TouchableOpacity>
             <FormProvider {...formProps}>
-              <ReportForm />
+              <ReportForm {...{ handleClose }} />
             </FormProvider>
           </Modal>
         </ThemeProvider>

@@ -6,15 +6,13 @@ import type { IReportFormValues } from '../../ReportForm.types';
 import { TextInput } from '../../../../data';
 
 export const StepsToRecreate: FunctionComponent<unknown> = () => {
-  const { setValue, errors } = useFormContext<IReportFormValues>();
+  const { watch, errors } = useFormContext<IReportFormValues>();
 
   return (
     <TextInput
       multiline
       label="Steps to recreate"
-      onChangeText={(text) =>
-        setValue('stepsToRecreate', text, { shouldValidate: false })
-      }
+      onChangeText={(text) => watch('stepsToRecreate', text)}
       error={errors.stepsToRecreate?.message as string}
     />
   );

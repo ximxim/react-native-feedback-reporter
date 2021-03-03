@@ -1,4 +1,6 @@
-export interface IReportFormProps {}
+export interface IReportFormProps {
+  handleClose: () => void;
+}
 
 export interface IReportFormValues {
   uri: string;

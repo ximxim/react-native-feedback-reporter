@@ -1,10 +1,11 @@
+import { Animated } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
-import { TouchableOpacity, Animated } from 'react-native';
 
 import * as Styled from './DropListPicker.style';
 import type { IDropListPickerProps } from './DropListPicker.types';
 
 import { RadioButton } from '../RadioButton';
+import { ModalHeader } from '../../ui';
 
 export const DropListPicker = ({
   label,
@@ -102,18 +103,6 @@ export const DropListPicker = ({
     </Styled.Wrapper>
   );
 
-  const ModalHeader = (
-    <Styled.ModalHeader>
-      <TouchableOpacity onPress={() => handleBlur(true)}>
-        <Styled.Close>Clear</Styled.Close>
-      </TouchableOpacity>
-      <Styled.ModalHeading>{placehoder}</Styled.ModalHeading>
-      <TouchableOpacity onPress={() => handleBlur(false)}>
-        <Styled.Close>Select</Styled.Close>
-      </TouchableOpacity>
-    </Styled.ModalHeader>
-  );
-
   const Modal = (
     <Styled.Modal
       transparent
@@ -122,7 +111,11 @@ export const DropListPicker = ({
       presentationStyle="overFullScreen"
     >
       <Styled.ModalWrapper>
-        {ModalHeader}
+        <ModalHeader
+          left={{ label: 'Clear', onPress: () => handleBlur(true) }}
+          heading={placehoder || 'Select One'}
+          right={{ label: 'Select', onPress: () => handleBlur(true) }}
+        />
         <Styled.OptionsWrapper>
           <Styled.SearchInput
             autoFocus

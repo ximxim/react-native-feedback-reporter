@@ -13,10 +13,16 @@ import {
   Version,
 } from './components';
 
-import { ScreenshotPreview, Typography } from '../../ui';
+import { ScreenshotPreview, ModalHeader } from '../../ui';
 
-export const ReportForm: FunctionComponent<IReportFormProps> = () => {
-  const { register, unregister, watch } = useFormContext<IReportFormValues>();
+export const ReportForm: FunctionComponent<IReportFormProps> = ({
+  handleClose,
+}) => {
+  const {
+    register,
+    unregister,
+    watch,
+  } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
     register({ name: 'stepsToRecreate' });
@@ -36,9 +42,10 @@ export const ReportForm: FunctionComponent<IReportFormProps> = () => {
   return (
     <Styled.Wrapper>
       <KeyboardAvoidingScrollView>
-        <Typography variant="h1" textAlign="center">
-          Wanna talk about it?
-        </Typography>
+        <ModalHeader
+          heading={'Wanna talk about it?'}
+          right={{ label: 'Close', onPress: handleClose }}
+        />
 
         <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
         <StepsToRecreate />
