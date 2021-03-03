@@ -18,11 +18,7 @@ import { ScreenshotPreview, ModalHeader } from '../../ui';
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
-  const {
-    register,
-    unregister,
-    watch,
-  } = useFormContext<IReportFormValues>();
+  const { register, unregister, watch } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
     register({ name: 'stepsToRecreate' });
