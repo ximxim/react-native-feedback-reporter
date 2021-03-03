@@ -33,7 +33,7 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
     resolver: yupResolver(ReportFormValidation),
     reValidateMode: 'onChange',
     defaultValues: {
-      project: 'AP'
+      project: 'AP',
     },
   });
   const [isModalOpen, setIsModalOpen] = useState(false);

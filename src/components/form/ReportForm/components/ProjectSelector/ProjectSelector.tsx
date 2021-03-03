@@ -23,7 +23,7 @@ export const ProjectSelector: FunctionComponent<IProjectSelectorProps> = ({}) =>
         value: project.name,
       }))}
       value={getValues('project')}
-      onChange={val => setValue('project', val)}
+      onChange={(val) => setValue('project', val)}
     />
   );
 };
