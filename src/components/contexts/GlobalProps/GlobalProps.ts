@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
-import type { IGlobalProps } from './GlobalProps.types';
+import type { IFeedbackReporterProps } from './GlobalProps.types';
 
-export const GlobalProps = createContext<IGlobalProps>({
-  isEnabled: true,
+export const GlobalProps = createContext<IFeedbackReporterProps>({
+  mode: 'onScreenShot',
 });

@@ -2,8 +2,8 @@ interface IOptional {
   defaultValue?: string;
   isVisible?: boolean;
 }
-export interface IGlobalProps {
-  isEnabled?: boolean;
+export interface IFeedbackReporterProps {
+  mode?: 'onScreenShot';
   /**
    * Project field props
    */
