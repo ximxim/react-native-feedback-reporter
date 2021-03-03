@@ -25,9 +25,18 @@ export const IconWrapper = styled.View`
   justify-content: center;
 `;
 
-// export const Icon = styled(MaterialIcon)`
-//   color: ${({ theme }) => theme.colors.brandSecondary};
-// `;
+export const Icon = styled.View<{ isSelected: boolean }>`
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: ${({ theme, isSelected }) =>
+    isSelected ? theme.colors.brandPrimary : theme.colors.brandSecondary};
+  background-color: ${({ theme, isSelected }) =>
+    isSelected ? theme.colors.brandSecondary : 'transparent'};
+  box-shadow: ${({ theme, isSelected }) =>
+    `0px 0px ${isSelected ? 2 : 0}px ${theme.colors.brandSecondary}`};
+`;
 
 export const IconPulse = styled(Animated.View)`
   width: 1px;

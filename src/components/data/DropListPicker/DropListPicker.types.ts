@@ -10,7 +10,7 @@ interface DropListTriggerProps {
 }
 
 export interface IDropListPickerProps extends TouchableOpacityProps {
-  value?: string;
+  defaultValue?: string;
   label?: string;
   error?: string;
   placehoder?: string;

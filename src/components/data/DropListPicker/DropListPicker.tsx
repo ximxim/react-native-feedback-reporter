@@ -10,22 +10,22 @@ import { ModalHeader } from '../../ui';
 export const DropListPicker = ({
   label,
   error,
-  value,
   onBlur,
   options,
   onFocus,
   children,
   onChange,
   placehoder,
+  defaultValue,
   searchInputProps,
   ...otherTouchableOpacityProps
 }: IDropListPickerProps) => {
-  const [keySelected, setKeySelected] = useState<string>('');
+  const [keySelected, setKeySelected] = useState<string>(defaultValue || '');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
   const translateY = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(1)).current;
-  const hasValue = !!keySelected || !!value;
+  const hasValue = !!keySelected;
   const hasError = !!error;
 
   const duration = 150;
@@ -58,7 +58,7 @@ export const DropListPicker = ({
   };
 
   const handleBlur = (reset?: boolean) => {
-    const val = reset ? '' : keySelected || value;
+    const val = reset ? '' : keySelected;
     setSearch('');
     setKeySelected(val || '');
     if (!val) {
@@ -79,10 +79,6 @@ export const DropListPicker = ({
   }, [keySelected]);
 
   useEffect(() => {
-    setKeySelected(value || '');
-  }, [value]);
-
-  useEffect(() => {
     const first = options.filter((o) =>
       o.value.toLowerCase().includes(search.toLowerCase())
     )[0];
@@ -98,7 +94,7 @@ export const DropListPicker = ({
         <Styled.Label {...{ hasError, isFocused }}>{label}</Styled.Label>
       </Styled.LabelWrapper>
       <Styled.Value hasValue={hasValue}>
-        {options.find((option) => option.key === (keySelected || value))?.value}
+        {options.find((option) => option.key === keySelected)?.value}
       </Styled.Value>
     </Styled.Wrapper>
   );
@@ -126,7 +122,7 @@ export const DropListPicker = ({
             {...searchInputProps}
           />
           <RadioButton
-            value={keySelected || value || ''}
+            value={keySelected || ''}
             onChange={setKeySelected}
             options={options.filter((o) =>
               o.value.toLowerCase().includes(search.toLowerCase())

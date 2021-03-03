@@ -78,10 +78,7 @@ export const RadioButton: FunctionComponent<IRadioButtonPickerProps> = ({
         onPress={(event) => handlePress(event, key, onPress)}
       >
         <Styled.IconWrapper>
-          {/* <Styled.Icon
-            name={isSelected ? 'radio-button-checked' : 'radio-button-unchecked'}
-            size={16}
-          /> */}
+          <Styled.Icon {...{ isSelected }} />
           {isSelected && (
             <Styled.IconPulse
               style={{

@@ -22,7 +22,8 @@ export const ProjectSelector: FunctionComponent<IProjectSelectorProps> = ({}) =>
         key: project.id,
         value: project.name,
       }))}
-      value={getValues('project')}
+      label="Project"
+      defaultValue={getValues('project')}
       onChange={(val) => setValue('project', val)}
     />
   );

@@ -39,12 +39,12 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   return (
     <Styled.Wrapper>
-      <KeyboardAvoidingScrollView stickyFooter={Submit}>
-        <ModalHeader
-          heading={'Wanna talk about it?'}
-          right={{ label: 'Close', onPress: handleClose }}
-        />
+      <ModalHeader
+        heading={'Wanna talk about it?'}
+        right={{ label: 'Close', onPress: handleClose }}
+      />
 
+      <KeyboardAvoidingScrollView stickyFooter={Submit}>
         <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
         <Description />
 
