@@ -110,7 +110,7 @@ export const DropListPicker = ({
         <ModalHeader
           left={{ label: 'Clear', onPress: () => handleBlur(true) }}
           heading={placehoder || 'Select One'}
-          right={{ label: 'Select', onPress: () => handleBlur(true) }}
+          right={{ label: 'Select', onPress: () => handleBlur(false) }}
         />
         <Styled.OptionsWrapper>
           <Styled.SearchInput

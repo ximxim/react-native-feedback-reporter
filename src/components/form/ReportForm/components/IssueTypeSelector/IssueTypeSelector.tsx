@@ -7,10 +7,13 @@ import type { IReportFormValues } from '../../ReportForm.types';
 
 import { DropListPicker } from '../../../../data';
 import { getAllIssueTypes } from '../../../../../api';
+import { compare } from '../../../../../utils';
 
 export const IssueTypeSelector: FunctionComponent<IIssueTypeSelectorProps> = ({}) => {
   const { data, isLoading } = useQuery('issueTypes', getAllIssueTypes);
   const { setValue, getValues } = useFormContext<IReportFormValues>();
+
+  console.log(data);
 
   if (isLoading || !data) return null;
 
@@ -21,8 +24,13 @@ export const IssueTypeSelector: FunctionComponent<IIssueTypeSelectorProps> = ({}
         value: issueType.name,
       }))}
       label="Issue Type"
-      defaultValue={getValues('project')}
-      onChange={(val) => setValue('project', val)}
+      defaultValue={
+        data.data.find((issueType) => {
+          const val = getValues('issueType') || '';
+          return compare(issueType.name, val) || compare(issueType.id, val);
+        })?.id
+      }
+      onChange={(val) => setValue('issueType', val)}
     />
   );
 };
