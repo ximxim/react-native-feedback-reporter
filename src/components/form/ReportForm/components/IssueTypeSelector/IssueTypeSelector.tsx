@@ -13,8 +13,6 @@ export const IssueTypeSelector: FunctionComponent<IIssueTypeSelectorProps> = ({}
   const { data, isLoading } = useQuery('issueTypes', getAllIssueTypes);
   const { setValue, getValues } = useFormContext<IReportFormValues>();
 
-  console.log(data);
-
   if (isLoading || !data) return null;
 
   return (
