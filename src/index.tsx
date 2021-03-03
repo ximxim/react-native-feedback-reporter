@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { Modal } from 'react-native';
-import { useForm } from 'react-hook-form';
+import { Modal, TouchableOpacity, Text } from 'react-native';
+import { useForm, FormProvider } from 'react-hook-form';
 import { ThemeProvider } from 'styled-components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { FunctionComponent, useEffect, useState } from 'react';
@@ -52,6 +52,8 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
     });
   }, [mode]);
 
+  const handleClose = () => setIsModalOpen(false);
+
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalProps.Provider value={{ mode, ...rest }}>
@@ -60,10 +62,15 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
             visible={isModalOpen}
             animationType="slide"
             presentationStyle="pageSheet"
-            onDismiss={() => setIsModalOpen(false)}
-            onRequestClose={() => setIsModalOpen(false)}
+            onDismiss={handleClose}
+            onRequestClose={handleClose}
           >
-            <ReportForm {...formProps} />
+            <TouchableOpacity onPress={handleClose}>
+              <Text>Close</Text>
+            </TouchableOpacity>
+            <FormProvider {...formProps}>
+              <ReportForm />
+            </FormProvider>
           </Modal>
         </ThemeProvider>
       </GlobalProps.Provider>
