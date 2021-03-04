@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Modal } from 'react-native';
 import { useForm, FormProvider } from 'react-hook-form';
 import { ThemeProvider } from 'styled-components';
@@ -7,6 +6,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 
 import { theme } from './theme';
 import { ScreenShot } from './utils';
+import { initIntegrations } from './integrations';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
@@ -21,14 +21,16 @@ const queryClient = new QueryClient();
 
 const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   mode = 'onScreenShot',
-  ...rest
+  ...props
 }) => {
+  initIntegrations(props);
+
   // TODO: use props to set these headers
-  axios.defaults.headers.common = {
-    Accept: 'application/json',
-    Authorization:
-      'Basic YXppbS5haG1lZDdAZ21haWwuY29tOjJyRUtraGlpdDN4M2tnR0FwWGVQOTQ5NQ==',
-  };
+  // axios.defaults.headers.common = {
+  //   Accept: 'application/json',
+  //   Authorization:
+  //     'Basic YXppbS5haG1lZDdAZ21haWwuY29tOjJyRUtraGlpdDN4M2tnR0FwWGVQOTQ5NQ==',
+  // };
   const formProps = useForm<IReportFormValues>({
     resolver: yupResolver(ReportFormValidation),
     reValidateMode: 'onChange',
@@ -59,7 +61,7 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GlobalProps.Provider value={{ mode, ...rest }}>
+      <GlobalProps.Provider value={{ mode, ...props }}>
         <ThemeProvider theme={theme.dark}>
           <Modal
             visible={isModalOpen}

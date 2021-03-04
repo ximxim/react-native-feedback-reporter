@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { JIRAApi } from '../JIRAApi.service';
 
 export interface IAllProjectsResponse {
   expand: string;
@@ -19,7 +19,5 @@ export interface IAllProjectsResponse {
   properties: object;
 }
 
-export const getAllProjects = () =>
-  axios.get<IAllProjectsResponse[]>(
-    'https://ximxim.atlassian.net/rest/api/3/project'
-  );
+export const getJIRAProjects = () =>
+  JIRAApi.get<IAllProjectsResponse[]>('3/project');

@@ -9,7 +9,12 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text>Result: {result}</Text>
-      <FeedbackReporter />
+      <FeedbackReporter
+        jira={{
+          username: 'azim.ahmed7@gmail.com',
+          token: '2rEKkhiit3x3kgGApXeP9495',
+        }}
+      />
     </View>
   );
 }

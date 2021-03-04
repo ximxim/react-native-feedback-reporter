@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { JIRAApi } from '../JIRAApi.service';
 
 export interface IAllIssueTypesResponse {
   self: string;
@@ -11,7 +11,5 @@ export interface IAllIssueTypesResponse {
   avatarId: number;
 }
 
-export const getAllIssueTypes = () =>
-  axios.get<IAllIssueTypesResponse[]>(
-    'https://ximxim.atlassian.net/rest/api/3/issuetype'
-  );
+export const getJIRAIssueTypes = () =>
+  JIRAApi.get<IAllIssueTypesResponse[]>('3/issuetype');

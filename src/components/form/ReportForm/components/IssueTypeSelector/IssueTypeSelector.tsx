@@ -5,12 +5,12 @@ import { useFormContext } from 'react-hook-form';
 import type { IIssueTypeSelectorProps } from './IssueTypeSelector.types';
 import type { IReportFormValues } from '../../ReportForm.types';
 
-import { DropListPicker } from '../../../../data';
-import { getAllIssueTypes } from '../../../../../api';
 import { compare } from '../../../../../utils';
+import { DropListPicker } from '../../../../data';
+import { getJIRAIssueTypes } from '../../../../../integrations';
 
 export const IssueTypeSelector: FunctionComponent<IIssueTypeSelectorProps> = ({}) => {
-  const { data, isLoading } = useQuery('issueTypes', getAllIssueTypes);
+  const { data, isLoading } = useQuery('issueTypes', getJIRAIssueTypes);
   const { setValue, getValues } = useFormContext<IReportFormValues>();
 
   if (isLoading || !data) return null;

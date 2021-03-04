@@ -1,36 +1,29 @@
+import type { JIRAIntegrationProps } from '../../../integrations';
+
 interface IOptional {
   defaultValue?: string;
   isVisible?: boolean;
 }
 export interface IFeedbackReporterProps {
   mode?: 'onScreenShot';
-  /**
-   * Project field props
-   */
-  projectField?: IOptional;
-
-  /**
-   * Issue type field props
-   */
-  issueTypeField?: IOptional;
 
   /**
    * Steps to create field props
    */
-  stepsToCreateField?: IOptional;
+  descriptionFeild?: IOptional;
 
   /**
-   * Intended outcomefield props
+   * Dev notes
    */
-  intendedOutcomeField?: IOptional;
+  devNotes?: string;
 
   /**
-   * Actual outcomefield props
+   * Attachments
    */
-  actualOutcomeField?: IOptional;
+  attachments?: [];
 
   /**
-   * Version field props
+   * JIRA Integration
    */
-  versionField?: IOptional;
+  jira?: JIRAIntegrationProps;
 }

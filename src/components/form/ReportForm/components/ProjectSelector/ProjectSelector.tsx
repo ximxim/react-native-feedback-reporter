@@ -7,10 +7,10 @@ import type { IReportFormValues } from '../../ReportForm.types';
 
 import { compare } from '../../../../../utils';
 import { DropListPicker } from '../../../../data';
-import { getAllProjects } from '../../../../../api';
+import { getJIRAProjects } from '../../../../../integrations';
 
 export const ProjectSelector: FunctionComponent<IProjectSelectorProps> = ({}) => {
-  const { data, isLoading } = useQuery('projects', getAllProjects);
+  const { data, isLoading } = useQuery('projects', getJIRAProjects);
   const { setValue, getValues } = useFormContext<IReportFormValues>();
 
   if (isLoading || !data) return null;
