@@ -13,6 +13,13 @@ export default function App() {
         jira={{
           username: 'azim.ahmed7@gmail.com',
           token: '2rEKkhiit3x3kgGApXeP9495',
+          issueTypeField: {
+            defaultValue: 'story',
+            isVisible: false,
+          },
+          projectField: {
+            defaultValue: 'apitest',
+          },
         }}
       />
     </View>

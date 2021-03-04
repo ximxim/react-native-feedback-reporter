@@ -6,16 +6,17 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 
 import { theme } from './theme';
 import { ScreenShot } from './utils';
-import { initIntegrations } from './integrations';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
   ReportForm,
+  GlobalProps,
+  ModalHeader,
   IReportFormValues,
   ReportFormValidation,
-  GlobalProps,
   IFeedbackReporterProps,
 } from './components';
+import * as Styled from './index.style';
 
 const queryClient = new QueryClient();
 
@@ -23,24 +24,17 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   mode = 'onScreenShot',
   ...props
 }) => {
-  initIntegrations(props);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleClose = () => setIsModalOpen(false);
   const formProps = useForm<IReportFormValues>({
     resolver: yupResolver(ReportFormValidation),
     reValidateMode: 'onChange',
-    defaultValues: {
-      project: 'apitest',
-      issueType: 'story',
-    },
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     formProps.register({ name: 'uri' });
-    formProps.register({ name: 'project' });
-    formProps.register({ name: 'issueType' });
 
-    return () => formProps.unregister(['uri', 'project', 'issueType']);
+    return () => formProps.unregister(['uri']);
   }, [formProps.register]);
 
   useEffect(() => {
@@ -53,8 +47,6 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
     });
   }, [mode]);
 
-  const handleClose = () => setIsModalOpen(false);
-
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalProps.Provider value={{ mode, ...props }}>
@@ -66,7 +58,13 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
             onRequestClose={handleClose}
           >
             <FormProvider {...formProps}>
-              <ReportForm {...{ handleClose }} />
+              <Styled.Wrapper>
+                <ModalHeader
+                  heading={'Wanna talk about it?'}
+                  right={{ label: 'Close', onPress: handleClose }}
+                />
+                <ReportForm />
+              </Styled.Wrapper>
             </FormProvider>
           </Modal>
         </ThemeProvider>

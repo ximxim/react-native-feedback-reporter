@@ -2,25 +2,20 @@ import { useFormContext } from 'react-hook-form';
 import React, { FunctionComponent, useEffect } from 'react';
 import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
-import * as Styled from './ReportForm.style';
+import { Description } from './components';
 import type { IReportFormProps, IReportFormValues } from './ReportForm.types';
-import { ProjectSelector, IssueTypeSelector, Description } from './components';
 
-import {
-  ScreenshotPreview,
-  ModalHeader,
-  BottomWrapper,
-  ButtonWithLabel,
-} from '../../ui';
+import { useJIRAIntegration } from '../../../integrations';
+import { BottomWrapper, ButtonWithLabel, ScreenshotPreview } from '../../ui';
 
-export const ReportForm: FunctionComponent<IReportFormProps> = ({
-  handleClose,
-}) => {
+export const ReportForm: FunctionComponent<IReportFormProps> = () => {
+  const { JIRAComponents, submitToJIRA } = useJIRAIntegration();
   const {
     register,
     unregister,
     watch,
     handleSubmit,
+    formState,
   } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
@@ -31,25 +26,22 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   const Submit = (
     <BottomWrapper>
-      <ButtonWithLabel onPress={handleSubmit(() => {})}>Report</ButtonWithLabel>
+      <ButtonWithLabel
+        isLoading={formState.isSubmitting}
+        onPress={handleSubmit(async () => {
+          await Promise.all([submitToJIRA()]);
+        })}
+      >
+        Report
+      </ButtonWithLabel>
     </BottomWrapper>
   );
 
   return (
-    <Styled.Wrapper>
-      <ModalHeader
-        heading={'Wanna talk about it?'}
-        right={{ label: 'Close', onPress: handleClose }}
-      />
-
-      <KeyboardAvoidingScrollView stickyFooter={Submit}>
-        <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
-        <Description />
-
-        {/* JIRA CONTROLS */}
-        <ProjectSelector />
-        <IssueTypeSelector />
-      </KeyboardAvoidingScrollView>
-    </Styled.Wrapper>
+    <KeyboardAvoidingScrollView stickyFooter={Submit}>
+      <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
+      <Description />
+      {JIRAComponents}
+    </KeyboardAvoidingScrollView>
   );
 };

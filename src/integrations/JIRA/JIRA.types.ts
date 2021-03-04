@@ -9,3 +9,8 @@ export interface JIRAIntegrationProps {
   projectField?: IOptional;
   issueTypeField?: IOptional;
 }
+
+export interface JIRAIntegrationValues {
+  JIRAProject?: string;
+  JIRAIssueType?: string;
+}

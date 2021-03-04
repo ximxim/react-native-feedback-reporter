@@ -1,12 +1,16 @@
-export interface IReportFormProps {
-  handleClose: () => void;
+import type { ReactNode } from 'react';
+
+import type { JIRAIntegrationValues } from '../../../integrations';
+
+export interface IReportFormSection {
+  renderItem: () => ReactNode;
 }
 
-export interface IReportFormValues {
+export interface IReportFormProps {
+  sections?: IReportFormSection[];
+}
+
+export interface IReportFormValues extends JIRAIntegrationValues {
   uri: string;
   description: string;
-
-  // JIRA CONTROLS
-  project: string;
-  issueType: string;
 }

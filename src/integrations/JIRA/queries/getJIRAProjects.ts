@@ -1,6 +1,6 @@
 import { JIRAApi } from '../JIRAApi.service';
 
-export interface IAllProjectsResponse {
+interface IAllJIRAProjectsResponse {
   expand: string;
   self: string;
   id: string;
@@ -20,4 +20,4 @@ export interface IAllProjectsResponse {
 }
 
 export const getJIRAProjects = () =>
-  JIRAApi.get<IAllProjectsResponse[]>('3/project');
+  JIRAApi.get<IAllJIRAProjectsResponse[]>('3/project');

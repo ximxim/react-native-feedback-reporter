@@ -85,6 +85,10 @@ export const DropListPicker = ({
     if (first && search) setKeySelected(first.key);
   }, [search]);
 
+  useEffect(() => {
+    setKeySelected(defaultValue || '');
+  }, [defaultValue]);
+
   const Label = (
     <Styled.Wrapper
       {...{ hasError, isFocused, ...otherTouchableOpacityProps }}

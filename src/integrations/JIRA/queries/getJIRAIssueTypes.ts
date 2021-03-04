@@ -1,6 +1,6 @@
 import { JIRAApi } from '../JIRAApi.service';
 
-export interface IAllIssueTypesResponse {
+interface IAllJIRAIssueTypesResponse {
   self: string;
   id: string;
   description: string;
@@ -12,4 +12,4 @@ export interface IAllIssueTypesResponse {
 }
 
 export const getJIRAIssueTypes = () =>
-  JIRAApi.get<IAllIssueTypesResponse[]>('3/issuetype');
+  JIRAApi.get<IAllJIRAIssueTypesResponse[]>('3/issuetype');
