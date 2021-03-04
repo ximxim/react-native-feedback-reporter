@@ -1,9 +1,9 @@
-import React, { FunctionComponent, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
+import React, { FunctionComponent, useEffect } from 'react';
 import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
-import type { IReportFormProps, IReportFormValues } from './ReportForm.types';
 import * as Styled from './ReportForm.style';
+import type { IReportFormProps, IReportFormValues } from './ReportForm.types';
 import { ProjectSelector, IssueTypeSelector, Description } from './components';
 
 import {
@@ -25,10 +25,8 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   useEffect(() => {
     register({ name: 'description' });
-    register({ name: 'project' });
-    register({ name: 'issueType' });
 
-    return () => unregister(['description', 'project', 'issueType']);
+    return () => unregister(['description']);
   }, [register]);
 
   const Submit = (

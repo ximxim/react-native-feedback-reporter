@@ -25,12 +25,6 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
 }) => {
   initIntegrations(props);
 
-  // TODO: use props to set these headers
-  // axios.defaults.headers.common = {
-  //   Accept: 'application/json',
-  //   Authorization:
-  //     'Basic YXppbS5haG1lZDdAZ21haWwuY29tOjJyRUtraGlpdDN4M2tnR0FwWGVQOTQ5NQ==',
-  // };
   const formProps = useForm<IReportFormValues>({
     resolver: yupResolver(ReportFormValidation),
     reValidateMode: 'onChange',
@@ -43,8 +37,10 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
 
   useEffect(() => {
     formProps.register({ name: 'uri' });
+    formProps.register({ name: 'project' });
+    formProps.register({ name: 'issueType' });
 
-    return () => formProps.unregister(['uri']);
+    return () => formProps.unregister(['uri', 'project', 'issueType']);
   }, [formProps.register]);
 
   useEffect(() => {
