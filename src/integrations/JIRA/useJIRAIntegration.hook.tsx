@@ -11,7 +11,6 @@ export const useJIRAIntegration = () => {
 
   const {
     register,
-    setValue,
     getValues,
     unregister,
   } = useFormContext<IReportFormValues>();
@@ -19,8 +18,6 @@ export const useJIRAIntegration = () => {
   useEffect(() => {
     register('JIRAProject');
     register('JIRAIssueType');
-
-    setValue('JIRAIssueType', jira?.issueTypeField?.defaultValue);
 
     return () => unregister(['JIRAIssueType', 'JIRAProject']);
   }, [register]);

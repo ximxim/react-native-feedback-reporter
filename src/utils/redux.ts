@@ -74,6 +74,9 @@ const defaultOptions: ReactNativeFeedbackReporterEnhancerOptions = {
   stateTransformer: (state) => state || null,
 };
 
+const timeline: unknown = [];
+let preloadedState: Object | undefined;
+
 export function createReduxEnhancer(
   enhancerOptions?: Partial<ReactNativeFeedbackReporterEnhancerOptions>
 ): any {
@@ -96,9 +99,18 @@ export function createReduxEnhancer(
     ): S => {
       const newState = reducer(state, action);
       const transformedAction = options.actionTransformer(action);
-      var transformedState = options.stateTransformer(newState);
-      console.log('transformedAction', transformedAction);
-      console.log('transformedState', transformedState);
+      const transformedState = options.stateTransformer(newState);
+      if (!preloadedState) {
+        preloadedState = transformedState;
+      }
+      if (
+        transformedAction?.type !== '@@INIT' && // Skip init action
+        // @ts-ignore
+        !transformedAction?.type.startsWith('persist') // Skip redux persist related actions
+      ) {
+        // @ts-ignore
+        timeline.push(transformedAction);
+      }
 
       return newState;
     };
@@ -106,3 +118,9 @@ export function createReduxEnhancer(
     return next(ReactNativeFeedbackReporterReducer, initialState);
   };
 }
+
+export const getExportContent = async () =>
+  JSON.stringify({
+    payload: JSON.stringify(timeline),
+    preloadedState: JSON.stringify(preloadedState),
+  });

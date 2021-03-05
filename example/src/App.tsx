@@ -1,7 +1,9 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { FeedbackReporter } from 'react-native-feedback-reporter';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import {
+  FeedbackReporter,
+  getExportContent,
+} from 'react-native-feedback-reporter';
 
 export default function App() {
   const [result] = React.useState<number | undefined>();
@@ -9,7 +11,9 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <TouchableOpacity onPress={getExportContent}>
+        <Text>Result: {result}</Text>
+      </TouchableOpacity>
       <FeedbackReporter
         modalProps={{ onShow: handleShow }}
         jira={{
