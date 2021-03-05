@@ -72,7 +72,9 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*",
+    "react-native": "*"
+  },
+  "dependencies": {
     "@hookform/resolvers": "1.x.x",
     "axios": "^0.21.1",
     "moment": "^2.29.1",
