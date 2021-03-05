@@ -4,8 +4,8 @@ import { ThemeProvider } from 'styled-components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 
-import { theme } from './theme';
-import { ScreenShot } from './utils';
+import { theme } from '../theme';
+import { ScreenShot } from '../utils';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
@@ -15,12 +15,12 @@ import {
   IReportFormValues,
   ReportFormValidation,
   IFeedbackReporterProps,
-} from './components';
-import * as Styled from './index.style';
+} from '../components';
+import * as Styled from './FeedbackReporter.style';
 
 const queryClient = new QueryClient();
 
-const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
+export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   mode = 'onScreenShot',
   ...props
 }) => {
@@ -56,6 +56,7 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
             animationType="slide"
             onDismiss={handleClose}
             onRequestClose={handleClose}
+            {...props.modalProps}
           >
             <FormProvider {...formProps}>
               <Styled.Wrapper>
@@ -72,5 +73,3 @@ const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
     </QueryClientProvider>
   );
 };
-
-export default FeedbackReporter;

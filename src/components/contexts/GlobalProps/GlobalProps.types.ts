@@ -1,3 +1,4 @@
+import type { ModalProps } from 'react-native';
 import type { JIRAIntegrationProps } from '../../../integrations';
 
 interface IOptional {
@@ -20,10 +21,15 @@ export interface IFeedbackReporterProps {
   /**
    * Attachments
    */
-  attachments?: [];
+  attachments?: NodeJS.ReadableStream[];
 
   /**
    * JIRA Integration
    */
   jira?: JIRAIntegrationProps;
+
+  /**
+   * Modal props
+   */
+  modalProps?: Partial<ModalProps>;
 }
