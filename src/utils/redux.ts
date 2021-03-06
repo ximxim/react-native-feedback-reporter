@@ -119,7 +119,7 @@ export function createReduxEnhancer(
   };
 }
 
-export const getExportContent = async () =>
+export const getExportContent = () =>
   JSON.stringify({
     payload: JSON.stringify(timeline),
     preloadedState: JSON.stringify(preloadedState),

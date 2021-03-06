@@ -1,8 +1,14 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  // NativeModules,
+  TouchableOpacity,
+} from 'react-native';
 import {
   FeedbackReporter,
-  getExportContent,
+  // getExportContent,
 } from 'react-native-feedback-reporter';
 
 export default function App() {
@@ -11,7 +17,39 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={getExportContent}>
+      <TouchableOpacity
+        onPress={async () => {
+          // const module = NativeModules.FeedbackReporter;
+          // const content = btoa(getExportContent());
+          // const path = module.TemporaryDirectoryPath + '/state.json';
+          // await module.writeFile(path, content, {
+          //   encoding: 'base64',
+          // });
+          // module.upload(
+          //   {
+          //     uploadUrl:
+          //       'https://ximxim.atlassian.net/rest/api/3/issue/AP-2/attachments',
+          //     files: [
+          //       {
+          //         name: 'state',
+          //         filename: 'state.json',
+          //         filepath: path,
+          //         filetype: 'application/json',
+          //       },
+          //     ],
+          //     method: 'POST',
+          //     headers: {
+          //       'Accept': 'application/json',
+          //       'X-Atlassian-Token': 'no-check',
+          //       'Authorization': `Basic ${btoa(
+          //         `azim.ahmed7@gmail.com:2rEKkhiit3x3kgGApXeP9495`
+          //       )}`,
+          //     },
+          //   },
+          //   console.log
+          // );
+        }}
+      >
         <Text>Result: {result}</Text>
       </TouchableOpacity>
       <FeedbackReporter

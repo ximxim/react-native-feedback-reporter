@@ -2,10 +2,26 @@
 #import <React/RCTBridge.h>
 #import <React/RCTEventDispatcher.h>
 
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <Foundation/Foundation.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <UIKit/UIKit.h>
+
+#import <React/RCTBridgeModule.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTLog.h>
+
 #define PATH @"feedback-reporter"
 
 @implementation FeedbackReporter
 RCT_EXPORT_MODULE()
+
+- (NSDictionary *)constantsToExport
+{
+  return @{
+    @"TemporaryDirectoryPath": NSTemporaryDirectory(),
+  };
+}
 
 @synthesize bridge = _bridge;
 
@@ -33,28 +49,6 @@ RCT_EXPORT_METHOD(startListener){
   @try{
     NSData *data = [self imageDataScreenShot];
     return @{@"code": @200, @"uri": [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]};
-
-    // NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    // NSFileManager *fileManager = [NSFileManager defaultManager];
-    // NSString *path =[[paths objectAtIndex:0]stringByAppendingPathComponent:PATH];
-    // if (![fileManager fileExistsAtPath:path]) {
-    //   [fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
-    // }
-    // long time = (long)[[NSDate new] timeIntervalSince1970];
-    // NSString *filePath = [path stringByAppendingPathComponent: [NSString stringWithFormat:@"screen-capture-%ld.png", time]];
-
-    // @try{
-    //   BOOL result = [UIImagePNGRepresentation(image) writeToFile:filePath atomically:YES]; // 保存成功会返回YES
-    //   if (result == YES) {
-    //     NSLog(@"agan_app 保存成功。filePath：%@", filePath);
-    //     [[[UIApplication sharedApplication] keyWindow] endEditing:YES]; // 获取截屏后关闭键盘
-    //     return @{@"code": @200, @"uri": filePath};
-    //   }
-    // }@catch(NSException *ex) {
-    //   NSLog(@"agan_app 保存图片失败：%@", ex.description);
-    //   filePath = @"";
-    //   return @{@"code": @500, @"errMsg": @"保存图片失败"};
-    // }
   }@catch(NSException *ex) {
     NSLog(@"Unable to get image", ex.description);
     return @{@"code": @500, @"errMsg": @"Unable to get image"};
@@ -84,6 +78,29 @@ RCT_EXPORT_METHOD(startListener){
   UIGraphicsEndImageContext();
 
   return UIImagePNGRepresentation(image);
+}
+
+RCT_EXPORT_METHOD(writeFile:(NSString *)filepath
+                  contents:(NSString *)base64Content
+                  options:(NSDictionary *)options
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  NSData *data = [[NSData alloc] initWithBase64EncodedString:base64Content options:NSDataBase64DecodingIgnoreUnknownCharacters];
+
+  NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
+
+  if ([options objectForKey:@"NSFileProtectionKey"]) {
+    [attributes setValue:[options objectForKey:@"NSFileProtectionKey"] forKey:@"NSFileProtectionKey"];
+  }
+
+  BOOL success = [[NSFileManager defaultManager] createFileAtPath:filepath contents:data attributes:attributes];
+
+  if (!success) {
+    return reject(@"ENOENT", [NSString stringWithFormat:@"ENOENT: no such file or directory, open '%@'", filepath], nil);
+  }
+
+  return resolve(nil);
 }
 
 @end
