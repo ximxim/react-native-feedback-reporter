@@ -11,7 +11,27 @@
 #import <React/RCTEventDispatcher.h>
 #import <React/RCTLog.h>
 
+#import "Uploader.h"
+
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTUtils.h>
+
+#if __has_include(<React/RCTImageLoader.h>)
+#import <React/RCTImageLoader.h>
+#else
+#import <React/RCTImageLoaderProtocol.h>
+#endif
+
+#import <CommonCrypto/CommonDigest.h>
+#import <Photos/Photos.h>
+
 #define PATH @"feedback-reporter"
+
+@interface FeedbackReporter()
+
+@property (retain) NSMutableDictionary* uploaders;
+
+@end
 
 @implementation FeedbackReporter
 RCT_EXPORT_MODULE()
@@ -26,7 +46,7 @@ RCT_EXPORT_MODULE()
 @synthesize bridge = _bridge;
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"ScreenshotTaken"];
+  return @[@"ScreenshotTaken",@"UploadBegin",@"UploadProgress"];
 }
 
 RCT_EXPORT_METHOD(startListener){
@@ -101,6 +121,69 @@ RCT_EXPORT_METHOD(writeFile:(NSString *)filepath
   }
 
   return resolve(nil);
+}
+
+RCT_EXPORT_METHOD(uploadFiles:(NSDictionary *)options
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+    FRUploadParams* params = [FRUploadParams alloc];
+
+  NSNumber* jobId = options[@"jobId"];
+  params.toUrl = options[@"toUrl"];
+  params.files = options[@"files"];
+  params.binaryStreamOnly = [[options objectForKey:@"binaryStreamOnly"] boolValue];
+  NSDictionary* headers = options[@"headers"];
+  NSDictionary* fields = options[@"fields"];
+  NSString* method = options[@"method"];
+  params.headers = headers;
+  params.fields = fields;
+  params.method = method;
+  bool hasBeginCallback = [options[@"hasBeginCallback"] boolValue];
+  bool hasProgressCallback = [options[@"hasProgressCallback"] boolValue];
+
+  params.completeCallback = ^(NSString* body, NSURLResponse *resp) {
+    [self.uploaders removeObjectForKey:[jobId stringValue]];
+
+    NSMutableDictionary* result = [[NSMutableDictionary alloc] initWithDictionary: @{@"jobId": jobId,
+                                                                                     @"body": body}];
+    if ([resp isKindOfClass:[NSHTTPURLResponse class]]) {
+      [result setValue:((NSHTTPURLResponse *)resp).allHeaderFields forKey:@"headers"];
+      [result setValue:[NSNumber numberWithUnsignedInteger:((NSHTTPURLResponse *)resp).statusCode] forKey:@"statusCode"];
+    }
+    return resolve(result);
+  };
+
+  params.errorCallback = ^(NSError* error) {
+    [self.uploaders removeObjectForKey:[jobId stringValue]];
+    return;
+  };
+
+  if (hasBeginCallback) {
+    params.beginCallback = ^() {
+        if (self.bridge != nil)
+          [self sendEventWithName:@"UploadBegin"
+                                                  body:@{@"jobId": jobId}];
+    };
+  }
+
+  if (hasProgressCallback) {
+    params.progressCallback = ^(NSNumber* totalBytesExpectedToSend, NSNumber* totalBytesSent) {
+        if (self.bridge != nil)
+            [self sendEventWithName:@"UploadProgress"
+                                                  body:@{@"jobId": jobId,
+                                                          @"totalBytesExpectedToSend": totalBytesExpectedToSend,
+                                                          @"totalBytesSent": totalBytesSent}];
+    };
+  }
+
+  if (!self.uploaders) self.uploaders = [[NSMutableDictionary alloc] init];
+
+  FRUploader* uploader = [FRUploader alloc];
+
+  [uploader uploadFiles:params];
+
+  [self.uploaders setValue:uploader forKey:[jobId stringValue]];
 }
 
 @end
