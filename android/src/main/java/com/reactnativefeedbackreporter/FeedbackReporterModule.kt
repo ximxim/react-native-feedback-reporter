@@ -1,22 +1,32 @@
 package com.reactnativefeedbackreporter
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.util.Base64
 import android.view.View
-import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.OutputStream
 
 
 class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), ScreenshotDetectionListener {
+  private val TemporaryDirectoryPath = "TemporaryDirectoryPath"
   private val screenshotDetectionDelegate = ScreenshotDetectionDelegate(reactContext, this)
   private val EVENT_NAME = "ScreenshotTaken"
 
   override fun getName(): String {
     return "FeedbackReporter"
+  }
+
+  override fun getConstants(): Map<String, Any> {
+    val constants = HashMap<String, Any>()
+
+    constants.put(TemporaryDirectoryPath, this.getReactApplicationContext().getCacheDir().getAbsolutePath())
+
+    return constants
   }
 
   @ReactMethod
@@ -66,5 +76,65 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       e.printStackTrace()
       return ""
     }
+  }
+
+  @ReactMethod
+  fun writeFile(filepath: String, base64Content: String?, options: ReadableMap?, promise: Promise) {
+    try {
+      val bytes = Base64.decode(base64Content, Base64.DEFAULT)
+      val outputStream: OutputStream = getOutputStream(filepath, false)
+      outputStream.write(bytes)
+      outputStream.close()
+      promise.resolve(null)
+    } catch (ex: Exception) {
+      ex.printStackTrace()
+      reject(promise, filepath, ex)
+    }
+  }
+
+  @Throws(IORejectionException::class)
+  private fun getOutputStream(filepath: String, append: Boolean): OutputStream {
+    val uri: Uri = getFileUri(filepath, false)
+    val stream: OutputStream?
+    stream = try {
+      reactContext.contentResolver.openOutputStream(uri, if (append) "wa" else "w")
+    } catch (ex: FileNotFoundException) {
+      throw IORejectionException("ENOENT", "ENOENT: " + ex.message + ", open '" + filepath + "'")
+    }
+    if (stream == null) {
+      throw IORejectionException("ENOENT", "ENOENT: could not open an output stream for '$filepath'")
+    }
+    return stream
+  }
+
+  @Throws(IORejectionException::class)
+  private fun getFileUri(filepath: String, isDirectoryAllowed: Boolean): Uri {
+    var uri: Uri = Uri.parse(filepath)
+    if (uri.getScheme() == null) {
+      // No prefix, assuming that provided path is absolute path to file
+      val file = File(filepath)
+      if (!isDirectoryAllowed && file.isDirectory()) {
+        throw IORejectionException("EISDIR", "EISDIR: illegal operation on a directory, read '$filepath'")
+      }
+      uri = Uri.parse("file://$filepath")
+    }
+    return uri
+  }
+
+  private fun reject(promise: Promise, filepath: String, ex: java.lang.Exception) {
+    if (ex is FileNotFoundException) {
+      rejectFileNotFound(promise, filepath)
+      return
+    }
+    if (ex is IORejectionException) {
+      val ioRejectionException = ex
+      promise.reject(ioRejectionException.code, ioRejectionException.message)
+      return
+    }
+    promise.reject(null, ex.message)
+  }
+
+  private fun rejectFileNotFound(promise: Promise, filepath: String) {
+    promise.reject("ENOENT", "ENOENT: no such file or directory, open '$filepath'")
   }
 }

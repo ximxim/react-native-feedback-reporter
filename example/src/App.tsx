@@ -31,6 +31,7 @@ export default function App() {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={async () => {
+          console.log(path);
           // @ts-ignore
           // eslint-disable-next-line no-undef
           const content = btoa(getExportContent());
