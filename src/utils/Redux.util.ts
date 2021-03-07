@@ -74,7 +74,7 @@ const defaultOptions: ReactNativeFeedbackReporterEnhancerOptions = {
   stateTransformer: (state) => state || null,
 };
 
-const timeline: unknown = [];
+const timeline: unknown[] = [];
 let preloadedState: Object | undefined;
 
 export function createReduxEnhancer(
@@ -120,7 +120,9 @@ export function createReduxEnhancer(
 }
 
 export const getExportContent = () =>
-  JSON.stringify({
-    payload: JSON.stringify(timeline),
-    preloadedState: JSON.stringify(preloadedState),
-  });
+  timeline.length
+    ? JSON.stringify({
+        payload: JSON.stringify(timeline),
+        preloadedState: JSON.stringify(preloadedState),
+      })
+    : null;
