@@ -12,5 +12,6 @@ export interface IReportFormProps {
 
 export interface IReportFormValues extends JIRAIntegrationValues {
   uri: string;
+  title: string;
   description: string;
 }

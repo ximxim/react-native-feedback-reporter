@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import React, { FunctionComponent, useEffect } from 'react';
 import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
-import { Description } from './components';
+import { Description, Title } from './components';
 import type { IReportFormProps, IReportFormValues } from './ReportForm.types';
 
 import { useJIRAIntegration } from '../../../integrations';
@@ -20,8 +20,9 @@ export const ReportForm: FunctionComponent<IReportFormProps> = () => {
 
   useEffect(() => {
     register({ name: 'description' });
+    register({ name: 'title' });
 
-    return () => unregister(['description']);
+    return () => unregister(['description', 'title']);
   }, [register]);
 
   const Submit = (
@@ -40,6 +41,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = () => {
   return (
     <KeyboardAvoidingScrollView stickyFooter={Submit}>
       <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
+      <Title />
       <Description />
       {JIRAComponents}
     </KeyboardAvoidingScrollView>

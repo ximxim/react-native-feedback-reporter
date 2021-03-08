@@ -168,7 +168,7 @@ const dark: ThemeType = {
     brandSecondary: '#ffffff',
     brandMuted: '#b4b4b4',
     brandSuccess: '#2A7F4F',
-    brandDanger: '#B21F2D',
+    brandDanger: '#f3b6bd',
     incomingMessagebg: '#FFDBC1',
     incomingMessageColor: '#000000',
     outgoingMessagebg: '#E0EEDE',

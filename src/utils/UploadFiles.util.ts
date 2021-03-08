@@ -30,15 +30,20 @@ export const uploadFiles = async ({
    * REDUX STATE ATTACHMENT
    */
   const content = toBase64(getExportContent());
-  await module.writeFile(reduxStatePath, content, {
-    encoding: 'base64',
-  });
-  const reduxStateFile = {
-    name: 'file',
-    filename: 'state.json',
-    filepath: reduxStatePath,
-    filetype: 'application/json',
-  };
+  const filesToUpload = files;
+  if (content) {
+    await module.writeFile(reduxStatePath, content, {
+      encoding: 'base64',
+    });
+    const reduxStateFile = {
+      content,
+      name: 'file',
+      filename: 'state.json',
+      filepath: reduxStatePath,
+      filetype: 'application/json',
+    };
+    filesToUpload.push(reduxStateFile);
+  }
 
   /**
    * WRITE FILES TO CACHE
@@ -53,7 +58,7 @@ export const uploadFiles = async ({
    * UPLOAD FILES
    */
   return await module.uploadFiles({
-    files: [...files, reduxStateFile],
+    files: filesToUpload,
     method,
     jobId: 1,
     ...props,

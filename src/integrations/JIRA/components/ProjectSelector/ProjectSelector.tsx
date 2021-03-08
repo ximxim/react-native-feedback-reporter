@@ -21,11 +21,11 @@ export const ProjectSelector: FunctionComponent<IProjectSelectorProps> = ({
     const found = projects.find(
       (issueType) => compare(issueType.name, val) || compare(issueType.key, val)
     );
-    setValue('JIRAProject', found?.key);
+    setValue('JIRAProject', found?.id);
   }, [isLoading]);
 
   const options = projects.map((project) => ({
-    key: project.key,
+    key: project.id,
     value: project.name,
   }));
 
