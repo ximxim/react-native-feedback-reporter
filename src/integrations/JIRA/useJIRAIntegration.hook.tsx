@@ -30,7 +30,7 @@ export const useJIRAIntegration = () => {
     return () => {
       setIsRegistered(false);
       unregister(['JIRAIssueType', 'JIRAProject']);
-    }
+    };
   }, [register]);
 
   if (!jira) return { JIRAComponents: null, submitToJIRA: () => {} };
