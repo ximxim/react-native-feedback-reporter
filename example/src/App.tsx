@@ -1,15 +1,38 @@
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
+import DeviceInfo from 'react-native-device-info';
 
 export default function App() {
-  'https://ximxim.atlassian.net/rest/api/3/issue/AP-2/attachments';
-  const [result] = React.useState<number | undefined>();
+  const [asyncInfo, setAsyncInfo] = React.useState({
+    deviceName: '',
+    ipAddress: '',
+    manufacturer: '',
+    powerState: {},
+  });
   const handleShow = () => console.log('OMG you showed');
+
+  React.useEffect(() => {
+    (async () => {
+      const [
+        deviceName,
+        ipAddress,
+        manufacturer,
+        powerState,
+      ] = await Promise.all([
+        DeviceInfo.getDeviceName(),
+        DeviceInfo.getIpAddress(),
+        DeviceInfo.getManufacturer(),
+        DeviceInfo.getPowerState(),
+      ]);
+
+      setAsyncInfo({ deviceName, ipAddress, manufacturer, powerState })
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Result of some sort</Text>
       <FeedbackReporter
         theme={{
           ...theme.base,
@@ -33,20 +56,20 @@ export default function App() {
           },
         }}
         devNotes={`
-          Brand: Apple
-          Build Number: 89
-          Bundle ID: com.example.AwesomeApp
-          Device ID: iPhone7,2
-          Device Name: Becca's iPhone 6
-          IP Address: 92.168.32.44
-          Manufacturer: Apple
-          Model: ?
-          Power State: { batteryLevel: 0.759999, batteryState: 'unplugged', lowPowerMode: false }
-          Readable Version: 1.0.1.32
-          System Name: iOS
-          Systerm Version: 11.0
-          Unique ID: FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
-          Version: 1.0
+          Brand: ${DeviceInfo.getBrand()}
+          Build Number: ${DeviceInfo.getBuildNumber()}
+          Bundle ID: ${DeviceInfo.getBundleId()}
+          Device ID: ${DeviceInfo.getDeviceId()}
+          Device Name: ${asyncInfo.deviceName}
+          IP Address: ${asyncInfo.ipAddress}
+          Manufacturer: ${asyncInfo.manufacturer}
+          Model: ${DeviceInfo.getModel()}
+          Power State: ${JSON.stringify(asyncInfo.powerState)}
+          Readable Version: ${DeviceInfo.getReadableVersion()}
+          System Name: ${DeviceInfo.getSystemName()}
+          Systerm Version: ${DeviceInfo.getSystemVersion()}
+          Unique ID: ${DeviceInfo.getUniqueId()}
+          Version: ${DeviceInfo.getVersion()}
         `}
       />
     </View>
