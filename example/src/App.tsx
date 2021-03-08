@@ -26,7 +26,7 @@ export default function App() {
         DeviceInfo.getPowerState(),
       ]);
 
-      setAsyncInfo({ deviceName, ipAddress, manufacturer, powerState })
+      setAsyncInfo({ deviceName, ipAddress, manufacturer, powerState });
     })();
   }, []);
 
