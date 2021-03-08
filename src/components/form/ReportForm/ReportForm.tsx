@@ -6,7 +6,12 @@ import { Description, Title } from './components';
 import type { IReportFormProps, IReportFormValues } from './ReportForm.types';
 
 import { useJIRAIntegration } from '../../../integrations';
-import { BottomWrapper, ButtonWithLabel, ScreenshotPreview } from '../../ui';
+import {
+  BottomWrapper,
+  ButtonWithLabel,
+  ScreenshotPreview,
+  Typography,
+} from '../../ui';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
@@ -60,7 +65,21 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   if (formState.isSubmitted) {
     return (
-      <KeyboardAvoidingScrollView stickyFooter={Done}>
+      <KeyboardAvoidingScrollView
+        stickyFooter={Done}
+        // eslint-disable-next-line react-native/no-inline-styles
+        contentContainerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flex: 1,
+        }}
+      >
+        <Typography variant="h1">Thank you!</Typography>
+
+        <Typography variant="body1" pb={30} px={30} textAlign="center">
+          Your feedback has been sent. We will be in touch and contact you soon!
+        </Typography>
+
         {JIRAConfirmationComponents}
       </KeyboardAvoidingScrollView>
     );

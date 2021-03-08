@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Linking } from 'react-native';
 import { useFormContext } from 'react-hook-form';
 
-import { setJIRAApiHeaders } from './JIRAApi.service';
+import { initJIRAApi } from './JIRAApi.service';
 import { ProjectSelector, IssueTypeSelector } from './components';
 import {
   postJIRAIssue,
@@ -23,6 +23,11 @@ export const useJIRAIntegration = () => {
   } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
+    if (!jira) return;
+    initJIRAApi(jira);
+  }, []);
+
+  useEffect(() => {
     register('JIRAProject');
     register('JIRAIssueType');
     setIsRegistered(true);
@@ -34,8 +39,6 @@ export const useJIRAIntegration = () => {
   }, [register]);
 
   if (!jira) return { JIRAComponents: null, submitToJIRA: () => {} };
-
-  setJIRAApiHeaders(jira);
 
   const submitToJIRA = async () => {
     setIssue(undefined);
@@ -50,7 +53,7 @@ export const useJIRAIntegration = () => {
 
     if (!jira || !projectId || !issueTypeId) return;
 
-    const { username, token } = jira;
+    const { username, token, domain } = jira;
 
     const res = await postJIRAIssue({
       title,
@@ -64,9 +67,10 @@ export const useJIRAIntegration = () => {
     if (!res.data.key) return;
 
     await postJIRAIssueAttachents({
-      content: uri,
-      username,
       token,
+      domain,
+      username,
+      content: uri,
       key: res.data.key,
     });
   };
@@ -79,9 +83,18 @@ export const useJIRAIntegration = () => {
   );
 
   const JIRAConfirmationComponents = issue && (
-    <Typography variant="h1" onPress={() => Linking.openURL(issue.self)}>
-      {issue.key}
-    </Typography>
+    <>
+      <Typography variant="h2" onPress={() => Linking.openURL(issue.self)}>
+        JIRA Issue ID
+      </Typography>
+      <Typography
+        variant="link"
+        fontSize={22}
+        onPress={() => Linking.openURL(issue.self)}
+      >
+        {issue.key}
+      </Typography>
+    </>
   );
 
   return {

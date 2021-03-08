@@ -19,7 +19,7 @@ export const postJIRAIssue = ({
   description,
   title,
 }: IPostJIRAIssueProps) =>
-  JIRAApi.post<IPostJIRAIssueResponse>('3/issue', {
+  JIRAApi.post<IPostJIRAIssueResponse>('issue', {
     update: {},
     fields: {
       summary: title,

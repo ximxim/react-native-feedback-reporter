@@ -12,4 +12,4 @@ interface IAllJIRAIssueTypesResponse {
 }
 
 export const getJIRAIssueTypes = () =>
-  JIRAApi.get<IAllJIRAIssueTypesResponse[]>('3/issuetype');
+  JIRAApi.get<IAllJIRAIssueTypesResponse[]>('issuetype');

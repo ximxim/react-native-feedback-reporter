@@ -2,17 +2,12 @@ import { NativeModules } from 'react-native';
 
 import { uploadFiles, toBase64 } from '../../../utils';
 
-// interface IPostJIRAIssueAttachmentsResponse {
-//   id: string;
-//   key: string;
-//   self: string;
-// }
-
 interface IPostJIRAIssueAttachmentsProps {
   content: string;
   username: string;
   token: string;
   key: string;
+  domain: string;
 }
 
 const module = NativeModules.FeedbackReporter;
@@ -24,9 +19,10 @@ export const postJIRAIssueAttachents = ({
   username,
   token,
   key,
+  domain,
 }: IPostJIRAIssueAttachmentsProps) =>
   uploadFiles({
-    toUrl: `https://ximxim.atlassian.net/rest/api/3/issue/${key}/attachments`,
+    toUrl: `${domain}/rest/api/3/issue/${key}/attachments`,
     headers: {
       'Accept': 'application/json',
       'Authorization': `Basic ${toBase64(`${username}:${token}`)}`,

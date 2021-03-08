@@ -21,6 +21,7 @@ export default function App() {
         }}
         modalProps={{ onShow: handleShow }}
         jira={{
+          domain: 'https://ximxim.atlassian.net',
           username: 'azim.ahmed7@gmail.com',
           token: '2rEKkhiit3x3kgGApXeP9495',
           issueTypeField: {

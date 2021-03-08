@@ -5,6 +5,7 @@ interface IOptional {
 
 export interface JIRAIntegrationProps {
   token: string;
+  domain: string;
   username: string;
   projectField?: IOptional;
   issueTypeField?: IOptional;

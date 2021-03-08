@@ -20,4 +20,4 @@ interface IAllJIRAProjectsResponse {
 }
 
 export const getJIRAProjects = () =>
-  JIRAApi.get<IAllJIRAProjectsResponse[]>('3/project');
+  JIRAApi.get<IAllJIRAProjectsResponse[]>('project');
