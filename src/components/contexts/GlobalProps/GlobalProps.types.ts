@@ -1,6 +1,7 @@
 import type { ModalProps } from 'react-native';
 
 import type { theme } from '../../../theme';
+import type { IModalHeaderProps } from '../../ui';
 import type { JIRAIntegrationProps } from '../../../integrations';
 
 export interface IFeedbackReporterProps {
@@ -24,5 +25,5 @@ export interface IFeedbackReporterProps {
   /**
    * Modal props
    */
-  modalProps?: Partial<ModalProps>;
+  modalProps?: Partial<ModalProps & { header?: IModalHeaderProps }>;
 }

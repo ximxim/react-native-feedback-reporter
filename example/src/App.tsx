@@ -42,7 +42,10 @@ export default function App() {
             brandSecondary: 'black',
           },
         }}
-        modalProps={{ onShow: handleShow }}
+        modalProps={{
+          onShow: handleShow,
+          header: { heading: 'Custom Heading' },
+        }}
         jira={{
           domain: 'https://ximxim.atlassian.net',
           username: 'azim.ahmed7@gmail.com',

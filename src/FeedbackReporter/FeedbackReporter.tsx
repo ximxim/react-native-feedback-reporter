@@ -57,6 +57,8 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
     selectedTheme = props.theme;
   }
 
+  const { header, ...modalProps } = props.modalProps || { header: {} };
+
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalProps.Provider value={{ mode, isModalOpen, ...props }}>
@@ -66,13 +68,14 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
             animationType="slide"
             onDismiss={handleClose}
             onRequestClose={handleClose}
-            {...props.modalProps}
+            {...modalProps}
           >
             <FormProvider {...formProps}>
               <Styled.Wrapper>
                 <ModalHeader
                   heading={'Wanna talk about it?'}
                   right={{ label: 'Close', onPress: handleClose }}
+                  {...header}
                 />
                 <ReportForm handleClose={handleClose} />
               </Styled.Wrapper>
