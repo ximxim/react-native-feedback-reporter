@@ -59,7 +59,7 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GlobalProps.Provider value={{ mode, ...props }}>
+      <GlobalProps.Provider value={{ mode, isModalOpen, ...props }}>
         <ThemeProvider theme={selectedTheme}>
           <Modal
             visible={isModalOpen}
@@ -74,7 +74,7 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
                   heading={'Wanna talk about it?'}
                   right={{ label: 'Close', onPress: handleClose }}
                 />
-                <ReportForm />
+                <ReportForm handleClose={handleClose} />
               </Styled.Wrapper>
             </FormProvider>
           </Modal>

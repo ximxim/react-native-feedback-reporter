@@ -1,13 +1,20 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Linking } from 'react-native';
 import { useFormContext } from 'react-hook-form';
 
-import { ProjectSelector, IssueTypeSelector } from './components';
 import { setJIRAApiHeaders } from './JIRAApi.service';
+import { ProjectSelector, IssueTypeSelector } from './components';
+import {
+  postJIRAIssue,
+  IPostJIRAIssueResponse,
+  postJIRAIssueAttachents,
+} from './mutations';
 
-import { GlobalProps, IReportFormValues } from '../../components';
-import { postJIRAIssue, postJIRAIssueAttachents } from './mutations';
+import { GlobalProps, IReportFormValues, Typography } from '../../components';
 
 export const useJIRAIntegration = () => {
+  const [issue, setIssue] = useState<IPostJIRAIssueResponse>();
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const { jira } = useContext(GlobalProps);
   const {
     register,
@@ -18,8 +25,12 @@ export const useJIRAIntegration = () => {
   useEffect(() => {
     register('JIRAProject');
     register('JIRAIssueType');
+    setIsRegistered(true);
 
-    return () => unregister(['JIRAIssueType', 'JIRAProject']);
+    return () => {
+      setIsRegistered(false);
+      unregister(['JIRAIssueType', 'JIRAProject']);
+    }
   }, [register]);
 
   if (!jira) return { JIRAComponents: null, submitToJIRA: () => {} };
@@ -27,6 +38,8 @@ export const useJIRAIntegration = () => {
   setJIRAApiHeaders(jira);
 
   const submitToJIRA = async () => {
+    setIssue(undefined);
+
     const {
       uri,
       title,
@@ -46,6 +59,8 @@ export const useJIRAIntegration = () => {
       description,
     });
 
+    setIssue(res.data);
+
     if (!res.data.key) return;
 
     await postJIRAIssueAttachents({
@@ -56,12 +71,22 @@ export const useJIRAIntegration = () => {
     });
   };
 
-  const JIRAComponents = (
+  const JIRAComponents = isRegistered && (
     <>
       <ProjectSelector defaultValue={jira?.projectField?.defaultValue} />
       <IssueTypeSelector defaultValue={jira?.issueTypeField?.defaultValue} />
     </>
   );
 
-  return { JIRAComponents, submitToJIRA };
+  const JIRAConfirmationComponents = issue && (
+    <Typography variant="h1" onPress={() => Linking.openURL(issue.self)}>
+      {issue.key}
+    </Typography>
+  );
+
+  return {
+    submitToJIRA,
+    JIRAComponents,
+    JIRAConfirmationComponents,
+  };
 };

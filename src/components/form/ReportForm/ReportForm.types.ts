@@ -7,7 +7,7 @@ export interface IReportFormSection {
 }
 
 export interface IReportFormProps {
-  sections?: IReportFormSection[];
+  handleClose: () => void;
 }
 
 export interface IReportFormValues extends JIRAIntegrationValues {

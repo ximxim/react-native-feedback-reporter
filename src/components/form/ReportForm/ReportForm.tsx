@@ -8,14 +8,21 @@ import type { IReportFormProps, IReportFormValues } from './ReportForm.types';
 import { useJIRAIntegration } from '../../../integrations';
 import { BottomWrapper, ButtonWithLabel, ScreenshotPreview } from '../../ui';
 
-export const ReportForm: FunctionComponent<IReportFormProps> = () => {
-  const { JIRAComponents, submitToJIRA } = useJIRAIntegration();
+export const ReportForm: FunctionComponent<IReportFormProps> = ({
+  handleClose,
+}) => {
+  const {
+    JIRAComponents,
+    submitToJIRA,
+    JIRAConfirmationComponents,
+  } = useJIRAIntegration();
   const {
     register,
     unregister,
     watch,
     handleSubmit,
     formState,
+    reset,
   } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
@@ -37,6 +44,27 @@ export const ReportForm: FunctionComponent<IReportFormProps> = () => {
       </ButtonWithLabel>
     </BottomWrapper>
   );
+
+  const Done = (
+    <BottomWrapper>
+      <ButtonWithLabel
+        onPress={() => {
+          handleClose();
+          reset();
+        }}
+      >
+        Done
+      </ButtonWithLabel>
+    </BottomWrapper>
+  );
+
+  if (formState.isSubmitted) {
+    return (
+      <KeyboardAvoidingScrollView stickyFooter={Done}>
+        {JIRAConfirmationComponents}
+      </KeyboardAvoidingScrollView>
+    );
+  }
 
   return (
     <KeyboardAvoidingScrollView stickyFooter={Submit}>

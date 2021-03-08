@@ -1,6 +1,6 @@
 import { JIRAApi } from '../JIRAApi.service';
 
-interface IPostJIRAIssueResponse {
+export interface IPostJIRAIssueResponse {
   id: string;
   key: string;
   self: string;
