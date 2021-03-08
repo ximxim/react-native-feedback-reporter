@@ -47,10 +47,20 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
     });
   }, [mode]);
 
+  let selectedTheme;
+
+  if (!props.theme) {
+    selectedTheme = theme.base;
+  } else if (typeof props.theme === 'string') {
+    selectedTheme = theme[props.theme];
+  } else {
+    selectedTheme = props.theme;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalProps.Provider value={{ mode, ...props }}>
-        <ThemeProvider theme={theme.dark}>
+        <ThemeProvider theme={selectedTheme}>
           <Modal
             visible={isModalOpen}
             animationType="slide"
