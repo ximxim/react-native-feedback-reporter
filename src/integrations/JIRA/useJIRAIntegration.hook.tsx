@@ -15,7 +15,7 @@ import { GlobalProps, IReportFormValues, Typography } from '../../components';
 export const useJIRAIntegration = () => {
   const [issue, setIssue] = useState<IPostJIRAIssueResponse>();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
-  const { jira } = useContext(GlobalProps);
+  const { jira, devNotes } = useContext(GlobalProps);
   const {
     register,
     getValues,
@@ -60,6 +60,7 @@ export const useJIRAIntegration = () => {
       projectId,
       issueTypeId,
       description,
+      devNotes,
     });
 
     setIssue(res.data);

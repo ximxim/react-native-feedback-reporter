@@ -8,6 +8,7 @@ export interface IPostJIRAIssueResponse {
 
 interface IPostJIRAIssueProps {
   title: string;
+  devNotes?: string;
   projectId: string;
   issueTypeId: string;
   description: string;
@@ -18,8 +19,32 @@ export const postJIRAIssue = ({
   issueTypeId,
   description,
   title,
-}: IPostJIRAIssueProps) =>
-  JIRAApi.post<IPostJIRAIssueResponse>('issue', {
+  devNotes,
+}: IPostJIRAIssueProps) => {
+  const content = [];
+  content.push({
+    type: 'paragraph',
+    content: [
+      {
+        text: description,
+        type: 'text',
+      },
+    ],
+  });
+
+  if (devNotes) {
+    content.push({
+      type: 'paragraph',
+      content: [
+        {
+          text: devNotes,
+          type: 'text',
+        },
+      ],
+    });
+  }
+
+  return JIRAApi.post<IPostJIRAIssueResponse>('issue', {
     update: {},
     fields: {
       summary: title,
@@ -28,18 +53,9 @@ export const postJIRAIssue = ({
       description: {
         type: 'doc',
         version: 1,
-        content: [
-          {
-            type: 'paragraph',
-            content: [
-              {
-                text: description,
-                type: 'text',
-              },
-            ],
-          },
-        ],
+        content,
       },
       labels: ['feedback-reporter'],
     },
   });
+};

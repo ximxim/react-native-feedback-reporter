@@ -32,7 +32,22 @@ export default function App() {
             defaultValue: 'apitest',
           },
         }}
-        devNotes="These are some devnotes to help understanding the ticket"
+        devNotes={`
+          Brand: Apple
+          Build Number: 89
+          Bundle ID: com.example.AwesomeApp
+          Device ID: iPhone7,2
+          Device Name: Becca's iPhone 6
+          IP Address: 92.168.32.44
+          Manufacturer: Apple
+          Model: ?
+          Power State: { batteryLevel: 0.759999, batteryState: 'unplugged', lowPowerMode: false }
+          Readable Version: 1.0.1.32
+          System Name: iOS
+          Systerm Version: 11.0
+          Unique ID: FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
+          Version: 1.0
+        `}
       />
     </View>
   );
