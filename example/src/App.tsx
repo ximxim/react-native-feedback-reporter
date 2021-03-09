@@ -58,7 +58,7 @@ export default function App() {
             defaultValue: 'apitest',
           },
         }}
-        devNotes={`
+        devNotes={() => `
           Brand: ${DeviceInfo.getBrand()}
           Build Number: ${DeviceInfo.getBuildNumber()}
           Bundle ID: ${DeviceInfo.getBundleId()}

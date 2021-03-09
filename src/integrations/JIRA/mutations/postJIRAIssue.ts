@@ -8,7 +8,7 @@ export interface IPostJIRAIssueResponse {
 
 interface IPostJIRAIssueProps {
   title: string;
-  devNotes?: string;
+  devNotes?: string | Function;
   projectId: string;
   issueTypeId: string;
   description: string;
@@ -37,7 +37,7 @@ export const postJIRAIssue = ({
       type: 'paragraph',
       content: [
         {
-          text: devNotes,
+          text: typeof devNotes === 'string' ? devNotes : devNotes(),
           type: 'text',
         },
       ],
