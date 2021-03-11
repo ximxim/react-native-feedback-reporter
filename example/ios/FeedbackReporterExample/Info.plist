@@ -24,6 +24,12 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>This is a reason for the photo library usage</string>
+  <key>NSCameraUsageDescription</key>
+  <string>This is a reason for the camera library usage</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>This is a reason for the microphone library usage</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

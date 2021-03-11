@@ -1,7 +1,9 @@
+import type { ReactNode } from 'react';
 import type { ModalProps } from 'react-native';
 
 import type { theme } from '../../../theme';
 import type { IModalHeaderProps } from '../../ui';
+import type { IReportFormValues } from '../../form';
 import type { JIRAIntegrationProps } from '../../../integrations';
 
 export interface IFeedbackReporterProps {
@@ -26,4 +28,9 @@ export interface IFeedbackReporterProps {
    * Modal props
    */
   modalProps?: Partial<ModalProps & { header?: IModalHeaderProps }>;
+
+  /**
+   * Additional Information
+   */
+  additionalInformation?: (values: IReportFormValues) => ReactNode;
 }
