@@ -41,4 +41,4 @@ export const ImagePreview: FunctionComponent<{
       />
     </TouchableOpacity>
   );
-}
+};
