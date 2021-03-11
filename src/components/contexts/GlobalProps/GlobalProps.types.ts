@@ -17,7 +17,7 @@ export interface IFeedbackReporterProps {
   /**
    * Dev notes
    */
-  devNotes?: string | Function;
+  devNotes?: string | (() => Promise<string>) | (() => string);
 
   /**
    * JIRA Integration

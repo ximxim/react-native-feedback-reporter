@@ -27,8 +27,8 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleClose = () => setIsModalOpen(false);
   const formProps = useForm<IReportFormValues>({
-    resolver: yupResolver(ReportFormValidation),
     reValidateMode: 'onChange',
+    resolver: yupResolver(ReportFormValidation({ mode, ...props })),
   });
 
   useEffect(() => {

@@ -14,37 +14,13 @@ const AdditionalInformationWrapper = styled.View`
 `;
 
 export default function App() {
+  const handleShow = () => console.log('OMG you showed');
   const [files, setFiles] = React.useState({
     file1: '',
     file2: '',
     file3: '',
     file4: '',
   });
-  const [asyncInfo, setAsyncInfo] = React.useState({
-    deviceName: '',
-    ipAddress: '',
-    manufacturer: '',
-    powerState: {},
-  });
-  const handleShow = () => console.log('OMG you showed');
-
-  React.useEffect(() => {
-    (async () => {
-      const [
-        deviceName,
-        ipAddress,
-        manufacturer,
-        powerState,
-      ] = await Promise.all([
-        DeviceInfo.getDeviceName(),
-        DeviceInfo.getIpAddress(),
-        DeviceInfo.getManufacturer(),
-        DeviceInfo.getPowerState(),
-      ]);
-
-      setAsyncInfo({ deviceName, ipAddress, manufacturer, powerState });
-    })();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -94,22 +70,36 @@ export default function App() {
             />
           </AdditionalInformationWrapper>
         )}
-        devNotes={() => `
-          Brand: ${DeviceInfo.getBrand()}
-          Build Number: ${DeviceInfo.getBuildNumber()}
-          Bundle ID: ${DeviceInfo.getBundleId()}
-          Device ID: ${DeviceInfo.getDeviceId()}
-          Device Name: ${asyncInfo.deviceName}
-          IP Address: ${asyncInfo.ipAddress}
-          Manufacturer: ${asyncInfo.manufacturer}
-          Model: ${DeviceInfo.getModel()}
-          Power State: ${JSON.stringify(asyncInfo.powerState)}
-          Readable Version: ${DeviceInfo.getReadableVersion()}
-          System Name: ${DeviceInfo.getSystemName()}
-          Systerm Version: ${DeviceInfo.getSystemVersion()}
-          Unique ID: ${DeviceInfo.getUniqueId()}
-          Version: ${DeviceInfo.getVersion()}
-        `}
+        devNotes={async () => {
+          const [
+            deviceName,
+            ipAddress,
+            manufacturer,
+            powerState,
+          ] = await Promise.all([
+            DeviceInfo.getDeviceName(),
+            DeviceInfo.getIpAddress(),
+            DeviceInfo.getManufacturer(),
+            DeviceInfo.getPowerState(),
+          ]);
+
+          return `
+            Brand: ${DeviceInfo.getBrand()}
+            Build Number: ${DeviceInfo.getBuildNumber()}
+            Bundle ID: ${DeviceInfo.getBundleId()}
+            Device ID: ${DeviceInfo.getDeviceId()}
+            Device Name: ${deviceName}
+            IP Address: ${ipAddress}
+            Manufacturer: ${manufacturer}
+            Model: ${DeviceInfo.getModel()}
+            Power State: ${JSON.stringify(powerState)}
+            Readable Version: ${DeviceInfo.getReadableVersion()}
+            System Name: ${DeviceInfo.getSystemName()}
+            Systerm Version: ${DeviceInfo.getSystemVersion()}
+            Unique ID: ${DeviceInfo.getUniqueId()}
+            Version: ${DeviceInfo.getVersion()}
+          `;
+        }}
       />
     </View>
   );

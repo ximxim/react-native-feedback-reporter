@@ -13,7 +13,7 @@ export const IssueTypeSelector: FunctionComponent<IIssueTypeSelectorProps> = ({
   ...dropListPickerProps
 }) => {
   const { data, isLoading } = useQuery('issueTypes', getJIRAIssueTypes);
-  const { setValue, watch } = useFormContext<IReportFormValues>();
+  const { setValue, watch, errors } = useFormContext<IReportFormValues>();
   const issueTypes = data?.data || [];
 
   useEffect(() => {
@@ -36,6 +36,7 @@ export const IssueTypeSelector: FunctionComponent<IIssueTypeSelectorProps> = ({
       {...dropListPickerProps}
       options={options}
       label="Issue Type"
+      error={errors.JIRAIssueType?.message}
       defaultValue={watch('JIRAIssueType')}
       onChange={(val) => setValue('JIRAIssueType', val)}
     />

@@ -20,6 +20,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   const {
     JIRAComponents,
     submitToJIRA,
+    isJIRAIssueCreated,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
   const {
@@ -66,7 +67,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     </BottomWrapper>
   );
 
-  if (formState.isSubmitted) {
+  if (formState.isSubmitted && isJIRAIssueCreated) {
     return (
       <KeyboardAvoidingScrollView
         stickyFooter={Done}

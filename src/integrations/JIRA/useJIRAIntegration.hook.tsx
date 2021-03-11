@@ -55,13 +55,18 @@ export const useJIRAIntegration = () => {
 
     const { username, token, domain } = jira;
 
+    const generatedDevNotes =
+      typeof devNotes === 'string' ? devNotes : await devNotes?.();
+
     const res = await postJIRAIssue({
       title,
       projectId,
       issueTypeId,
       description,
-      devNotes,
+      devNotes: generatedDevNotes,
     });
+
+    console.log(res);
 
     setIssue(res.data);
 
@@ -102,5 +107,6 @@ export const useJIRAIntegration = () => {
     submitToJIRA,
     JIRAComponents,
     JIRAConfirmationComponents,
+    isJIRAIssueCreated: jira ? !!issue : true,
   };
 };

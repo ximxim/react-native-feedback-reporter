@@ -13,7 +13,7 @@ export const ProjectSelector: FunctionComponent<IProjectSelectorProps> = ({
   ...dropListPickerProps
 }) => {
   const { data, isLoading } = useQuery('JIRAProjects', getJIRAProjects);
-  const { setValue, watch } = useFormContext<IReportFormValues>();
+  const { setValue, watch, errors } = useFormContext<IReportFormValues>();
   const projects = data?.data || [];
 
   useEffect(() => {
@@ -38,6 +38,7 @@ export const ProjectSelector: FunctionComponent<IProjectSelectorProps> = ({
       label="Project"
       defaultValue={watch('JIRAProject')}
       onChange={(val) => setValue('JIRAProject', val)}
+      error={errors.JIRAProject?.message}
     />
   );
 };
