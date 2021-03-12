@@ -2,8 +2,9 @@ import { useFormContext } from 'react-hook-form';
 import React, { FunctionComponent, useEffect, useContext } from 'react';
 import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
-import { Description, Title } from './components';
+import { Description, Title, ImageAttachments } from './components';
 import type { IReportFormProps, IReportFormValues } from './ReportForm.types';
+import * as Styled from './ReportForm.styles';
 
 import { useJIRAIntegration } from '../../../integrations';
 import {
@@ -32,7 +33,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     reset,
     getValues,
   } = useFormContext<IReportFormValues>();
-  const { additionalInformation } = useContext(GlobalProps);
+  const { additionalInformation, extraSource } = useContext(GlobalProps);
 
   useEffect(() => {
     register({ name: 'description' });
@@ -91,11 +92,16 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   return (
     <KeyboardAvoidingScrollView stickyFooter={Submit}>
-      <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
-      {additionalInformation?.(getValues())}
       <Title />
       <Description />
       {JIRAComponents}
+      {additionalInformation?.(getValues())}
+      <Styled.ScreenShotWrapper>
+        <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
+        {extraSource === 'react-native-image-crop-picker' && (
+          <ImageAttachments />
+        )}
+      </Styled.ScreenShotWrapper>
     </KeyboardAvoidingScrollView>
   );
 };

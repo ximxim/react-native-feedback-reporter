@@ -2,25 +2,9 @@ import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
 import DeviceInfo from 'react-native-device-info';
-import styled from 'styled-components/native';
-
-import { ImagePreview } from './ImagePreview/ImagePreview';
-
-const AdditionalInformationWrapper = styled.View`
-  flex: 1;
-  flex-direction: row;
-  margin-left: 4px;
-  margin-right: 4px;
-`;
 
 export default function App() {
   const handleShow = () => console.log('OMG you showed');
-  const [files, setFiles] = React.useState({
-    file1: '',
-    file2: '',
-    file3: '',
-    file4: '',
-  });
 
   return (
     <View style={styles.container}>
@@ -50,26 +34,7 @@ export default function App() {
             defaultValue: 'apitest',
           },
         }}
-        additionalInformation={() => (
-          <AdditionalInformationWrapper>
-            <ImagePreview
-              value={files.file1}
-              onChange={(val) => setFiles({ ...files, file1: val })}
-            />
-            <ImagePreview
-              value={files.file2}
-              onChange={(val) => setFiles({ ...files, file2: val })}
-            />
-            <ImagePreview
-              value={files.file3}
-              onChange={(val) => setFiles({ ...files, file3: val })}
-            />
-            <ImagePreview
-              value={files.file4}
-              onChange={(val) => setFiles({ ...files, file4: val })}
-            />
-          </AdditionalInformationWrapper>
-        )}
+        extraSource="react-native-image-crop-picker"
         devNotes={async () => {
           const [
             deviceName,

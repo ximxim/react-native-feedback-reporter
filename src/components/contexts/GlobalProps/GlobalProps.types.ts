@@ -33,4 +33,9 @@ export interface IFeedbackReporterProps {
    * Additional Information
    */
   additionalInformation?: (values: IReportFormValues) => ReactNode;
+
+  /**
+   * Additional screen shot
+   */
+  extraSource?: 'react-native-image-crop-picker';
 }

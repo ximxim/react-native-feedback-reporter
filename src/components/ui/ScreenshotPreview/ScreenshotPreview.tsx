@@ -8,6 +8,8 @@ export const ScreenshotPreview: FunctionComponent<IScreenshotPreviewProps> = ({
   ...imageProps
 }) => {
   return (
-    <Styled.Wrapper resizeMode="contain" {...imageProps} source={{ uri }} />
+    <Styled.Wrapper>
+      <Styled.Image resizeMode="cover" {...imageProps} source={{ uri }} />
+    </Styled.Wrapper>
   );
 };
