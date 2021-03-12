@@ -6,9 +6,9 @@ import { getExportContent } from './Redux.util';
 const module = NativeModules.FeedbackReporter;
 const reduxStatePath = module.TemporaryDirectoryPath + '/state.json';
 
-interface IFile {
+export interface IFile {
   name: string;
-  content: string;
+  content?: string;
   filename: string;
   filepath: string;
   filetype: string;
@@ -49,9 +49,11 @@ export const uploadFiles = async ({
    * WRITE FILES TO CACHE
    */
   await Promise.all(
-    files.map((file) =>
-      module.writeFile(file.filepath, file.content, { encoding: 'base64' })
-    )
+    files
+      .filter((file) => !!file.content)
+      .map((file) =>
+        module.writeFile(file.filepath, file.content, { encoding: 'base64' })
+      )
   );
 
   /**

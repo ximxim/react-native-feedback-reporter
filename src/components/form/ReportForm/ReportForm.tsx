@@ -1,5 +1,10 @@
 import { useFormContext } from 'react-hook-form';
-import React, { FunctionComponent, useEffect, useContext } from 'react';
+import React, {
+  FunctionComponent,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
 import { Description, Title, ImageAttachments } from './components';
@@ -14,10 +19,12 @@ import {
   Typography,
 } from '../../ui';
 import { GlobalProps } from '../../contexts';
+import type { IFile } from 'src/utils';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
+  const [files, setFiles] = useState<IFile[]>([]);
   const {
     JIRAComponents,
     submitToJIRA,
@@ -30,7 +37,6 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     watch,
     handleSubmit,
     formState,
-    reset,
     getValues,
   } = useFormContext<IReportFormValues>();
   const { additionalInformation, extraSource } = useContext(GlobalProps);
@@ -47,7 +53,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       <ButtonWithLabel
         isLoading={formState.isSubmitting}
         onPress={handleSubmit(async () => {
-          await Promise.all([submitToJIRA()]);
+          await Promise.all([submitToJIRA(files)]);
         })}
       >
         Report
@@ -60,7 +66,6 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       <ButtonWithLabel
         onPress={() => {
           handleClose();
-          reset();
         }}
       >
         Done
@@ -99,7 +104,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       <Styled.ScreenShotWrapper>
         <ScreenshotPreview uri={`data:image/png;base64,${watch('uri')}`} />
         {extraSource === 'react-native-image-crop-picker' && (
-          <ImageAttachments />
+          <ImageAttachments {...{ files, setFiles }} />
         )}
       </Styled.ScreenShotWrapper>
     </KeyboardAvoidingScrollView>

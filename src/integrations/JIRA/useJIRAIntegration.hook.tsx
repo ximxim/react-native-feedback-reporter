@@ -10,6 +10,7 @@ import {
   postJIRAIssueAttachents,
 } from './mutations';
 
+import type { IFile } from '../../utils';
 import { GlobalProps, IReportFormValues, Typography } from '../../components';
 
 export const useJIRAIntegration = () => {
@@ -40,7 +41,7 @@ export const useJIRAIntegration = () => {
 
   if (!jira) return { JIRAComponents: null, submitToJIRA: () => {} };
 
-  const submitToJIRA = async () => {
+  const submitToJIRA = async (files: IFile[]) => {
     setIssue(undefined);
 
     const {
@@ -66,13 +67,12 @@ export const useJIRAIntegration = () => {
       devNotes: generatedDevNotes,
     });
 
-    console.log(res);
-
     setIssue(res.data);
 
     if (!res.data.key) return;
 
     await postJIRAIssueAttachents({
+      files,
       token,
       domain,
       username,

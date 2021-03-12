@@ -1,33 +1,29 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 
-import { metrics } from '../../../../../utils';
+import { IFile, metrics } from '../../../../../utils';
 import { ImagePicker } from '../ImagePicker';
 
 const { width, height } = Dimensions.get('window');
 
-const Wrapper = styled.View`
+const Wrapper = styled.ScrollView`
   width: ${width * metrics.attachmentsPreview}px;
   height: ${height * metrics.screenShotPreview - metrics.margin * 2}px;
 `;
 
-export const ImageAttachments: FunctionComponent<unknown> = () => {
-  const [files, setFiles] = useState({
-    file1: '',
-    file2: '',
-  });
+export const ImageAttachments: FunctionComponent<{
+  files: IFile[];
+  setFiles: (val: IFile[]) => void;
+}> = ({ files, setFiles }) => {
+  const onChange = (val: IFile) => setFiles([...files, val]);
 
   return (
     <Wrapper>
-      <ImagePicker
-        value={files.file1}
-        onChange={(val) => setFiles({ ...files, file1: val })}
-      />
-      <ImagePicker
-        value={files.file2}
-        onChange={(val) => setFiles({ ...files, file2: val })}
-      />
+      <ImagePicker {...{ onChange }} />
+      {files.map(() => (
+        <ImagePicker {...{ onChange }} />
+      ))}
     </Wrapper>
   );
 };

@@ -1,9 +1,10 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacity, Dimensions } from 'react-native';
 import RNImagePicker from 'react-native-image-crop-picker';
 
 import { metrics } from '../../../../../utils';
+import type { IFile } from '../../../../../utils';
 
 const { width, height } = Dimensions.get('window');
 
@@ -19,23 +20,35 @@ const Preview = styled.Image`
 `;
 
 export const ImagePicker: FunctionComponent<{
-  value: string;
-  onChange: (value: string) => void;
-}> = ({ value, onChange }) => {
-  console.log(value);
+  defaultValue?: IFile;
+  onChange?: (value: IFile) => void;
+}> = ({ defaultValue, onChange }) => {
+  const [value, setValue] = useState<IFile | undefined>(defaultValue);
+
+  useEffect(() => {
+    if (!value) return;
+    onChange?.(value);
+  }, [value]);
+
   return (
     <TouchableOpacity
       onPress={async () => {
-        const image = await RNImagePicker.openPicker({});
-        console.log(image);
-        image.sourceURL && onChange(image.path);
+        const {
+          mime: filetype,
+          path: filepath,
+          filename,
+        } = await RNImagePicker.openPicker({});
+
+        if (filename) {
+          setValue({ name: 'file', filename, filepath, filetype });
+        }
       }}
     >
       <Preview
         resizeMode={value ? 'stretch' : 'cover'}
         source={{
           uri:
-            value ||
+            value?.filepath ||
             'https://thumbs.dreamstime.com/b/screenshot-icon-black-gray-background-vector-illustration-127971141.jpg',
         }}
       />
