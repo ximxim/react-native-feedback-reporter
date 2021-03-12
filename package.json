@@ -73,7 +73,8 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-image-crop-picker": "*"
   },
   "dependencies": {
     "@hookform/resolvers": "1.x.x",
