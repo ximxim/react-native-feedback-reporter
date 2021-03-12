@@ -13,8 +13,19 @@ export const IssueTypeSelector: FunctionComponent<IIssueTypeSelectorProps> = ({
   ...dropListPickerProps
 }) => {
   const { data, isLoading } = useQuery('issueTypes', getJIRAIssueTypes);
-  const { setValue, watch, errors } = useFormContext<IReportFormValues>();
-  const issueTypes = data?.data || [];
+  const {
+    setValue,
+    watch,
+    errors,
+    getValues,
+  } = useFormContext<IReportFormValues>();
+  const projectId = getValues('JIRAProject');
+  const allIssuesTypes = data?.data || [];
+  const issuesWithScope = allIssuesTypes.filter(
+    (issue) => issue.scope?.project?.id === projectId
+  );
+
+  const issueTypes = issuesWithScope.length ? issuesWithScope : allIssuesTypes;
 
   useEffect(() => {
     const val = defaultValue || '';
@@ -22,7 +33,7 @@ export const IssueTypeSelector: FunctionComponent<IIssueTypeSelectorProps> = ({
       (issueType) => compare(issueType.name, val) || compare(issueType.id, val)
     );
     setValue('JIRAIssueType', found?.id);
-  }, [isLoading]);
+  }, [isLoading, projectId]);
 
   const options = issueTypes.map((issueType) => ({
     key: issueType.id,

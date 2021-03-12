@@ -9,6 +9,12 @@ interface IAllJIRAIssueTypesResponse {
   untranslatedName: string;
   subtask: boolean;
   avatarId: number;
+  scope?: {
+    type: string;
+    project: {
+      id: string;
+    };
+  };
 }
 
 export const getJIRAIssueTypes = () =>
