@@ -121,15 +121,17 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion "27.0.3"
 
-    compileOptions {
+  compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
         applicationId "com.example.reactnativefeedbackreporter"
-        minSdkVersion rootProject.ext.minSdkVersion
+      vectorDrawables.useSupportLibrary = true
+      minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
