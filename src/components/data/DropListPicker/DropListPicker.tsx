@@ -5,7 +5,7 @@ import * as Styled from './DropListPicker.style';
 import type { IDropListPickerProps } from './DropListPicker.types';
 
 import { RadioButton } from '../RadioButton';
-import { ModalHeader } from '../../ui';
+import { ModalHeader, Typography } from '../../ui';
 
 export const DropListPicker = ({
   label,
@@ -95,11 +95,22 @@ export const DropListPicker = ({
       onPress={handleFocus}
     >
       <Styled.LabelWrapper style={{ transform: [{ translateY }, { scale }] }}>
-        <Styled.Label {...{ hasError, isFocused }}>{label}</Styled.Label>
+        <Typography
+          variant="body1"
+          opacity={isFocused || hasError ? 1 : 0.8}
+          color={hasError ? 'brandDanger' : 'brandSecondary'}
+        >
+          {label}
+        </Typography>
       </Styled.LabelWrapper>
-      <Styled.Value hasValue={hasValue}>
+      <Typography
+        variant="body1"
+        mx={14}
+        my={18.5}
+        color={hasValue ? 'brandSecondary' : 'transparent'}
+      >
         {options.find((option) => option.key === keySelected)?.value}
-      </Styled.Value>
+      </Typography>
     </Styled.Wrapper>
   );
 
@@ -146,7 +157,11 @@ export const DropListPicker = ({
     <Styled.Container>
       {Label}
       {Modal}
-      {hasError && <Styled.Error>{error}</Styled.Error>}
+      {hasError && (
+        <Typography variant="body2" mx={14} color="brandDanger">
+          {error}
+        </Typography>
+      )}
     </Styled.Container>
   );
 };

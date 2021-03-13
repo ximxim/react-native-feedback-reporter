@@ -1,6 +1,5 @@
 import { TouchableOpacity, Animated } from 'react-native';
 import styled from 'styled-components/native';
-// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const Wrapper = styled(TouchableOpacity)<{ hasIcon: boolean }>`
   flex: 1;
@@ -16,17 +15,6 @@ export const Wrapper = styled(TouchableOpacity)<{ hasIcon: boolean }>`
   background-color: ${({ theme }) => theme.colors.brandPrimary};
   justify-content: ${({ hasIcon }) => (hasIcon ? 'flex-start' : 'center')};
 `;
-
-export const Label = styled.Text`
-  font-size: 20px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.brandSecondary};
-`;
-
-// export const Icon = styled(MaterialCommunityIcons)<{ hasIcon: boolean }>`
-//   color: ${({ theme }) => theme.colors.brandSecondary};
-//   margin-right: ${({ hasIcon }) => (hasIcon ? 15 : 8)}px;
-// `;
 
 export const AnimatedView = styled(Animated.View)`
   left: 50%;

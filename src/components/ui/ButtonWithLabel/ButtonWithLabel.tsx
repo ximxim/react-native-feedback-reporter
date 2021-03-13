@@ -56,10 +56,7 @@ export const ButtonWithLabel = ({
   const ButtonContent = isLoading ? (
     <Styled.ActivityIndicator />
   ) : (
-    <>
-      {/* {icon && <Styled.Icon name={icon} size={24} {...{ hasIcon }} />} */}
-      <Typography variant="button">{children}</Typography>
-    </>
+    <Typography variant="button">{children}</Typography>
   );
 
   return (

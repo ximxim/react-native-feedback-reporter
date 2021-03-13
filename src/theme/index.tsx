@@ -1,16 +1,16 @@
-const h1 = 26;
-const h2 = h1 * 0.94;
-const h3 = h1 * 0.88;
-const h4 = h1 * 0.82;
-const h5 = h1 * 0.75;
-const h6 = h1 * 0.69;
-const subtitle1 = h1 * 0.63;
-const subtitle2 = h1 * 0.5;
-const body1 = h1 * 0.63;
-const body2 = h1 * 0.57;
-const button = h1 * 0.57;
-const caption = h1 * 0.5;
-const overline = h1 * 0.5;
+const h1 = 26; // 26
+const h2 = h1 * 0.94; // 24.44
+const h3 = h1 * 0.88; // 22.88
+const h4 = h1 * 0.82; // 21.32
+const h5 = h1 * 0.75; // 19.5
+const h6 = h1 * 0.69; // 17.94
+const subtitle1 = h1 * 0.63; // 16.38
+const subtitle2 = h1 * 0.5; // 13
+const body1 = h1 * 0.63; // 16.38
+const body2 = h1 * 0.57; // 14.82
+const button = h1 * 0.57; // 14.82
+const caption = h1 * 0.5; // 13
+const overline = h1 * 0.5; // 13
 
 const MARGIN_GUTTER = 0.35;
 
@@ -125,6 +125,7 @@ const base = {
     femaleColor: '#F490A7',
     otherColor: '#6b747d',
     barStyle: 'dark-content',
+    transparent: 'transparent',
     lightenLevels: {
       lvl1: 0,
       lvl2: 0.05,
@@ -152,6 +153,7 @@ const navyBlue: ThemeType = {
     femaleColor: '#F490A7',
     otherColor: '#6b747d',
     barStyle: 'light-content',
+    transparent: 'transparent',
     lightenLevels: {
       lvl1: 0,
       lvl2: 0.1,
@@ -177,6 +179,7 @@ const dark: ThemeType = {
     femaleColor: '#F490A7',
     otherColor: '#ccc',
     barStyle: 'light-content',
+    transparent: 'transparent',
     lightenLevels: {
       lvl1: 0,
       lvl2: 0.1,
@@ -202,6 +205,7 @@ const champagne: ThemeType = {
     femaleColor: '#F490A7',
     otherColor: '#6b747d',
     barStyle: 'dark-content',
+    transparent: 'transparent',
     lightenLevels: {
       lvl1: 0,
       lvl2: 0.05,
@@ -227,6 +231,7 @@ const teaGreen: ThemeType = {
     femaleColor: '#F490A7',
     otherColor: '#6b747d',
     barStyle: 'dark-content',
+    transparent: 'transparent',
     lightenLevels: {
       lvl1: 0,
       lvl2: 0.05,
@@ -252,6 +257,7 @@ const crystal: ThemeType = {
     femaleColor: '#F490A7',
     otherColor: '#6b747d',
     barStyle: 'dark-content',
+    transparent: 'transparent',
     lightenLevels: {
       lvl1: 0,
       lvl2: 0.05,
@@ -277,6 +283,7 @@ const pastelGray: ThemeType = {
     femaleColor: '#F490A7',
     otherColor: '#6b747d',
     barStyle: 'dark-content',
+    transparent: 'transparent',
     lightenLevels: {
       lvl1: 0,
       lvl2: 0.05,
@@ -302,6 +309,7 @@ const grape: ThemeType = {
     femaleColor: '#F490A7',
     otherColor: '#6b747d',
     barStyle: 'dark-content',
+    transparent: 'transparent',
     lightenLevels: {
       lvl1: 0,
       lvl2: 0.05,
