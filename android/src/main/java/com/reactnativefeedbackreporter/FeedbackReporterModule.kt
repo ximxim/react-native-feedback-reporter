@@ -1,18 +1,28 @@
 package com.reactnativefeedbackreporter
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Base64
 import android.util.SparseArray
 import android.view.View
+import androidx.core.app.ActivityCompat
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.facebook.react.modules.core.PermissionAwareActivity
+import com.facebook.react.modules.core.PermissionListener
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.OutputStream
 import java.net.URL
+import java.util.*
+import java.util.concurrent.Callable
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), ScreenshotDetectionListener {
@@ -44,8 +54,6 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
   }
 
   override fun onScreenCaptured(path: String) {
-//    val view: View = currentActivity?.getWindow()?.getDecorView()!!.findViewById(android.R.id.content)
-
     val encoded = takeScreenshot()
 
     val map = Arguments.createMap()
@@ -62,7 +70,9 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
   }
 
   override fun onScreenCapturedWithDeniedPermission() {
-    // Todo: send user notification.
+    permissionsCheck(currentActivity!!, Arrays.asList(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), Callable<Void?> {
+      null
+    })
   }
 
   private fun takeScreenshot(): String? {
@@ -76,7 +86,6 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       val byteArray: ByteArray = byteArrayOutputStream.toByteArray()
       return Base64.encodeToString(byteArray, Base64.DEFAULT);
     } catch (e: Throwable) {
-      // Several error may come out with file handling or DOM
       e.printStackTrace()
       return ""
     }
@@ -212,5 +221,41 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
     reactContext
       .getJSModule(RCTNativeAppEventEmitter::class.java)
       .emit(eventName, params)
+  }
+
+  private fun permissionsCheck(activity: Activity, requiredPermissions: List<String>, callback: Callable<Void?>) {
+    val missingPermissions: MutableList<String> = ArrayList()
+    for (permission in requiredPermissions) {
+      val status: Int = ActivityCompat.checkSelfPermission(activity, permission)
+      if (status != PackageManager.PERMISSION_GRANTED) {
+        missingPermissions.add(permission)
+      }
+    }
+    if (!missingPermissions.isEmpty()) {
+      (activity as PermissionAwareActivity).requestPermissions(missingPermissions.toTypedArray(), 1, PermissionListener { requestCode, permissions, grantResults ->
+        if (requestCode == 1) {
+          for (permissionIndex in permissions.indices) {
+            val permission = permissions[permissionIndex]
+            val grantResult = grantResults[permissionIndex]
+            if (grantResult == PackageManager.PERMISSION_DENIED) {
+              return@PermissionListener true
+            }
+          }
+          try {
+            callback.call()
+          } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+          }
+        }
+        true
+      })
+      return
+    }
+
+    try {
+      callback.call()
+    } catch (e: java.lang.Exception) {
+      e.printStackTrace()
+    }
   }
 }

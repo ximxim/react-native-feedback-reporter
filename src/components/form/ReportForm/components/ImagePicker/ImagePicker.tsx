@@ -39,9 +39,12 @@ export const ImagePicker: FunctionComponent<{
           filename,
         } = await RNImagePicker.openPicker({});
 
-        if (filename) {
-          setValue({ name: 'file', filename, filepath, filetype });
-        }
+        setValue({
+          name: 'file',
+          filename: filename || new Date().toString(),
+          filepath,
+          filetype,
+        });
       }}
     >
       <Preview

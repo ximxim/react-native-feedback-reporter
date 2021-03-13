@@ -20,8 +20,8 @@ class ScreenshotDetectionDelegate(val context: Context, val listener: Screenshot
     contentObserver = object : ContentObserver(Handler()) {
       override fun onChange(selfChange: Boolean, uri: Uri) {
         super.onChange(selfChange, uri)
+        val path = getFilePathFromContentResolver(context, uri)
         if (isReadExternalStoragePermissionGranted()) {
-          val path = getFilePathFromContentResolver(context, uri)
           if (isScreenshotPath(path)) {
             onScreenCaptured(path!!)
           }
