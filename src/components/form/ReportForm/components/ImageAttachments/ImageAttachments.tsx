@@ -19,7 +19,7 @@ export const ImageAttachments: FunctionComponent<{
   const onChange = (val: IFile) => {
     console.log(val);
     setFiles([...files, val]);
-  }
+  };
 
   return (
     <Wrapper>
