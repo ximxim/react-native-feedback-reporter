@@ -46,23 +46,3 @@ export const IconPulse = styled(Animated.View)`
   position: absolute;
   background-color: ${({ theme }) => theme.colors.brandSecondary};
 `;
-
-export const Label = styled.Text<{ hasError: boolean }>`
-  margin: 8px;
-  color: ${({ theme, hasError }) =>
-    hasError ? theme.colors.brandDanger : theme.colors.brandSecondary};
-`;
-
-export const OptionLabel = styled.Text`
-  font-size: 16px;
-  text-align: center;
-  margin-left: 10px;
-  color: ${({ theme }) => theme.colors.brandSecondary};
-`;
-
-export const Error = styled.Text`
-  margin: 8px;
-  font-size: 14px;
-  font-weight: 400;
-  color: ${({ theme }) => theme.colors.brandDanger};
-`;

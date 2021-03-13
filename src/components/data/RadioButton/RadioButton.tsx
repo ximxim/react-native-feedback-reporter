@@ -9,6 +9,8 @@ import {
 import * as Styled from './RadioButton.style';
 import type { IRadioButtonPickerProps, IOption } from './RadioButton.types';
 
+import { Typography } from '../../ui';
+
 export const RadioButton: FunctionComponent<IRadioButtonPickerProps> = ({
   label,
   error,
@@ -88,14 +90,26 @@ export const RadioButton: FunctionComponent<IRadioButtonPickerProps> = ({
             />
           )}
         </Styled.IconWrapper>
-        <Styled.OptionLabel>{val}</Styled.OptionLabel>
+        <Typography
+          mb={0}
+          ml={10}
+          variant="body1"
+          textAlign="center"
+          color="brandSecondary"
+        >
+          {val}
+        </Typography>
       </Styled.OptionWrapper>
     );
   };
 
   return (
     <Styled.Wrapper {...otherViewProps}>
-      {hasLabel && <Styled.Label {...{ hasError }}>{label}</Styled.Label>}
+      {hasLabel && (
+        <Typography color={hasError ? 'brandDanger' : 'brandSecondary'} m={8}>
+          {label}
+        </Typography>
+      )}
       <Styled.OptionsList>
         <FlatList
           data={options}
@@ -104,7 +118,11 @@ export const RadioButton: FunctionComponent<IRadioButtonPickerProps> = ({
           keyExtractor={(item) => item.key}
         />
       </Styled.OptionsList>
-      {hasError && <Styled.Error>{error}</Styled.Error>}
+      {hasError && (
+        <Typography color="brandDanger" m={8} variant="body2">
+          {error}
+        </Typography>
+      )}
     </Styled.Wrapper>
   );
 };
