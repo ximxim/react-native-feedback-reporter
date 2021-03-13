@@ -7,18 +7,12 @@ export const ModalHeader = styled.View`
   border-color: ${({ theme }) => theme.colors.brandSecondary};
 `;
 
-export const Close = styled.Text`
+export const Close = styled.TouchableOpacity`
   flex: 1;
-  font-size: 14px;
   padding: 16px 8px;
-  color: ${({ theme }) => theme.colors.brandSecondary};
 `;
 
-export const ModalHeading = styled.Text`
-  flex: 8;
+export const ModalHeading = styled.View`
+  flex: 3;
   padding: 16px 8px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  color: ${({ theme }) => theme.colors.brandSecondary};
 `;

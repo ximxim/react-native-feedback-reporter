@@ -1,8 +1,8 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
 
 import * as Styled from './ModalHeader.style';
 import type { IModalHeaderProps } from './ModalHeader.types';
+import { Typography } from '../Typography';
 
 export const ModalHeader = ({
   left,
@@ -10,28 +10,38 @@ export const ModalHeader = ({
   right,
   ...viewProps
 }: IModalHeaderProps) => {
-  const Blank = <View style={{ flex: 1 }} />;
+  const Blank = <Styled.Close />;
 
   const LeftComponent = left
     ? left.component || (
-        <TouchableOpacity onPress={left.onPress}>
-          <Styled.Close>{left.label || 'Clear'}</Styled.Close>
-        </TouchableOpacity>
+        <Styled.Close onPress={left.onPress}>
+          <Typography variant="body2">{left.label || 'Clear'}</Typography>
+        </Styled.Close>
       )
     : Blank;
 
   const RightComponent = right
     ? right.component || (
-        <TouchableOpacity onPress={right.onPress}>
-          <Styled.Close>{right.label || 'Close'}</Styled.Close>
-        </TouchableOpacity>
+        <Styled.Close onPress={right.onPress}>
+          <Typography variant="body2" textAlign="right">
+            {right.label || 'Close'}
+          </Typography>
+        </Styled.Close>
       )
     : Blank;
+
+  const Heading = (
+    <Styled.ModalHeading>
+      <Typography variant="body1" textAlign="center">
+        {heading}
+      </Typography>
+    </Styled.ModalHeading>
+  );
 
   return (
     <Styled.ModalHeader {...viewProps}>
       {LeftComponent}
-      <Styled.ModalHeading>{heading}</Styled.ModalHeading>
+      {Heading}
       {RightComponent}
     </Styled.ModalHeader>
   );
