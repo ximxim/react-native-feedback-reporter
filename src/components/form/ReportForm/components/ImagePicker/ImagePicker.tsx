@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-useless-escape */
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacity, Dimensions } from 'react-native';
@@ -35,9 +37,13 @@ export const ImagePicker: FunctionComponent<{
       onPress={async () => {
         const {
           mime: filetype,
-          path: filepath,
+          path,
           filename,
         } = await RNImagePicker.openPicker({});
+
+        const filepath = path.startsWith('file://')
+          ? path.replace('file:\/\/', '')
+          : path;
 
         setValue({
           name: 'file',
