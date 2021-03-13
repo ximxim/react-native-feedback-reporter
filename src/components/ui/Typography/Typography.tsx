@@ -56,6 +56,7 @@ type Props = {
   WidthProps;
 
 const StyledTypography = styled(Text)<Props>`
+  font-family: System;
   color: ${({ theme }) => theme.colors.brandSecondary};
   ${textVariants}
   ${colorProps}
