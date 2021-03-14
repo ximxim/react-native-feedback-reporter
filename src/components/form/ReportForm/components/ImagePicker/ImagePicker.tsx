@@ -37,8 +37,16 @@ export const ImagePicker: FunctionComponent<{
   useEffect(() => {
     if (!previewFile) return;
     (async () => {
-      const { path } = await module.getThumbnail(previewFile.filepath);
-      setUri(path);
+      try {
+        if (previewFile.filetype.toLowerCase().startsWith('video')) {
+          const { path } = await module.getThumbnail(previewFile.filepath);
+          setUri(path);
+        } else {
+          setUri(previewFile.filepath);
+        }
+      } catch (e) {
+        console.log(e);
+      }
     })();
   }, [previewFile]);
 
