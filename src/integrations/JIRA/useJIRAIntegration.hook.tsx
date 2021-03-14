@@ -4,24 +4,15 @@ import { useFormContext } from 'react-hook-form';
 
 import { initJIRAApi } from './JIRAApi.service';
 import { ProjectSelector, IssueTypeSelector } from './components';
-import {
-  postJIRAIssue,
-  IPostJIRAIssueResponse,
-  postJIRAIssueAttachents,
-} from './mutations';
+import { useJIRASubmission } from './useJIRASubmission.hook';
 
-import type { IFile } from '../../utils';
 import { GlobalProps, IReportFormValues, Typography } from '../../components';
 
 export const useJIRAIntegration = () => {
-  const [issue, setIssue] = useState<IPostJIRAIssueResponse>();
+  const { issue, submitToJIRA } = useJIRASubmission();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
-  const { jira, devNotes } = useContext(GlobalProps);
-  const {
-    register,
-    getValues,
-    unregister,
-  } = useFormContext<IReportFormValues>();
+  const { jira } = useContext(GlobalProps);
+  const { register, unregister } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
     if (!jira) return;
@@ -40,46 +31,6 @@ export const useJIRAIntegration = () => {
   }, [register]);
 
   if (!jira) return { JIRAComponents: null, submitToJIRA: () => {} };
-
-  const submitToJIRA = async (files: IFile[]) => {
-    setIssue(undefined);
-
-    const {
-      uri,
-      title,
-      description,
-      JIRAProject: projectId,
-      JIRAIssueType: issueTypeId,
-    } = getValues();
-
-    if (!jira || !projectId || !issueTypeId) return;
-
-    const { username, token, domain } = jira;
-
-    const generatedDevNotes =
-      typeof devNotes === 'string' ? devNotes : await devNotes?.();
-
-    const res = await postJIRAIssue({
-      title,
-      projectId,
-      issueTypeId,
-      description,
-      devNotes: generatedDevNotes,
-    });
-
-    setIssue(res.data);
-
-    if (!res.data.key) return;
-
-    await postJIRAIssueAttachents({
-      files,
-      token,
-      domain,
-      username,
-      content: uri,
-      key: res.data.key,
-    });
-  };
 
   const JIRAComponents = isRegistered && (
     <>
