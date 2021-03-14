@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-useless-escape */
 import { NativeModules } from 'react-native';
 
 import { toBase64 } from './Base64.util';
@@ -30,7 +32,13 @@ export const uploadFiles = async ({
    * REDUX STATE ATTACHMENT
    */
   const content = toBase64(getExportContent());
-  const filesToUpload = files;
+  const filesToUpload = files.map(({ filepath, ...file }) => ({
+    ...file,
+    filepath: filepath.startsWith('file://')
+      ? filepath.replace('file:\/\/', '')
+      : filepath,
+  }));
+
   if (content) {
     await module.writeFile(reduxStatePath, content, {
       encoding: 'base64',
