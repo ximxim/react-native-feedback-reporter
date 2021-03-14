@@ -20,10 +20,10 @@ const Preview = styled.Image`
 `;
 
 export const ImagePicker: FunctionComponent<{
-  defaultValue?: IFile;
-  onChange?: (value: IFile) => void;
-}> = ({ defaultValue, onChange }) => {
-  const [value, setValue] = useState<IFile | undefined>(defaultValue);
+  previewFile?: IFile;
+  onChange?: (value: IFile[]) => void;
+}> = ({ previewFile, onChange }) => {
+  const [value, setValue] = useState<IFile[]>();
 
   useEffect(() => {
     if (!value) return;
@@ -33,25 +33,22 @@ export const ImagePicker: FunctionComponent<{
   return (
     <TouchableOpacity
       onPress={async () => {
-        const {
-          mime: filetype,
-          path,
-          filename,
-        } = await RNImagePicker.openPicker({});
-
-        setValue({
+        const res = await RNImagePicker.openPicker({ multiple: true });
+        const files = res.map(({ filename, path, mime: filetype }) => ({
           name: 'file',
           filename: filename || new Date().toString(),
           filepath: path,
           filetype,
-        });
+        }));
+
+        setValue(files);
       }}
     >
       <Preview
         resizeMode={value ? 'stretch' : 'cover'}
         source={{
           uri:
-            value?.filepath ||
+            previewFile?.filepath ||
             'https://thumbs.dreamstime.com/b/screenshot-icon-black-gray-background-vector-illustration-127971141.jpg',
         }}
       />

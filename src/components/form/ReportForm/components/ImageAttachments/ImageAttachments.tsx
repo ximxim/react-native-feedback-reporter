@@ -16,14 +16,17 @@ export const ImageAttachments: FunctionComponent<{
   files: IFile[];
   setFiles: (val: IFile[]) => void;
 }> = ({ files, setFiles }) => {
-  const onChange = (val: IFile) => setFiles([...files, val]);
+  const onChange = (val: IFile[]) => setFiles(val);
 
   return (
     <Wrapper>
-      <ImagePicker {...{ onChange }} />
-      {files.map(() => (
+      {files.length ? (
+        files.map((file) => (
+          <ImagePicker {...{ onChange }} previewFile={file} />
+        ))
+      ) : (
         <ImagePicker {...{ onChange }} />
-      ))}
+      )}
     </Wrapper>
   );
 };
