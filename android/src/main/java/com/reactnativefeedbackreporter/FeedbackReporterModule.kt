@@ -4,8 +4,11 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Environment
 import android.util.Base64
+import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import androidx.core.app.ActivityCompat
@@ -14,10 +17,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.modules.core.PermissionAwareActivity
 import com.facebook.react.modules.core.PermissionListener
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.OutputStream
+import java.io.*
 import java.net.URL
 import java.util.*
 import java.util.concurrent.Callable
@@ -256,6 +256,44 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       callback.call()
     } catch (e: java.lang.Exception) {
       e.printStackTrace()
+    }
+  }
+
+  @ReactMethod
+  fun getThumbnail(filePath: String, promise: Promise) {
+    var filePath = filePath
+    filePath = filePath.replace("file://", "")
+    val retriever = MediaMetadataRetriever()
+    retriever.setDataSource(filePath)
+    val image = retriever.getFrameAtTime(1000000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
+    val fullPath: String = this.getReactApplicationContext().getCacheDir().getAbsolutePath()
+//    val fullPath: String = Environment.getExternalStorageDirectory().getAbsolutePath().toString() + "/thumb"
+    try {
+      val dir = File(fullPath)
+      if (!dir.exists()) {
+        dir.mkdirs()
+      }
+      var fOut: OutputStream? = null
+      // String fileName = "thumb-" + UUID.randomUUID().toString() + ".jpeg";
+      val fileName = "thumb-" + UUID.randomUUID().toString() + ".jpeg"
+      val file = File(fullPath, fileName)
+      file.createNewFile()
+      fOut = FileOutputStream(file)
+
+      // 100 means no compression, the lower you go, the stronger the compression
+      image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+      fOut!!.flush()
+      fOut.close()
+
+      // MediaStore.Images.Media.insertImage(reactContext.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+      val map = Arguments.createMap()
+      map.putString("path", "file://$fullPath/$fileName")
+      map.putDouble("width", image.width.toDouble())
+      map.putDouble("height", image.height.toDouble())
+      promise.resolve(map)
+    } catch (e: java.lang.Exception) {
+      Log.e("E_RNThumnail_ERROR", e.message)
+      promise.reject("E_RNThumnail_ERROR", e)
     }
   }
 }

@@ -1,12 +1,13 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { TouchableOpacity, Dimensions } from 'react-native';
+import { TouchableOpacity, Dimensions, NativeModules } from 'react-native';
 import RNImagePicker from 'react-native-image-crop-picker';
 
 import { metrics } from '../../../../../utils';
 import type { IFile } from '../../../../../utils';
 
 const { width, height } = Dimensions.get('window');
+const module = NativeModules.FeedbackReporter;
 
 const Preview = styled.Image`
   border-radius: 4px;
@@ -24,11 +25,22 @@ export const ImagePicker: FunctionComponent<{
   onChange?: (value: IFile[]) => void;
 }> = ({ previewFile, onChange }) => {
   const [value, setValue] = useState<IFile[]>();
+  const [uri, setUri] = useState<string>(
+    'https://thumbs.dreamstime.com/b/screenshot-icon-black-gray-background-vector-illustration-127971141.jpg'
+  );
 
   useEffect(() => {
     if (!value) return;
     onChange?.(value);
   }, [value]);
+
+  useEffect(() => {
+    if (!previewFile) return;
+    (async () => {
+      const { path } = await module.getThumbnail(previewFile.filepath);
+      setUri(path);
+    })();
+  }, [previewFile]);
 
   return (
     <TouchableOpacity
@@ -44,14 +56,7 @@ export const ImagePicker: FunctionComponent<{
         setValue(files);
       }}
     >
-      <Preview
-        resizeMode={value ? 'stretch' : 'cover'}
-        source={{
-          uri:
-            previewFile?.filepath ||
-            'https://thumbs.dreamstime.com/b/screenshot-icon-black-gray-background-vector-illustration-127971141.jpg',
-        }}
-      />
+      <Preview source={{ uri }} resizeMode="cover" />
     </TouchableOpacity>
   );
 };
