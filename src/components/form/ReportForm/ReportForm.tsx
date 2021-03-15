@@ -29,6 +29,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     JIRAComponents,
     submitToJIRA,
     isJIRAIssueCreated,
+    JIRAFailureComponents,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
   const {
@@ -97,6 +98,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   return (
     <KeyboardAvoidingScrollView stickyFooter={Submit}>
+      {JIRAFailureComponents}
       <Title />
       <Description />
       {JIRAComponents}

@@ -17,7 +17,12 @@ export const useJIRAIntegration = () => {
   const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const { jira } = useContext(GlobalProps);
-  const { register, unregister } = useFormContext<IReportFormValues>();
+  const {
+    register,
+    unregister,
+    formState,
+  } = useFormContext<IReportFormValues>();
+  const isJIRAIssueCreated = jira ? !!issue : true;
 
   useEffect(() => {
     if (!jira) return;
@@ -67,10 +72,18 @@ export const useJIRAIntegration = () => {
     </>
   );
 
+  const JIRAFailureComponents = isJIRAIssueCreated && formState.isSubmitted && (
+    <Alert
+      variant="brandDanger"
+      alert="Unable to create JIRA ticket. Please try again."
+    />
+  );
+
   return {
     submitToJIRA,
     JIRAComponents,
+    JIRAFailureComponents,
     JIRAConfirmationComponents,
-    isJIRAIssueCreated: jira ? !!issue : true,
+    isJIRAIssueCreated,
   };
 };

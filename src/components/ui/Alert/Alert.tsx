@@ -6,15 +6,25 @@ import type { IAlertProps } from './Alert.types';
 
 import { Typography } from '../Typography';
 
-export const Alert = ({ alert, isLoading, ...viewProps }: IAlertProps) => {
+export const Alert = ({
+  alert,
+  variant = 'brandPrimary',
+  isLoading,
+  ...viewProps
+}: IAlertProps) => {
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isLoading]);
 
   return (
-    <Styled.Wrapper {...viewProps}>
+    <Styled.Wrapper {...{ ...viewProps, variant }}>
       {isLoading && <Styled.ActivityIndicator />}
-      <Typography my={2} variant="subtitle2" textAlign="center">
+      <Typography
+        my={2}
+        variant="subtitle2"
+        textAlign="center"
+        color={variant === 'brandDanger' ? 'brandPrimary' : 'brandSecondary'}
+      >
         {alert}
       </Typography>
     </Styled.Wrapper>
