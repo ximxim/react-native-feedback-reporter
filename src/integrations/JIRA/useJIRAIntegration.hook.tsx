@@ -6,10 +6,15 @@ import { initJIRAApi } from './JIRAApi.service';
 import { ProjectSelector, IssueTypeSelector } from './components';
 import { useJIRASubmission } from './useJIRASubmission.hook';
 
-import { GlobalProps, IReportFormValues, Typography } from '../../components';
+import {
+  Alert,
+  Typography,
+  GlobalProps,
+  IReportFormValues,
+} from '../../components';
 
 export const useJIRAIntegration = () => {
-  const { issue, submitToJIRA } = useJIRASubmission();
+  const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const { jira } = useContext(GlobalProps);
   const { register, unregister } = useFormContext<IReportFormValues>();
@@ -51,6 +56,14 @@ export const useJIRAIntegration = () => {
       >
         {issue.key}
       </Typography>
+      <Alert
+        alert={
+          isAttaching
+            ? 'Uploading attachments in the background. Feel free to continue using the app. Dismissing this screen will not stop the uploads'
+            : 'Attachments uploaded'
+        }
+        isLoading={isAttaching}
+      />
     </>
   );
 
