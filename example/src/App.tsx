@@ -24,8 +24,7 @@ export default function App() {
         }}
         slack={{
           channel: 'random',
-          botToken:
-            'xoxp-733009645829-732537859076-1873639939654-01b4f3bea56463906b1fed1f770e2c8e',
+          botToken: 'xoxb-733009645829-1893273458545-TwDwShjXYCIg4wvjpApvxLZX',
         }}
         // jira={{
         //   domain: 'https://ximxim.atlassian.net',

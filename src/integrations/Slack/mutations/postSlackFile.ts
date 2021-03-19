@@ -5,9 +5,10 @@ import type { IFile } from '../../../utils';
 import { slackApi } from '../slack.service';
 
 interface IPostSlackThreadAttachmentsProps {
-  content?: string;
   ts: string;
   files: IFile[];
+  channel?: string;
+  content?: string;
 }
 
 const module = NativeModules.FeedbackReporter;
@@ -18,6 +19,7 @@ export const postSlackFile = ({
   ts,
   files,
   content,
+  channel,
 }: IPostSlackThreadAttachmentsProps) =>
   Promise.all(
     [
@@ -31,7 +33,7 @@ export const postSlackFile = ({
       },
     ].map((file) =>
       uploadFiles({
-        toUrl: `${slackApi.defaults.baseURL}files.upload?thread_ts=${ts}&channels=random`,
+        toUrl: `${slackApi.defaults.baseURL}files.upload?thread_ts=${ts}&channels=${channel || 'general'}`,
         headers: slackApi.defaults.headers.common,
         files: [file],
       })
