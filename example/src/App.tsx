@@ -22,6 +22,11 @@ export default function App() {
           onShow: handleShow,
           header: { heading: 'Custom Heading' },
         }}
+        slack={{
+          channel: 'random',
+          botToken:
+            'xoxp-733009645829-732537859076-750531743285-ab913c3a9bad46f9accd23e8294994b7',
+        }}
         jira={{
           domain: 'https://ximxim.atlassian.net',
           username: 'azim.ahmed7@gmail.com',

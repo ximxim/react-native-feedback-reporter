@@ -1,30 +1,27 @@
 import { NativeModules } from 'react-native';
 
-import type { IFile } from '../../../utils';
-import { JIRAApi } from '../JIRAApi.service';
 import { uploadFiles } from '../../../utils';
+import type { IFile } from '../../../utils';
+import { slackApi } from '../slack.service';
 
-interface IPostJIRAIssueAttachmentsProps {
-  key: string;
-  files: IFile[];
+interface IPostSlackThreadAttachmentsProps {
   content?: string;
+  ts: string;
+  files: IFile[];
 }
 
 const module = NativeModules.FeedbackReporter;
 const filename = 'screenshot.png';
 const filepath = `${module.TemporaryDirectoryPath}/${filename}`;
 
-export const postJIRAIssueAttachents = ({
-  key,
+export const postSlackFile = ({
+  ts,
   files,
   content,
-}: IPostJIRAIssueAttachmentsProps) =>
+}: IPostSlackThreadAttachmentsProps) =>
   uploadFiles({
-    toUrl: `${JIRAApi.defaults.baseURL}issue/${key}/attachments`,
-    headers: {
-      ...JIRAApi.defaults.headers.common,
-      'X-Atlassian-Token': 'no-check',
-    },
+    toUrl: `${slackApi.defaults.baseURL}files.upload?thread_ts=${ts}`,
+    headers: slackApi.defaults.headers.common,
     files: [
       ...files,
       {

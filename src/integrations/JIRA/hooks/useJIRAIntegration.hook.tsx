@@ -1,27 +1,26 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Linking } from 'react-native';
 import { useFormContext } from 'react-hook-form';
 
-import { initJIRAApi } from './JIRAApi.service';
-import { ProjectSelector, IssueTypeSelector } from './components';
+import { initJIRAApi } from '../JIRAApi.service';
+import { ProjectSelector, IssueTypeSelector } from '../components';
 import { useJIRASubmission } from './useJIRASubmission.hook';
+import { useJIRAProjects } from './useJIRAProjects.hook';
+import { useJIRAIssueType } from './useJIRAIssueType.hook';
 
 import {
   Alert,
   Typography,
   GlobalProps,
   IReportFormValues,
-} from '../../components';
+} from '../../../components';
 
 export const useJIRAIntegration = () => {
+  const projectOptions = useJIRAProjects();
+  const issueTypeOptions = useJIRAIssueType();
   const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
-  const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const { jira } = useContext(GlobalProps);
-  const {
-    register,
-    unregister,
-    formState,
-  } = useFormContext<IReportFormValues>();
+  const { formState } = useFormContext<IReportFormValues>();
   const isJIRAIssueCreated = jira ? !!issue : true;
 
   useEffect(() => {
@@ -29,23 +28,12 @@ export const useJIRAIntegration = () => {
     initJIRAApi(jira);
   }, []);
 
-  useEffect(() => {
-    register('JIRAProject');
-    register('JIRAIssueType');
-    setIsRegistered(true);
-
-    return () => {
-      setIsRegistered(false);
-      unregister(['JIRAIssueType', 'JIRAProject']);
-    };
-  }, [register]);
-
   if (!jira) return { JIRAComponents: null, submitToJIRA: () => {} };
 
-  const JIRAComponents = isRegistered && (
+  const JIRAComponents = (
     <>
-      <ProjectSelector defaultValue={jira?.projectField?.defaultValue} />
-      <IssueTypeSelector defaultValue={jira?.issueTypeField?.defaultValue} />
+      <ProjectSelector options={projectOptions} />
+      <IssueTypeSelector options={issueTypeOptions} />
     </>
   );
 

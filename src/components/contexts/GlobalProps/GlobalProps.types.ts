@@ -4,7 +4,10 @@ import type { ModalProps } from 'react-native';
 import type { theme } from '../../../theme';
 import type { IModalHeaderProps } from '../../ui';
 import type { IReportFormValues } from '../../form';
-import type { JIRAIntegrationProps } from '../../../integrations';
+import type {
+  JIRAIntegrationProps,
+  SlackIntegrationProps,
+} from '../../../integrations';
 
 export interface IFeedbackReporterProps {
   mode?: 'onScreenShot';
@@ -23,6 +26,11 @@ export interface IFeedbackReporterProps {
    * JIRA Integration
    */
   jira?: JIRAIntegrationProps;
+
+  /**
+   * Slack Integration
+   */
+  slack?: SlackIntegrationProps;
 
   /**
    * Modal props

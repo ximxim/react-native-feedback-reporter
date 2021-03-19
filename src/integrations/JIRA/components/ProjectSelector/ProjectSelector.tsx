@@ -1,41 +1,21 @@
-import { useQuery } from 'react-query';
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import type { IProjectSelectorProps } from './ProjectSelector.types';
 
-import { compare } from '../../../../utils';
-import { getJIRAProjects } from '../../queries';
 import { DropListPicker, IReportFormValues } from '../../../../components';
 
 export const ProjectSelector: FunctionComponent<IProjectSelectorProps> = ({
-  defaultValue,
+  options,
   ...dropListPickerProps
 }) => {
-  const { data, isLoading } = useQuery('JIRAProjects', getJIRAProjects);
   const { setValue, watch, errors } = useFormContext<IReportFormValues>();
-  const projects = data?.data || [];
-
-  useEffect(() => {
-    const val = defaultValue || '';
-    const found = projects.find(
-      (issueType) => compare(issueType.name, val) || compare(issueType.key, val)
-    );
-    setValue('JIRAProject', found?.id);
-  }, [isLoading]);
-
-  const options = projects.map((project) => ({
-    key: project.id,
-    value: project.name,
-  }));
-
-  if (isLoading) return null;
 
   return (
     <DropListPicker
       {...dropListPickerProps}
-      options={options}
       label="Project"
+      options={options || []}
       defaultValue={watch('JIRAProject')}
       onChange={(val) => setValue('JIRAProject', val)}
       error={errors.JIRAProject?.message}
