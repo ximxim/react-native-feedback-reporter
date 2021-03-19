@@ -25,20 +25,20 @@ export default function App() {
         slack={{
           channel: 'random',
           botToken:
-            'xoxp-733009645829-732537859076-750531743285-ab913c3a9bad46f9accd23e8294994b7',
+            'xoxp-733009645829-732537859076-1873639939654-01b4f3bea56463906b1fed1f770e2c8e',
         }}
-        jira={{
-          domain: 'https://ximxim.atlassian.net',
-          username: 'azim.ahmed7@gmail.com',
-          token: '2rEKkhiit3x3kgGApXeP9495',
-          issueTypeField: {
-            defaultValue: 'story',
-            isVisible: false,
-          },
-          projectField: {
-            defaultValue: 'apitest',
-          },
-        }}
+        // jira={{
+        //   domain: 'https://ximxim.atlassian.net',
+        //   username: 'azim.ahmed7@gmail.com',
+        //   token: '2rEKkhiit3x3kgGApXeP9495',
+        //   issueTypeField: {
+        //     defaultValue: 'story',
+        //     isVisible: false,
+        //   },
+        //   projectField: {
+        //     defaultValue: 'apitest',
+        //   },
+        // }}
         extraSource="react-native-image-crop-picker"
         devNotes={async () => {
           const [

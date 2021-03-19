@@ -12,11 +12,14 @@ export const useSlackSubmission = () => {
   const { mutate: postMessage, data: messageRes } = useMutation(
     postSlackMessage
   );
-  const { mutate: postFile, isLoading: isAttaching } = useMutation(
+  const { mutate: postFile, isLoading: isAttaching, data, error } = useMutation(
     postSlackFile
   );
   const { getValues } = useFormContext<IReportFormValues>();
   const { slack, devNotes } = useContext(GlobalProps);
+
+  console.log(data);
+  console.log(error);
 
   useEffect(() => {
     const ts = messageRes?.data.ts;

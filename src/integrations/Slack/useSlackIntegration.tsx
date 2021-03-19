@@ -1,8 +1,9 @@
 import { useFormContext } from 'react-hook-form';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { useSlackSubmission } from './useSlackSubmission.hook';
 
+import { initSlackApi } from './slack.service';
 import {
   Alert,
   Typography,
@@ -13,33 +14,19 @@ import {
 export const useSlackIntegration = () => {
   const { submitToSlack, ts, isAttaching } = useSlackSubmission();
   const { slack } = useContext(GlobalProps);
-  const [isRegistered, setIsRegistered] = useState<boolean>(false);
-  const {
-    register,
-    unregister,
-    formState,
-  } = useFormContext<IReportFormValues>();
+  const { formState } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
     if (!slack) return;
+    initSlackApi(slack);
   }, [slack]);
-
-  useEffect(() => {
-    register('SlackEnabled');
-    setIsRegistered(true);
-
-    return () => {
-      setIsRegistered(false);
-      unregister(['JIRAIssueType', 'JIRAProject']);
-    };
-  }, [register]);
 
   if (!slack) return { slackComponents: null, submitToSlack: () => {} };
 
   // TODO: provide enable disable component in an object
-  const slackComponents = isRegistered && <Typography />;
+  const slackComponents = <Typography />;
 
-  const JIRAConfirmationComponents = ts && (
+  const slackConfirmationComponents = ts && (
     <>
       <Typography variant="h2">Slack</Typography>
       <Typography variant="link" fontSize={22}>
@@ -67,7 +54,7 @@ export const useSlackIntegration = () => {
     submitToSlack,
     slackComponents,
     slackFailureComponents,
-    JIRAConfirmationComponents,
+    slackConfirmationComponents,
     isSlackMessageCreated: !!ts,
   };
 };

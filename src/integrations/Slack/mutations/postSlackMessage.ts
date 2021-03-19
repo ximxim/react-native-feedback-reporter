@@ -42,6 +42,6 @@ export const postSlackMessage = ({
     params: {
       text: title,
       channel: channel || 'general',
-      attachments: [{ pretext: description, text: devNotes }],
+      attachments: JSON.stringify([{ pretext: description, text: devNotes }]),
     },
   });

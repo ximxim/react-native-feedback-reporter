@@ -11,7 +11,7 @@ import { Description, Title, ImageAttachments } from './components';
 import type { IReportFormProps, IReportFormValues } from './ReportForm.types';
 import * as Styled from './ReportForm.styles';
 
-import { useJIRAIntegration } from '../../../integrations';
+import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
 import {
   BottomWrapper,
   ButtonWithLabel,
@@ -32,6 +32,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     JIRAFailureComponents,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
+  const { submitToSlack } = useSlackIntegration();
   const {
     register,
     unregister,
@@ -54,7 +55,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       <ButtonWithLabel
         isLoading={formState.isSubmitting}
         onPress={handleSubmit(async () => {
-          await Promise.all([submitToJIRA(files)]);
+          await Promise.all([submitToJIRA(files), submitToSlack(files)]);
         })}
       >
         Report
