@@ -33,7 +33,9 @@ export const postSlackFile = ({
       },
     ].map((file) =>
       uploadFiles({
-        toUrl: `${slackApi.defaults.baseURL}files.upload?thread_ts=${ts}&channels=${channel || 'general'}`,
+        toUrl: `${
+          slackApi.defaults.baseURL
+        }files.upload?thread_ts=${ts}&channels=${channel || 'general'}`,
         headers: slackApi.defaults.headers.common,
         files: [file],
       })
