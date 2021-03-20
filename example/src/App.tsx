@@ -1,4 +1,9 @@
-import { SLACK_BOT_TOKEN, JIRA_DOMAIN, JIRA_USERNAME, JIRA_TOKEN } from '@env';
+import {
+  SLACK_BOT_TOKEN,
+  // JIRA_DOMAIN,
+  // JIRA_USERNAME,
+  // JIRA_TOKEN,
+} from '@env';
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
@@ -27,18 +32,18 @@ export default function App() {
           channel: 'random',
           botToken: SLACK_BOT_TOKEN,
         }}
-        jira={{
-          domain: JIRA_DOMAIN,
-          username: JIRA_USERNAME,
-          token: JIRA_TOKEN,
-          issueTypeField: {
-            defaultValue: 'story',
-            isVisible: false,
-          },
-          projectField: {
-            defaultValue: 'apitest',
-          },
-        }}
+        // jira={{
+        //   domain: JIRA_DOMAIN,
+        //   username: JIRA_USERNAME,
+        //   token: JIRA_TOKEN,
+        //   issueTypeField: {
+        //     defaultValue: 'story',
+        //     isVisible: false,
+        //   },
+        //   projectField: {
+        //     defaultValue: 'apitest',
+        //   },
+        // }}
         extraSource="react-native-image-crop-picker"
         devNotes={async () => {
           const [
@@ -54,20 +59,20 @@ export default function App() {
           ]);
 
           return `
-            Brand: ${DeviceInfo.getBrand()}
-            Build Number: ${DeviceInfo.getBuildNumber()}
-            Bundle ID: ${DeviceInfo.getBundleId()}
-            Device ID: ${DeviceInfo.getDeviceId()}
-            Device Name: ${deviceName}
-            IP Address: ${ipAddress}
-            Manufacturer: ${manufacturer}
-            Model: ${DeviceInfo.getModel()}
-            Power State: ${JSON.stringify(powerState)}
-            Readable Version: ${DeviceInfo.getReadableVersion()}
-            System Name: ${DeviceInfo.getSystemName()}
-            Systerm Version: ${DeviceInfo.getSystemVersion()}
-            Unique ID: ${DeviceInfo.getUniqueId()}
-            Version: ${DeviceInfo.getVersion()}
+Brand: ${DeviceInfo.getBrand()}
+Build Number: ${DeviceInfo.getBuildNumber()}
+Bundle ID: ${DeviceInfo.getBundleId()}
+Device ID: ${DeviceInfo.getDeviceId()}
+Device Name: ${deviceName}
+IP Address: ${ipAddress}
+Manufacturer: ${manufacturer}
+Model: ${DeviceInfo.getModel()}
+Power State: ${JSON.stringify(powerState)}
+Readable Version: ${DeviceInfo.getReadableVersion()}
+System Name: ${DeviceInfo.getSystemName()}
+Systerm Version: ${DeviceInfo.getSystemVersion()}
+Unique ID: ${DeviceInfo.getUniqueId()}
+Version: ${DeviceInfo.getVersion()}
           `;
         }}
       />
