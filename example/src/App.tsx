@@ -1,3 +1,4 @@
+import { SLACK_BOT_TOKEN, JIRA_DOMAIN, JIRA_USERNAME, JIRA_TOKEN } from '@env';
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
@@ -24,20 +25,20 @@ export default function App() {
         }}
         slack={{
           channel: 'random',
-          botToken: 'xoxb-733009645829-1893273458545-TwDwShjXYCIg4wvjpApvxLZX',
+          botToken: SLACK_BOT_TOKEN,
         }}
-        // jira={{
-        //   domain: 'https://ximxim.atlassian.net',
-        //   username: 'azim.ahmed7@gmail.com',
-        //   token: '2rEKkhiit3x3kgGApXeP9495',
-        //   issueTypeField: {
-        //     defaultValue: 'story',
-        //     isVisible: false,
-        //   },
-        //   projectField: {
-        //     defaultValue: 'apitest',
-        //   },
-        // }}
+        jira={{
+          domain: JIRA_DOMAIN,
+          username: JIRA_USERNAME,
+          token: JIRA_TOKEN,
+          issueTypeField: {
+            defaultValue: 'story',
+            isVisible: false,
+          },
+          projectField: {
+            defaultValue: 'apitest',
+          },
+        }}
         extraSource="react-native-image-crop-picker"
         devNotes={async () => {
           const [
