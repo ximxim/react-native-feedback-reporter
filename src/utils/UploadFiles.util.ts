@@ -20,12 +20,14 @@ interface IUploadFilesProps {
   toUrl: string;
   files: IFile[];
   method?: 'POST';
+  submitIndividually?: boolean;
   headers: Record<string, string>;
 }
 
 export const uploadFiles = async ({
   files,
   method = 'POST',
+  submitIndividually,
   ...props
 }: IUploadFilesProps) => {
   /**
@@ -67,6 +69,15 @@ export const uploadFiles = async ({
   /**
    * UPLOAD FILES
    */
+  if (submitIndividually) {
+    return await Promise.all(filesToUpload.map(file => module.uploadFiles({
+      files: [file],
+      method,
+      jobId: 1,
+      ...props,
+    })));
+  }
+
   return await module.uploadFiles({
     files: filesToUpload,
     method,

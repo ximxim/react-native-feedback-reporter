@@ -21,8 +21,13 @@ export const postSlackFile = ({
   content,
   channel,
 }: IPostSlackThreadAttachmentsProps) =>
-  Promise.all(
-    [
+  uploadFiles({
+    submitIndividually: true,
+    toUrl: `${slackApi.defaults.baseURL}files.upload?thread_ts=${ts}&channels=${
+      channel || 'general'
+    }`,
+    headers: slackApi.defaults.headers.common,
+    files: [
       ...files,
       {
         content,
@@ -31,13 +36,5 @@ export const postSlackFile = ({
         filepath,
         filetype: 'image/png',
       },
-    ].map((file) =>
-      uploadFiles({
-        toUrl: `${
-          slackApi.defaults.baseURL
-        }files.upload?thread_ts=${ts}&channels=${channel || 'general'}`,
-        headers: slackApi.defaults.headers.common,
-        files: [file],
-      })
-    )
-  );
+    ],
+  });
