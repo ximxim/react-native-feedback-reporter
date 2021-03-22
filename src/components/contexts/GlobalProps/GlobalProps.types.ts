@@ -3,7 +3,7 @@ import type { ModalProps } from 'react-native';
 
 import type { theme } from '../../../theme';
 import type { IModalHeaderProps } from '../../ui';
-import type { IReportFormValues } from '../../form';
+import type { FormOrderEnum, IReportFormValues } from '../../form';
 import type {
   JIRAIntegrationProps,
   SlackIntegrationProps,
@@ -46,4 +46,9 @@ export interface IFeedbackReporterProps {
    * Additional screen shot
    */
   extraSource?: 'react-native-image-crop-picker';
+
+  /**
+   * Form order
+   */
+  order?: FormOrderEnum[];
 }

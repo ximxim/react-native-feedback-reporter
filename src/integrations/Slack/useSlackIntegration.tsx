@@ -9,6 +9,7 @@ import {
   Typography,
   GlobalProps,
   IReportFormValues,
+  FormOrderEnum,
 } from '../../components';
 
 export const useSlackIntegration = () => {
@@ -21,10 +22,18 @@ export const useSlackIntegration = () => {
     initSlackApi(slack);
   }, [slack]);
 
-  if (!slack) return { slackComponents: null, submitToSlack: () => {} };
+  if (!slack) {
+    return {
+      slackComponents: {
+        [FormOrderEnum.SlackSwitch]: null,
+      },
+      submitToSlack: () => {},
+    };
+  }
 
-  // TODO: provide enable disable component in an object
-  const slackComponents = <Typography />;
+  const slackComponents = {
+    [FormOrderEnum.SlackSwitch]: null,
+  };
 
   const slackConfirmationComponents = ts && (
     <>

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { Linking } from 'react-native';
-import { useFormContext } from 'react-hook-form';
 
 import { initJIRAApi } from '../JIRAApi.service';
 import { ProjectSelector, IssueTypeSelector } from '../components';
@@ -12,7 +11,7 @@ import {
   Alert,
   Typography,
   GlobalProps,
-  IReportFormValues,
+  FormOrderEnum,
 } from '../../../components';
 
 export const useJIRAIntegration = () => {
@@ -20,7 +19,6 @@ export const useJIRAIntegration = () => {
   const issueTypeOptions = useJIRAIssueType();
   const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
   const { jira } = useContext(GlobalProps);
-  const { formState } = useFormContext<IReportFormValues>();
   const isJIRAIssueCreated = jira ? !!issue : true;
 
   useEffect(() => {
@@ -28,14 +26,24 @@ export const useJIRAIntegration = () => {
     initJIRAApi(jira);
   }, []);
 
-  if (!jira) return { JIRAComponents: null, submitToJIRA: () => {} };
+  if (!jira) {
+    return {
+      JIRAComponents: {
+        [FormOrderEnum.JIRAProjects]: null,
+        [FormOrderEnum.JIRAIssueTypes]: null,
+        [FormOrderEnum.JIRASwitch]: null,
+      },
+      submitToJIRA: () => {},
+    };
+  }
 
-  const JIRAComponents = (
-    <>
-      <ProjectSelector options={projectOptions} />
+  const JIRAComponents = {
+    [FormOrderEnum.JIRASwitch]: null,
+    [FormOrderEnum.JIRAProjects]: <ProjectSelector options={projectOptions} />,
+    [FormOrderEnum.JIRAIssueTypes]: (
       <IssueTypeSelector options={issueTypeOptions} />
-    </>
-  );
+    ),
+  };
 
   const JIRAConfirmationComponents = issue && (
     <>
@@ -60,18 +68,10 @@ export const useJIRAIntegration = () => {
     </>
   );
 
-  const JIRAFailureComponents = isJIRAIssueCreated && formState.isSubmitted && (
-    <Alert
-      variant="brandDanger"
-      alert="Unable to create JIRA ticket. Please try again."
-    />
-  );
-
   return {
     submitToJIRA,
     JIRAComponents,
-    JIRAFailureComponents,
-    JIRAConfirmationComponents,
     isJIRAIssueCreated,
+    JIRAConfirmationComponents,
   };
 };

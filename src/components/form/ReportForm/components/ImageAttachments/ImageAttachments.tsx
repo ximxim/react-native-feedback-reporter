@@ -12,10 +12,15 @@ const Wrapper = styled.ScrollView`
   height: ${height * metrics.screenShotPreview - metrics.margin * 2}px;
 `;
 
-export const ImageAttachments: FunctionComponent<{
+export interface IImageAttachmentsProps {
   files: IFile[];
   setFiles: (val: IFile[]) => void;
-}> = ({ files, setFiles }) => {
+}
+
+export const ImageAttachments: FunctionComponent<IImageAttachmentsProps> = ({
+  files,
+  setFiles,
+}) => {
   const onChange = (val: IFile[]) => setFiles(val);
 
   return (

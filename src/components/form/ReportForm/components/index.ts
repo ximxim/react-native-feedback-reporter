@@ -1,3 +1,4 @@
 export * from './Title';
+export * from './BottomButton';
 export * from './Description';
-export * from './ImageAttachments';
+export * from './ScreenShotPreview';

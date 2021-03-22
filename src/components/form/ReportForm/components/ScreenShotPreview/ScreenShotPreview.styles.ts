@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-import { metrics } from '../../../utils';
+import { metrics } from '../../../../../utils';
 
 export const ScreenShotWrapper = styled.View`
   flex: 1;
