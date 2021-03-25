@@ -4,9 +4,10 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useRef,
   ReactNode,
 } from 'react';
-import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
+import { FlatList } from 'react-native';
 
 import {
   Title,
@@ -18,7 +19,10 @@ import {
   IReportFormProps,
   IReportFormValues,
   FormOrderEnum,
+  SubmissionOrderEnum,
+  IScreens,
 } from './ReportForm.types';
+import * as Styled from './ReportForm.style';
 
 import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
 import { Typography } from '../../ui';
@@ -28,6 +32,7 @@ import type { IFile } from '../../../utils';
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
+  const flatListRef = useRef<FlatList>(null);
   const formOrder: FormOrderEnum[] = [
     FormOrderEnum.Title,
     FormOrderEnum.Description,
@@ -35,14 +40,22 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     FormOrderEnum.JIRAProjects,
     FormOrderEnum.JIRAIssueTypes,
   ];
+  const submissionOrder: SubmissionOrderEnum[] = [
+    SubmissionOrderEnum.Reporting,
+    SubmissionOrderEnum.Jira,
+    SubmissionOrderEnum.Slack,
+  ];
   const [files, setFiles] = useState<IFile[]>([]);
   const {
     JIRAComponents,
     submitToJIRA,
-    isJIRAIssueCreated,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
-  const { submitToSlack, slackComponents } = useSlackIntegration();
+  const {
+    submitToSlack,
+    slackComponents,
+    slackConfirmationComponents,
+  } = useSlackIntegration();
   const {
     register,
     unregister,
@@ -63,8 +76,10 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     <BottomButton
       label="Report"
       isLoading={formState.isSubmitting}
-      onPress={handleSubmit(async () => {
-        await Promise.all([submitToJIRA(files), submitToSlack(files)]);
+      onPress={handleSubmit(() => {
+        submitToJIRA(files);
+        submitToSlack(files);
+        flatListRef.current?.scrollToIndex({ index: 1 });
       })}
     />
   );
@@ -77,19 +92,15 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     />
   );
 
-  if (formState.isSubmitted && isJIRAIssueCreated) {
-    return (
-      <KeyboardAvoidingScrollView stickyFooter={Done}>
-        <Typography variant="h1">Thank you!</Typography>
-
-        <Typography variant="body1" pb={30} px={30} textAlign="center">
-          Your feedback has been sent. We will be in touch and contact you soon!
-        </Typography>
-
-        {JIRAConfirmationComponents}
-      </KeyboardAvoidingScrollView>
-    );
-  }
+  const submissionComponents: Record<SubmissionOrderEnum, ReactNode> = {
+    [SubmissionOrderEnum.Reporting]: (
+      <Typography variant="h1" textAlign="center">
+        Thank you!
+      </Typography>
+    ),
+    ...JIRAConfirmationComponents,
+    ...slackConfirmationComponents,
+  };
 
   const formComponents: Record<FormOrderEnum, ReactNode> = {
     [FormOrderEnum.Title]: <Title />,
@@ -102,9 +113,30 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     ...slackComponents,
   };
 
+  const data: IScreens[] = [
+    { stickyFooter: Submit, components: formComponents, order: formOrder },
+    {
+      stickyFooter: Done,
+      components: submissionComponents,
+      order: submissionOrder,
+    },
+  ];
+
   return (
-    <KeyboardAvoidingScrollView stickyFooter={Submit}>
-      {formOrder.map((key) => formComponents[key])}
-    </KeyboardAvoidingScrollView>
+    <FlatList
+      horizontal
+      data={data}
+      pagingEnabled
+      ref={flatListRef}
+      scrollEnabled={false}
+      showsHorizontalScrollIndicator={false}
+      renderItem={({
+        item: { components, order, ...keyboardAvoidingScrollView },
+      }) => (
+        <Styled.Wrapper {...keyboardAvoidingScrollView}>
+          {order.map((key: keyof typeof components) => components[key])}
+        </Styled.Wrapper>
+      )}
+    />
   );
 };

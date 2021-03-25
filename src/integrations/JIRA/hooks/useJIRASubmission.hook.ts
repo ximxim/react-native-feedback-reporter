@@ -29,6 +29,8 @@ export const useJIRASubmission = () => {
   }, [issueRes]);
 
   const submitToJIRA = async (fs: IFile[]) => {
+    if (!jira) return;
+
     setFiles(fs);
     const {
       title,

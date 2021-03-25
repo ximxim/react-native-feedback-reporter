@@ -12,6 +12,7 @@ import {
   Typography,
   GlobalProps,
   FormOrderEnum,
+  SubmissionOrderEnum,
 } from '../../../components';
 
 export const useJIRAIntegration = () => {
@@ -26,21 +27,12 @@ export const useJIRAIntegration = () => {
     initJIRAApi(jira);
   }, []);
 
-  if (!jira) {
-    return {
-      JIRAComponents: {
-        [FormOrderEnum.JIRAProjects]: null,
-        [FormOrderEnum.JIRAIssueTypes]: null,
-        [FormOrderEnum.JIRASwitch]: null,
-      },
-      submitToJIRA: () => {},
-    };
-  }
-
   const JIRAComponents = {
     [FormOrderEnum.JIRASwitch]: null,
-    [FormOrderEnum.JIRAProjects]: <ProjectSelector options={projectOptions} />,
-    [FormOrderEnum.JIRAIssueTypes]: (
+    [FormOrderEnum.JIRAProjects]: jira && (
+      <ProjectSelector options={projectOptions} />
+    ),
+    [FormOrderEnum.JIRAIssueTypes]: jira && (
       <IssueTypeSelector options={issueTypeOptions} />
     ),
   };
@@ -72,6 +64,8 @@ export const useJIRAIntegration = () => {
     submitToJIRA,
     JIRAComponents,
     isJIRAIssueCreated,
-    JIRAConfirmationComponents,
+    JIRAConfirmationComponents: {
+      [SubmissionOrderEnum.Jira]: JIRAConfirmationComponents,
+    },
   };
 };

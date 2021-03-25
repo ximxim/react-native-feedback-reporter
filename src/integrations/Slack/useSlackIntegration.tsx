@@ -10,6 +10,7 @@ import {
   GlobalProps,
   IReportFormValues,
   FormOrderEnum,
+  SubmissionOrderEnum,
 } from '../../components';
 
 export const useSlackIntegration = () => {
@@ -22,23 +23,16 @@ export const useSlackIntegration = () => {
     initSlackApi(slack);
   }, [slack]);
 
-  if (!slack) {
-    return {
-      slackComponents: {
-        [FormOrderEnum.SlackSwitch]: null,
-      },
-      submitToSlack: () => {},
-    };
-  }
-
   const slackComponents = {
     [FormOrderEnum.SlackSwitch]: null,
   };
 
   const slackConfirmationComponents = ts && (
     <>
-      <Typography variant="h2">Slack</Typography>
-      <Typography variant="link" fontSize={22}>
+      <Typography variant="h2" textAlign="center">
+        Slack
+      </Typography>
+      <Typography variant="link" fontSize={22} textAlign="center">
         message sent
       </Typography>
       <Alert
@@ -63,7 +57,9 @@ export const useSlackIntegration = () => {
     submitToSlack,
     slackComponents,
     slackFailureComponents,
-    slackConfirmationComponents,
+    slackConfirmationComponents: {
+      [SubmissionOrderEnum.Slack]: slackConfirmationComponents,
+    },
     isSlackMessageCreated: !!ts,
   };
 };
