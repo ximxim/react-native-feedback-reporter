@@ -1,4 +1,4 @@
-import { slackApi } from '../slack.service';
+import { slackApi } from '../slackApi.service';
 
 interface IAttachment {
   text: string;

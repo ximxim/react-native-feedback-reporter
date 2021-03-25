@@ -2,7 +2,7 @@ import { NativeModules } from 'react-native';
 
 import { uploadFiles } from '../../../utils';
 import type { IFile } from '../../../utils';
-import { slackApi } from '../slack.service';
+import { slackApi } from '../slackApi.service';
 
 interface IPostSlackThreadAttachmentsProps {
   ts: string;

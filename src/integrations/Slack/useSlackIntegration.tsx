@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 
 import { useSlackSubmission } from './useSlackSubmission.hook';
 
-import { initSlackApi } from './slack.service';
+import { initSlackApi } from './slackApi.service';
 import {
   Alert,
   Typography,
