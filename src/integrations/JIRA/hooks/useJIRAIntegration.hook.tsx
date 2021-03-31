@@ -9,6 +9,7 @@ import { useJIRAIssueType } from './useJIRAIssueType.hook';
 
 import {
   Alert,
+  Checkbox,
   Typography,
   GlobalProps,
   FormOrderEnum,
@@ -28,7 +29,7 @@ export const useJIRAIntegration = () => {
   }, []);
 
   const JIRAComponents = {
-    [FormOrderEnum.JIRASwitch]: null,
+    [FormOrderEnum.JIRASwitch]: <Checkbox onChange={console.log} />,
     [FormOrderEnum.JIRAProjects]: jira && (
       <ProjectSelector options={projectOptions} />
     ),

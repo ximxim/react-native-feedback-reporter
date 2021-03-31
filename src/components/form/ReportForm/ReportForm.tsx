@@ -36,6 +36,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   const formOrder: FormOrderEnum[] = [
     FormOrderEnum.Title,
     FormOrderEnum.Description,
+    FormOrderEnum.SlackSwitch,
     FormOrderEnum.ScreenShotAndExternalSource,
     FormOrderEnum.JIRAProjects,
     FormOrderEnum.JIRAIssueTypes,

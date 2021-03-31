@@ -6,6 +6,7 @@ import { useSlackSubmission } from './useSlackSubmission.hook';
 import { initSlackApi } from './slackApi.service';
 import {
   Alert,
+  Switch,
   Typography,
   GlobalProps,
   IReportFormValues,
@@ -24,7 +25,9 @@ export const useSlackIntegration = () => {
   }, [slack]);
 
   const slackComponents = {
-    [FormOrderEnum.SlackSwitch]: null,
+    [FormOrderEnum.SlackSwitch]: (
+      <Switch onChange={console.log} label="Enable slack integration" />
+    ),
   };
 
   const slackConfirmationComponents = ts && (
