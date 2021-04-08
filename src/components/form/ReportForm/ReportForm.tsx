@@ -37,6 +37,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     FormOrderEnum.Title,
     FormOrderEnum.Description,
     FormOrderEnum.SlackSwitch,
+    FormOrderEnum.SlackChannelsSelector,
     FormOrderEnum.ScreenShotAndExternalSource,
     FormOrderEnum.JIRAProjects,
     FormOrderEnum.JIRAIssueTypes,

@@ -17,15 +17,14 @@ export const useSlackSubmission = () => {
   );
   const { getValues } = useFormContext<IReportFormValues>();
   const { slack, devNotes } = useContext(GlobalProps);
+  const { uri: content, slackChannel } = getValues();
 
   useEffect(() => {
     const ts = messageRes?.data.ts;
 
     if (!ts || !slack) return;
 
-    const { uri: content } = getValues();
-
-    postFile({ files, content, ts, channel: slack.channel });
+    postFile({ files, content, ts, channel: slackChannel });
   }, [messageRes]);
 
   const submitToSlack = async (files: IFile[]) => {
@@ -41,7 +40,7 @@ export const useSlackSubmission = () => {
     postMessage({
       title,
       description,
-      channel: slack.channel,
+      channel: slackChannel,
       devNotes: generatedDevNotes,
     });
   };

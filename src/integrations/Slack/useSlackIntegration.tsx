@@ -1,7 +1,9 @@
 import { useFormContext } from 'react-hook-form';
 import React, { useContext, useEffect } from 'react';
 
+import { SlackChannelsSelector } from './components';
 import { useSlackSubmission } from './useSlackSubmission.hook';
+import { useSlackChannels } from './hooks';
 
 import { initSlackApi } from './slackApi.service';
 import {
@@ -15,6 +17,7 @@ import {
 } from '../../components';
 
 export const useSlackIntegration = () => {
+  const slackChannels = useSlackChannels();
   const { submitToSlack, ts, isAttaching } = useSlackSubmission();
   const { slack } = useContext(GlobalProps);
   const { formState } = useFormContext<IReportFormValues>();
@@ -27,6 +30,9 @@ export const useSlackIntegration = () => {
   const slackComponents = {
     [FormOrderEnum.SlackSwitch]: (
       <Switch onChange={console.log} label="Enable slack integration" />
+    ),
+    [FormOrderEnum.SlackChannelsSelector]: (
+      <SlackChannelsSelector options={slackChannels} />
     ),
   };
 

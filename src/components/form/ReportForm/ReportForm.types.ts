@@ -1,7 +1,10 @@
 import type { ReactNode } from 'react';
 import type { KeyboardAvoidingScrollViewProps } from 'react-native-keyboard-avoiding-scroll-view';
 
-import type { JIRAIntegrationValues } from '../../../integrations';
+import type {
+  JIRAIntegrationValues,
+  SlackIntegrationValues,
+} from '../../../integrations';
 
 export enum FormOrderEnum {
   Title = 'title',
@@ -11,6 +14,7 @@ export enum FormOrderEnum {
   AdditionalInformation = 'additional_information',
   JIRASwitch = 'jira_switch',
   SlackSwitch = 'slack_switch',
+  SlackChannelsSelector = 'slack_channels_selector',
   ScreenShotAndExternalSource = 'screen_shot_and_external_sources',
 }
 
@@ -28,7 +32,9 @@ export interface IReportFormProps {
   handleClose: () => void;
 }
 
-export interface IReportFormValues extends JIRAIntegrationValues {
+export interface IReportFormValues
+  extends JIRAIntegrationValues,
+    SlackIntegrationValues {
   uri: string;
   title: string;
   description: string;
