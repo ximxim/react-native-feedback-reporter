@@ -1,5 +1,6 @@
 import { useFormContext } from 'react-hook-form';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { LayoutAnimation } from 'react-native';
 
 import { SlackChannelsSelector } from './components';
 import { useSlackSubmission } from './useSlackSubmission.hook';
@@ -17,6 +18,7 @@ import {
 } from '../../components';
 
 export const useSlackIntegration = () => {
+  const [showControls, setShowControls] = useState<boolean>(false);
   const slackChannels = useSlackChannels();
   const { submitToSlack, ts, isAttaching } = useSlackSubmission();
   const { slack } = useContext(GlobalProps);
@@ -27,11 +29,15 @@ export const useSlackIntegration = () => {
     initSlackApi(slack);
   }, [slack]);
 
+  useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  }, [showControls]);
+
   const slackComponents = {
     [FormOrderEnum.SlackSwitch]: (
-      <Switch onChange={console.log} label="Enable slack integration" />
+      <Switch onChange={setShowControls} label="Enable slack integration" />
     ),
-    [FormOrderEnum.SlackChannelsSelector]: (
+    [FormOrderEnum.SlackChannelsSelector]: showControls && (
       <SlackChannelsSelector options={slackChannels} />
     ),
   };
