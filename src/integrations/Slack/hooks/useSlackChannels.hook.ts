@@ -37,11 +37,11 @@ export const useSlackChannels = () => {
       (channel) =>
         compare(channel.name, val) || compare(channel.name_normalized, val)
     );
-    setValue('slackChannel', found?.name_normalized);
+    setValue('slackChannel', found?.id);
   }, [isLoading]);
 
   const options: IOption[] = channels.map((channel) => ({
-    key: channel.name_normalized,
+    key: channel.id,
     value: `# ${channel.name}`,
   }));
 
