@@ -34,7 +34,7 @@ export const useJIRAIntegration = () => {
   }, [isEnabled]);
 
   const JIRAComponents = {
-    [FormOrderEnum.JIRASwitch]: (
+    [FormOrderEnum.JIRASwitch]: !!jira && (
       <Switch
         onChange={setIsEnabled}
         label="Enable JIRA integration"

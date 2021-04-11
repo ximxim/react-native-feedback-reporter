@@ -34,7 +34,7 @@ export const useSlackIntegration = () => {
   }, [isEnabled]);
 
   const slackComponents = {
-    [FormOrderEnum.SlackSwitch]: (
+    [FormOrderEnum.SlackSwitch]: !!slack && (
       <Switch
         onChange={setIsEnabled}
         label="Enable slack integration"
