@@ -18,7 +18,7 @@ import {
 } from '../../components';
 
 export const useSlackIntegration = () => {
-  const [showControls, setShowControls] = useState<boolean>(false);
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const slackChannels = useSlackChannels();
   const { submitToSlack, ts, isAttaching } = useSlackSubmission();
   const { slack } = useContext(GlobalProps);
@@ -31,13 +31,13 @@ export const useSlackIntegration = () => {
 
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  }, [showControls]);
+  }, [isEnabled]);
 
   const slackComponents = {
     [FormOrderEnum.SlackSwitch]: (
-      <Switch onChange={setShowControls} label="Enable slack integration" />
+      <Switch onChange={setIsEnabled} label="Enable slack integration" />
     ),
-    [FormOrderEnum.SlackChannelsSelector]: showControls && (
+    [FormOrderEnum.SlackChannelsSelector]: isEnabled && (
       <SlackChannelsSelector options={slackChannels} />
     ),
   };
@@ -68,8 +68,10 @@ export const useSlackIntegration = () => {
     />
   );
 
+  const handleSubmit = isEnabled ? submitToSlack : console.log;
+
   return {
-    submitToSlack,
+    submitToSlack: handleSubmit,
     slackComponents,
     slackFailureComponents,
     slackConfirmationComponents: {
