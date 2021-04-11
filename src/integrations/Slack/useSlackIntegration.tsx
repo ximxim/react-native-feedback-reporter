@@ -48,12 +48,10 @@ export const useSlackIntegration = () => {
 
   const slackConfirmationComponents = ts && (
     <>
-      <Typography variant="h2" textAlign="center">
+      <Typography variant="h2" textAlign="center" my="10">
         Slack
       </Typography>
-      <Typography variant="link" fontSize={22} textAlign="center">
-        message sent
-      </Typography>
+      <Typography textAlign="center">message sent</Typography>
       <Alert
         alert={
           isAttaching

@@ -52,19 +52,21 @@ export const useJIRAIntegration = () => {
   const JIRAConfirmationComponents = issue && (
     <>
       <Typography
+        my="10"
         variant="h2"
         textAlign="center"
         onPress={() => Linking.openURL(issue.self)}
       >
-        JIRA Issue ID
+        JIRA
       </Typography>
       <Typography
-        variant="link"
-        fontSize={22}
         textAlign="center"
         onPress={() => Linking.openURL(issue.self)}
       >
-        {issue.key}
+        <Typography variant="body1">Issue ID: </Typography>
+        <Typography variant="link" fontSize={18}>
+          {issue.key}
+        </Typography>
       </Typography>
       <Alert
         alert={

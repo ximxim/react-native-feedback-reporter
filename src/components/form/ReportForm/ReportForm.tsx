@@ -100,7 +100,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   const submissionComponents: Record<SubmissionOrderEnum, ReactNode> = {
     [SubmissionOrderEnum.Reporting]: (
-      <Typography variant="h1" textAlign="center">
+      <Typography variant="h1" textAlign="center" my="30">
         Thank you!
       </Typography>
     ),
