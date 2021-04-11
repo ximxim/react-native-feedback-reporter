@@ -1,9 +1,4 @@
-import {
-  SLACK_BOT_TOKEN,
-  JIRA_DOMAIN,
-  JIRA_USERNAME,
-  JIRA_TOKEN,
-} from '@env';
+import { SLACK_BOT_TOKEN, JIRA_DOMAIN, JIRA_USERNAME, JIRA_TOKEN } from '@env';
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
