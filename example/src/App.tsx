@@ -1,8 +1,8 @@
 import {
   SLACK_BOT_TOKEN,
-  // JIRA_DOMAIN,
-  // JIRA_USERNAME,
-  // JIRA_TOKEN,
+  JIRA_DOMAIN,
+  JIRA_USERNAME,
+  JIRA_TOKEN,
 } from '@env';
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
@@ -32,18 +32,18 @@ export default function App() {
           channel: 'random',
           botToken: SLACK_BOT_TOKEN,
         }}
-        // jira={{
-        //   domain: JIRA_DOMAIN,
-        //   username: JIRA_USERNAME,
-        //   token: JIRA_TOKEN,
-        //   issueTypeField: {
-        //     defaultValue: 'story',
-        //     isVisible: false,
-        //   },
-        //   projectField: {
-        //     defaultValue: 'apitest',
-        //   },
-        // }}
+        jira={{
+          domain: JIRA_DOMAIN,
+          username: JIRA_USERNAME,
+          token: JIRA_TOKEN,
+          issueTypeField: {
+            defaultValue: 'story',
+            isVisible: false,
+          },
+          projectField: {
+            defaultValue: 'apitest',
+          },
+        }}
         extraSource="react-native-image-crop-picker"
         devNotes={async () => {
           const [

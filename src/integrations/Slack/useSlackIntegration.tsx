@@ -18,10 +18,10 @@ import {
 } from '../../components';
 
 export const useSlackIntegration = () => {
-  const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const slackChannels = useSlackChannels();
   const { submitToSlack, ts, isAttaching } = useSlackSubmission();
   const { slack } = useContext(GlobalProps);
+  const [isEnabled, setIsEnabled] = useState<boolean>(!!slack);
   const { formState } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
@@ -35,7 +35,11 @@ export const useSlackIntegration = () => {
 
   const slackComponents = {
     [FormOrderEnum.SlackSwitch]: (
-      <Switch onChange={setIsEnabled} label="Enable slack integration" />
+      <Switch
+        onChange={setIsEnabled}
+        label="Enable slack integration"
+        defaultValue={!!slack}
+      />
     ),
     [FormOrderEnum.SlackChannelsSelector]: isEnabled && (
       <SlackChannelsSelector options={slackChannels} />
@@ -68,7 +72,7 @@ export const useSlackIntegration = () => {
     />
   );
 
-  const handleSubmit = isEnabled ? submitToSlack : console.log;
+  const handleSubmit = isEnabled ? submitToSlack : null;
 
   return {
     submitToSlack: handleSubmit,

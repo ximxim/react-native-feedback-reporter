@@ -38,9 +38,10 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     FormOrderEnum.Description,
     FormOrderEnum.SlackSwitch,
     FormOrderEnum.SlackChannelsSelector,
-    FormOrderEnum.ScreenShotAndExternalSource,
+    FormOrderEnum.JIRASwitch,
     FormOrderEnum.JIRAProjects,
     FormOrderEnum.JIRAIssueTypes,
+    FormOrderEnum.ScreenShotAndExternalSource,
   ];
   const submissionOrder: SubmissionOrderEnum[] = [
     SubmissionOrderEnum.Reporting,
@@ -74,13 +75,16 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     return () => unregister(['description', 'title']);
   }, [register]);
 
+  const disableReporting = !submitToSlack && !submitToJIRA;
+
   const Submit = (
     <BottomButton
-      label="Report"
+      label={disableReporting ? 'Unable to report' : 'Report'}
+      disabled={disableReporting}
       isLoading={formState.isSubmitting}
       onPress={handleSubmit(() => {
-        submitToJIRA(files);
-        submitToSlack(files);
+        submitToJIRA?.(files);
+        submitToSlack?.(files);
         flatListRef.current?.scrollToIndex({ index: 1 });
       })}
     />

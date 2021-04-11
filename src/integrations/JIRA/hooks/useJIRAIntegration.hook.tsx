@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { Linking } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Linking, LayoutAnimation } from 'react-native';
 
 import { initJIRAApi } from '../JIRAApi.service';
 import { ProjectSelector, IssueTypeSelector } from '../components';
@@ -9,7 +9,7 @@ import { useJIRAIssueType } from './useJIRAIssueType.hook';
 
 import {
   Alert,
-  Checkbox,
+  Switch,
   Typography,
   GlobalProps,
   FormOrderEnum,
@@ -21,6 +21,7 @@ export const useJIRAIntegration = () => {
   const issueTypeOptions = useJIRAIssueType();
   const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
   const { jira } = useContext(GlobalProps);
+  const [isEnabled, setIsEnabled] = useState<boolean>(!!jira);
   const isJIRAIssueCreated = jira ? !!issue : true;
 
   useEffect(() => {
@@ -28,24 +29,39 @@ export const useJIRAIntegration = () => {
     initJIRAApi(jira);
   }, []);
 
+  useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  }, [isEnabled]);
+
   const JIRAComponents = {
-    [FormOrderEnum.JIRASwitch]: <Checkbox onChange={console.log} />,
-    [FormOrderEnum.JIRAProjects]: jira && (
+    [FormOrderEnum.JIRASwitch]: (
+      <Switch
+        onChange={setIsEnabled}
+        label="Enable JIRA integration"
+        defaultValue={!!jira}
+      />
+    ),
+    [FormOrderEnum.JIRAProjects]: isEnabled && (
       <ProjectSelector options={projectOptions} />
     ),
-    [FormOrderEnum.JIRAIssueTypes]: jira && (
+    [FormOrderEnum.JIRAIssueTypes]: isEnabled && (
       <IssueTypeSelector options={issueTypeOptions} />
     ),
   };
 
   const JIRAConfirmationComponents = issue && (
     <>
-      <Typography variant="h2" onPress={() => Linking.openURL(issue.self)}>
+      <Typography
+        variant="h2"
+        textAlign="center"
+        onPress={() => Linking.openURL(issue.self)}
+      >
         JIRA Issue ID
       </Typography>
       <Typography
         variant="link"
         fontSize={22}
+        textAlign="center"
         onPress={() => Linking.openURL(issue.self)}
       >
         {issue.key}
@@ -61,8 +77,10 @@ export const useJIRAIntegration = () => {
     </>
   );
 
+  const handleSubmit = isEnabled ? submitToJIRA : null;
+
   return {
-    submitToJIRA,
+    submitToJIRA: handleSubmit,
     JIRAComponents,
     isJIRAIssueCreated,
     JIRAConfirmationComponents: {
