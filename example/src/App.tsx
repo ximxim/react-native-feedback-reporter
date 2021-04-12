@@ -7,14 +7,22 @@ import {
   SLACK_BOT_TOKEN,
 } from '@env';
 import * as React from 'react';
+import { useDispatch } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
 import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
 import DeviceInfo from 'react-native-device-info';
+
+import { LOGIN_SUCCESS } from './userReducers';
 
 Sentry.init({ dsn: SENTRY });
 
 export default function App() {
   const handleShow = () => console.log('OMG you showed');
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch({ type: LOGIN_SUCCESS });
+  }, []);
 
   return (
     <View style={styles.container}>
