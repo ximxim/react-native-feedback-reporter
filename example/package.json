@@ -9,6 +9,7 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "@sentry/react-native": "^2.4.0",
     "react": "16.13.1",
     "react-native": "0.63.4",
     "react-native-device-info": "^8.0.2",

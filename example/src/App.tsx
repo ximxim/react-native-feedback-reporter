@@ -1,8 +1,17 @@
-import { SLACK_BOT_TOKEN, JIRA_DOMAIN, JIRA_USERNAME, JIRA_TOKEN } from '@env';
+import * as Sentry from '@sentry/react-native';
+import {
+  SENTRY,
+  JIRA_TOKEN,
+  JIRA_DOMAIN,
+  JIRA_USERNAME,
+  SLACK_BOT_TOKEN,
+} from '@env';
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
 import DeviceInfo from 'react-native-device-info';
+
+Sentry.init({ dsn: SENTRY });
 
 export default function App() {
   const handleShow = () => console.log('OMG you showed');
