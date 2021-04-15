@@ -9,6 +9,11 @@ import type {
   SlackIntegrationProps,
 } from '../../../integrations';
 
+interface IAsyncStorageProps {
+  getItem: (key: string) => Promise<unknown>;
+  setItem: (key: string, value: string) => Promise<unknown>;
+}
+
 export interface IFeedbackReporterProps {
   mode?: 'onScreenShot';
 
@@ -51,4 +56,9 @@ export interface IFeedbackReporterProps {
    * Form order
    */
   order?: FormOrderEnum[];
+
+  /**
+   * Async storage plugin
+   */
+  asyncStorage?: IAsyncStorageProps;
 }
