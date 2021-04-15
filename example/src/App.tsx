@@ -1,3 +1,4 @@
+import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 import * as Sentry from '@sentry/react-native';
 import {
   SENTRY,
@@ -57,6 +58,13 @@ export default function App() {
           },
         }}
         extraSource="react-native-image-crop-picker"
+        asyncStorage={{
+          getItem: (key) => RNSecureKeyStore.get(key),
+          setItem: (key, value) =>
+            RNSecureKeyStore.set(key, value, {
+              accessible: ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY,
+            }),
+        }}
         devNotes={async () => {
           const [
             deviceName,

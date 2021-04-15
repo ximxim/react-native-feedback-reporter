@@ -309,6 +309,8 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
+  - RNSecureKeyStore (1.0.0):
+    - React
   - RNSentry (2.4.0):
     - React-Core
     - Sentry (= 6.1.4)
@@ -370,6 +372,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - RNSecureKeyStore (from `../node_modules/react-native-secure-key-store/ios`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -447,6 +450,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNSecureKeyStore:
+    :path: "../node_modules/react-native-secure-key-store/ios"
   RNSentry:
     :path: "../node_modules/@sentry/react-native"
   Yoga:
@@ -492,6 +497,7 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNDeviceInfo: a9601119924a67d2479d3facf04cec7b658f44ed
   RNImageCropPicker: e641bf83ac47324994cac139bde74635ec52c17c
+  RNSecureKeyStore: f1ad870e53806453039f650720d2845c678d89c8
   RNSentry: b0d55027200c96f52e26b9bfb20296d47fc5051d
   Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38

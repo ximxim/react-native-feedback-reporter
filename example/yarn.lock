@@ -4004,6 +4004,11 @@ react-native-image-crop-picker@^0.36.0:
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.36.0.tgz#adf5a5677c3ae0e0bdaa18c73d880db2190e3023"
   integrity sha512-1S8+0EZJmUMWMcdo2tTadqIIsJo7aPxPed0P7Cop3DhBqEeYrAWfgdrJq9VoTXI+cIrOOcTAxn4NZPz+DQEn7g==
 
+react-native-secure-key-store@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-secure-key-store/-/react-native-secure-key-store-2.0.9.tgz#9094d4d914145a301864b941c6289f57058780a5"
+  integrity sha512-9qi1rOlv4qNSpJIjqcIB7d0EQSwo2Yho8NVBT/Jc9NeYibDLHdArLXl8jn8H6nlf+8alk/bXqr4rPINrCTtmog==
+
 react-native@0.63.4:
   version "0.63.4"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.63.4.tgz#2210fdd404c94a5fa6b423c6de86f8e48810ec36"
