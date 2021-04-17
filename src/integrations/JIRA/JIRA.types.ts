@@ -12,6 +12,7 @@ export interface JIRAIntegrationProps {
 }
 
 export interface JIRAIntegrationValues {
+  JIRASwitch?: boolean;
   JIRAProject?: string;
   JIRAIssueType?: string;
 }

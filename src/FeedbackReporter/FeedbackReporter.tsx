@@ -25,27 +25,31 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   ...props
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const formProps = useForm<IReportFormValues>({
+  const reportFormProps = useForm<IReportFormValues>({
+    reValidateMode: 'onChange',
+    resolver: yupResolver(ReportFormValidation({ mode, ...props })),
+  });
+  const linkAccountsFormProps = useForm<IReportFormValues>({
     reValidateMode: 'onChange',
     resolver: yupResolver(ReportFormValidation({ mode, ...props })),
   });
   const handleClose = () => {
     setIsModalOpen(false);
-    formProps.reset();
+    reportFormProps.reset();
   };
 
   useEffect(() => {
-    formProps.register({ name: 'uri' });
+    reportFormProps.register({ name: 'uri' });
 
-    return () => formProps.unregister(['uri']);
-  }, [formProps.register]);
+    return () => reportFormProps.unregister(['uri']);
+  }, [reportFormProps.register]);
 
   useEffect(() => {
     if (mode !== 'onScreenShot') return;
     ScreenShot.startListener((res?: { uri: string; code: number }) => {
       if (res?.code === 200) {
         setIsModalOpen(true);
-        formProps.setValue('uri', res.uri);
+        reportFormProps.setValue('uri', res.uri);
       }
     });
   }, [mode]);
@@ -73,15 +77,17 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
             onRequestClose={handleClose}
             {...modalProps}
           >
-            <FormProvider {...formProps}>
-              <Styled.Wrapper>
-                <ModalHeader
-                  heading={'Wanna talk about it?'}
-                  right={{ label: 'Close', onPress: handleClose }}
-                  {...header}
-                />
-                <ReportForm handleClose={handleClose} />
-              </Styled.Wrapper>
+            <FormProvider {...reportFormProps}>
+              <FormProvider {...linkAccountsFormProps}>
+                <Styled.Wrapper>
+                  <ModalHeader
+                    heading={'Wanna talk about it?'}
+                    right={{ label: 'Close', onPress: handleClose }}
+                    {...header}
+                  />
+                  <ReportForm handleClose={handleClose} />
+                </Styled.Wrapper>
+              </FormProvider>
             </FormProvider>
           </Modal>
         </ThemeProvider>

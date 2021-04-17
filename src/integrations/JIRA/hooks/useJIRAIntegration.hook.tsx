@@ -1,28 +1,33 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Linking, LayoutAnimation } from 'react-native';
+import { useFormContext } from 'react-hook-form';
 
 import { initJIRAApi } from '../JIRAApi.service';
 import { ProjectSelector, IssueTypeSelector } from '../components';
 import { useJIRASubmission } from './useJIRASubmission.hook';
 import { useJIRAProjects } from './useJIRAProjects.hook';
 import { useJIRAIssueType } from './useJIRAIssueType.hook';
+import { useJIRASwitch } from './useJIRASwitch.hook';
 
 import {
   Alert,
-  Switch,
   Typography,
   GlobalProps,
   FormOrderEnum,
+  LinkingOrderEnum,
+  IReportFormValues,
   SubmissionOrderEnum,
 } from '../../../components';
 
 export const useJIRAIntegration = () => {
   const projectOptions = useJIRAProjects();
   const issueTypeOptions = useJIRAIssueType();
+  const Switch = useJIRASwitch();
   const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
   const { jira } = useContext(GlobalProps);
-  const [isEnabled, setIsEnabled] = useState<boolean>(!!jira);
   const isJIRAIssueCreated = jira ? !!issue : true;
+  const { watch } = useFormContext<IReportFormValues>();
+  const isEnabled = watch('JIRASwitch');
 
   useEffect(() => {
     if (!jira) return;
@@ -33,14 +38,14 @@ export const useJIRAIntegration = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isEnabled]);
 
+  const JIRAAccountComponents = {
+    [LinkingOrderEnum.JIRAUsername]: null,
+    [LinkingOrderEnum.JIRAPassword]: null,
+    [LinkingOrderEnum.JIRAInfo]: null,
+  };
+
   const JIRAComponents = {
-    [FormOrderEnum.JIRASwitch]: !!jira && (
-      <Switch
-        onChange={setIsEnabled}
-        label="Enable JIRA integration"
-        defaultValue={!!jira}
-      />
-    ),
+    [FormOrderEnum.JIRASwitch]: Switch,
     [FormOrderEnum.JIRAProjects]: isEnabled && (
       <ProjectSelector options={projectOptions} />
     ),
@@ -85,6 +90,7 @@ export const useJIRAIntegration = () => {
     submitToJIRA: handleSubmit,
     JIRAComponents,
     isJIRAIssueCreated,
+    JIRAAccountComponents,
     JIRAConfirmationComponents: {
       [SubmissionOrderEnum.Jira]: JIRAConfirmationComponents,
     },

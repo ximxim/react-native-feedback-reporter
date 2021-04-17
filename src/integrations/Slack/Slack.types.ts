@@ -4,5 +4,6 @@ export interface SlackIntegrationProps {
 }
 
 export interface SlackIntegrationValues {
+  slackSwitch?: boolean;
   slackChannel?: string;
 }

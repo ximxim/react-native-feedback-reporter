@@ -13,6 +13,8 @@ import {
   Title,
   Description,
   BottomButton,
+  SubmissionTitle,
+  LinkAccountsTitle,
   ScreenShotPreview,
 } from './components';
 import {
@@ -20,12 +22,12 @@ import {
   IReportFormValues,
   FormOrderEnum,
   SubmissionOrderEnum,
+  LinkingOrderEnum,
   IScreens,
 } from './ReportForm.types';
 import * as Styled from './ReportForm.style';
 
 import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
-import { Typography } from '../../ui';
 import { GlobalProps } from '../../contexts';
 import type { IFile } from '../../../utils';
 
@@ -33,6 +35,13 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
   const flatListRef = useRef<FlatList>(null);
+  const linkingOrder: LinkingOrderEnum[] = [
+    LinkingOrderEnum.Title,
+    LinkingOrderEnum.JIRAUsername,
+    LinkingOrderEnum.JIRAPassword,
+    LinkingOrderEnum.JIRAInfo,
+    LinkingOrderEnum.Slack,
+  ];
   const formOrder: FormOrderEnum[] = [
     FormOrderEnum.Title,
     FormOrderEnum.Description,
@@ -52,11 +61,13 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   const {
     JIRAComponents,
     submitToJIRA,
+    JIRAAccountComponents,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
   const {
     submitToSlack,
     slackComponents,
+    slackAccountComponents,
     slackConfirmationComponents,
   } = useSlackIntegration();
   const {
@@ -85,27 +96,30 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       onPress={handleSubmit(() => {
         submitToJIRA?.(files);
         submitToSlack?.(files);
-        flatListRef.current?.scrollToIndex({ index: 1 });
+        flatListRef.current?.scrollToIndex({
+          index: data.findIndex((item) => item.name === 'submission'),
+        });
       })}
     />
   );
 
-  const Done = (
+  const Done = <BottomButton label="Done" onPress={handleClose} />;
+
+  const LinkAccounts = (
     <BottomButton
-      label="Done"
-      onPress={handleClose}
-      isLoading={formState.isSubmitting}
+      label="Link Account(s)"
+      onPress={() => {
+        flatListRef.current?.scrollToIndex({
+          index: data.findIndex((item) => item.name === 'bugReport'),
+        });
+      }}
     />
   );
 
-  const submissionComponents: Record<SubmissionOrderEnum, ReactNode> = {
-    [SubmissionOrderEnum.Reporting]: (
-      <Typography variant="h1" textAlign="center" my="30">
-        Thank you!
-      </Typography>
-    ),
-    ...JIRAConfirmationComponents,
-    ...slackConfirmationComponents,
+  const linkingComponents: Record<LinkingOrderEnum, ReactNode> = {
+    [LinkingOrderEnum.Title]: <LinkAccountsTitle />,
+    ...slackAccountComponents,
+    ...JIRAAccountComponents,
   };
 
   const formComponents: Record<FormOrderEnum, ReactNode> = {
@@ -119,12 +133,30 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     ...slackComponents,
   };
 
+  const submissionComponents: Record<SubmissionOrderEnum, ReactNode> = {
+    [SubmissionOrderEnum.Reporting]: <SubmissionTitle />,
+    ...JIRAConfirmationComponents,
+    ...slackConfirmationComponents,
+  };
+
   const data: IScreens[] = [
-    { stickyFooter: Submit, components: formComponents, order: formOrder },
+    {
+      stickyFooter: LinkAccounts,
+      components: linkingComponents,
+      order: linkingOrder,
+      name: 'linkAccounts',
+    },
+    {
+      stickyFooter: Submit,
+      components: formComponents,
+      order: formOrder,
+      name: 'bugReport',
+    },
     {
       stickyFooter: Done,
       components: submissionComponents,
       order: submissionOrder,
+      name: 'submission',
     },
   ];
 
