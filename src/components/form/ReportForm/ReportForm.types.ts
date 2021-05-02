@@ -24,14 +24,6 @@ export enum SubmissionOrderEnum {
   Slack = 'slack',
 }
 
-export enum LinkingOrderEnum {
-  Title = 'title',
-  JIRAUsername = 'jira_username',
-  JIRAPassword = 'jira_password',
-  JIRAInfo = 'jira_info',
-  Slack = 'slack',
-}
-
 export interface IReportFormSection {
   renderItem: () => ReactNode;
 }
@@ -51,5 +43,5 @@ export interface IReportFormValues
 export interface IScreens extends KeyboardAvoidingScrollViewProps {
   name: 'bugReport' | 'submission' | 'linkAccounts';
   components: Record<string, ReactNode>;
-  order: FormOrderEnum[] | SubmissionOrderEnum[] | LinkingOrderEnum[];
+  order: FormOrderEnum[] | SubmissionOrderEnum[];
 }

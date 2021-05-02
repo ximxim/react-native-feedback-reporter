@@ -13,7 +13,6 @@ import {
   GlobalProps,
   IReportFormValues,
   FormOrderEnum,
-  LinkingOrderEnum,
   SubmissionOrderEnum,
 } from '../../components';
 
@@ -34,10 +33,6 @@ export const useSlackIntegration = () => {
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isEnabled]);
-
-  const slackAccountComponents = {
-    [LinkingOrderEnum.Slack]: null,
-  };
 
   const slackComponents = {
     [FormOrderEnum.SlackSwitch]: Switch,
@@ -76,7 +71,6 @@ export const useSlackIntegration = () => {
     submitToSlack: handleSubmit,
     slackComponents,
     slackFailureComponents,
-    slackAccountComponents,
     slackConfirmationComponents: {
       [SubmissionOrderEnum.Slack]: slackConfirmationComponents,
     },

@@ -14,7 +14,6 @@ import {
   Description,
   BottomButton,
   SubmissionTitle,
-  LinkAccountsTitle,
   ScreenShotPreview,
 } from './components';
 import {
@@ -22,7 +21,6 @@ import {
   IReportFormValues,
   FormOrderEnum,
   SubmissionOrderEnum,
-  LinkingOrderEnum,
   IScreens,
 } from './ReportForm.types';
 import * as Styled from './ReportForm.style';
@@ -35,13 +33,6 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
   const flatListRef = useRef<FlatList>(null);
-  const linkingOrder: LinkingOrderEnum[] = [
-    LinkingOrderEnum.Title,
-    LinkingOrderEnum.JIRAUsername,
-    LinkingOrderEnum.JIRAPassword,
-    LinkingOrderEnum.JIRAInfo,
-    LinkingOrderEnum.Slack,
-  ];
   const formOrder: FormOrderEnum[] = [
     FormOrderEnum.Title,
     FormOrderEnum.Description,
@@ -61,13 +52,11 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   const {
     JIRAComponents,
     submitToJIRA,
-    JIRAAccountComponents,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
   const {
     submitToSlack,
     slackComponents,
-    slackAccountComponents,
     slackConfirmationComponents,
   } = useSlackIntegration();
   const {
@@ -105,23 +94,6 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   const Done = <BottomButton label="Done" onPress={handleClose} />;
 
-  const LinkAccounts = (
-    <BottomButton
-      label="Link Account(s)"
-      onPress={() => {
-        flatListRef.current?.scrollToIndex({
-          index: data.findIndex((item) => item.name === 'bugReport'),
-        });
-      }}
-    />
-  );
-
-  const linkingComponents: Record<LinkingOrderEnum, ReactNode> = {
-    [LinkingOrderEnum.Title]: <LinkAccountsTitle />,
-    ...slackAccountComponents,
-    ...JIRAAccountComponents,
-  };
-
   const formComponents: Record<FormOrderEnum, ReactNode> = {
     [FormOrderEnum.Title]: <Title />,
     [FormOrderEnum.Description]: <Description />,
@@ -140,12 +112,6 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   };
 
   const data: IScreens[] = [
-    {
-      stickyFooter: LinkAccounts,
-      components: linkingComponents,
-      order: linkingOrder,
-      name: 'linkAccounts',
-    },
     {
       stickyFooter: Submit,
       components: formComponents,

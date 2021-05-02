@@ -14,7 +14,6 @@ import {
   Typography,
   GlobalProps,
   FormOrderEnum,
-  LinkingOrderEnum,
   IReportFormValues,
   SubmissionOrderEnum,
 } from '../../../components';
@@ -37,12 +36,6 @@ export const useJIRAIntegration = () => {
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isEnabled]);
-
-  const JIRAAccountComponents = {
-    [LinkingOrderEnum.JIRAUsername]: null,
-    [LinkingOrderEnum.JIRAPassword]: null,
-    [LinkingOrderEnum.JIRAInfo]: null,
-  };
 
   const JIRAComponents = {
     [FormOrderEnum.JIRASwitch]: Switch,
@@ -90,7 +83,6 @@ export const useJIRAIntegration = () => {
     submitToJIRA: handleSubmit,
     JIRAComponents,
     isJIRAIssueCreated,
-    JIRAAccountComponents,
     JIRAConfirmationComponents: {
       [SubmissionOrderEnum.Jira]: JIRAConfirmationComponents,
     },
