@@ -3,7 +3,11 @@ import { Linking, LayoutAnimation } from 'react-native';
 import { useFormContext } from 'react-hook-form';
 
 import { initJIRAApi } from '../JIRAApi.service';
-import { ProjectSelector, IssueTypeSelector } from '../components';
+import {
+  ProjectSelector,
+  IssueTypeSelector,
+  AccountLinking,
+} from '../components';
 import { useJIRASubmission } from './useJIRASubmission.hook';
 import { useJIRAProjects } from './useJIRAProjects.hook';
 import { useJIRAIssueType } from './useJIRAIssueType.hook';
@@ -45,6 +49,7 @@ export const useJIRAIntegration = () => {
     [FormOrderEnum.JIRAIssueTypes]: isEnabled && (
       <IssueTypeSelector options={issueTypeOptions} />
     ),
+    [FormOrderEnum.JIRAAccountLinking]: isEnabled && <AccountLinking />,
   };
 
   const JIRAConfirmationComponents = issue && (

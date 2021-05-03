@@ -9,6 +9,7 @@ import { ScreenShot } from '../utils';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
+  Popover,
   ReportForm,
   GlobalProps,
   ModalHeader,
@@ -77,18 +78,20 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
             onRequestClose={handleClose}
             {...modalProps}
           >
-            <FormProvider {...reportFormProps}>
-              <FormProvider {...linkAccountsFormProps}>
-                <Styled.Wrapper>
-                  <ModalHeader
-                    heading={'Wanna talk about it?'}
-                    right={{ label: 'Close', onPress: handleClose }}
-                    {...header}
-                  />
-                  <ReportForm handleClose={handleClose} />
-                </Styled.Wrapper>
+            <Popover>
+              <FormProvider {...reportFormProps}>
+                <FormProvider {...linkAccountsFormProps}>
+                  <Styled.Wrapper>
+                    <ModalHeader
+                      heading={'Wanna talk about it?'}
+                      right={{ label: 'Close', onPress: handleClose }}
+                      {...header}
+                    />
+                    <ReportForm handleClose={handleClose} />
+                  </Styled.Wrapper>
+                </FormProvider>
               </FormProvider>
-            </FormProvider>
+            </Popover>
           </Modal>
         </ThemeProvider>
       </GlobalProps.Provider>

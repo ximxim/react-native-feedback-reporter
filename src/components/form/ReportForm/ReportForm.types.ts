@@ -11,6 +11,7 @@ export enum FormOrderEnum {
   Description = 'description',
   JIRAProjects = 'jira_projects',
   JIRAIssueTypes = 'jira_issue_types',
+  JIRAAccountLinking = 'jira_account_linking',
   AdditionalInformation = 'additional_information',
   JIRASwitch = 'jira_switch',
   SlackSwitch = 'slack_switch',

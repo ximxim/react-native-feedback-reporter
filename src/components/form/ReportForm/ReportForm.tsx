@@ -41,6 +41,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     FormOrderEnum.JIRASwitch,
     FormOrderEnum.JIRAProjects,
     FormOrderEnum.JIRAIssueTypes,
+    FormOrderEnum.JIRAAccountLinking,
     FormOrderEnum.ScreenShotAndExternalSource,
   ];
   const submissionOrder: SubmissionOrderEnum[] = [
