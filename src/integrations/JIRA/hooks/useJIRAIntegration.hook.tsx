@@ -20,6 +20,7 @@ import {
   FormOrderEnum,
   IReportFormValues,
   SubmissionOrderEnum,
+  CollapsibleView,
 } from '../../../components';
 
 export const useJIRAIntegration = () => {
@@ -44,7 +45,12 @@ export const useJIRAIntegration = () => {
   const JIRAComponents = {
     [FormOrderEnum.JIRASwitch]: Switch,
     [FormOrderEnum.JIRAProjects]: isEnabled && (
-      <ProjectSelector options={projectOptions} />
+      <>
+        <ProjectSelector options={projectOptions} />
+        <CollapsibleView label="Link Account">
+          <ProjectSelector options={projectOptions} />
+        </CollapsibleView>
+      </>
     ),
     [FormOrderEnum.JIRAIssueTypes]: isEnabled && (
       <IssueTypeSelector options={issueTypeOptions} />

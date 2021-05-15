@@ -25,9 +25,9 @@ import {
 } from './ReportForm.types';
 import * as Styled from './ReportForm.style';
 
-import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
-import { GlobalProps } from '../../contexts';
 import type { IFile } from '../../../utils';
+import { GlobalProps } from '../../contexts';
+import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
