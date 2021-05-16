@@ -7,10 +7,11 @@ import React, {
   useRef,
   ReactNode,
 } from 'react';
-import { FlatList } from 'react-native';
+import { ScrollView } from 'react-native';
 
 import {
   Title,
+  Integrations,
   Description,
   BottomButton,
   SubmissionTitle,
@@ -28,21 +29,23 @@ import * as Styled from './ReportForm.style';
 import type { IFile } from '../../../utils';
 import { GlobalProps } from '../../contexts';
 import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
+import { IntegrationsEnum } from './components/Integrations/Integrations.types';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
-  const flatListRef = useRef<FlatList>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
   const formOrder: FormOrderEnum[] = [
-    FormOrderEnum.Title,
-    FormOrderEnum.Description,
-    FormOrderEnum.SlackSwitch,
-    FormOrderEnum.SlackChannelsSelector,
-    FormOrderEnum.JIRASwitch,
-    FormOrderEnum.JIRAProjects,
-    FormOrderEnum.JIRAIssueTypes,
-    FormOrderEnum.JIRAAccountLinking,
-    FormOrderEnum.ScreenShotAndExternalSource,
+    FormOrderEnum.Integrations,
+    // FormOrderEnum.Title,
+    // FormOrderEnum.Description,
+    // FormOrderEnum.SlackSwitch,
+    // FormOrderEnum.SlackChannelsSelector,
+    // FormOrderEnum.JIRASwitch,
+    // FormOrderEnum.JIRAProjects,
+    // FormOrderEnum.JIRAIssueTypes,
+    // FormOrderEnum.JIRAAccountLinking,
+    // FormOrderEnum.ScreenShotAndExternalSource,
   ];
   const submissionOrder: SubmissionOrderEnum[] = [
     SubmissionOrderEnum.Reporting,
@@ -53,11 +56,13 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   const {
     JIRAComponents,
     submitToJIRA,
+    isJIRAEnabled,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
   const {
     submitToSlack,
     slackComponents,
+    isSlackEnabled,
     slackConfirmationComponents,
   } = useSlackIntegration();
   const {
@@ -86,8 +91,10 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       onPress={handleSubmit(() => {
         submitToJIRA?.(files);
         submitToSlack?.(files);
-        flatListRef.current?.scrollToIndex({
-          index: data.findIndex((item) => item.name === 'submission'),
+        const index = data.findIndex((item) => item.name === 'submission');
+        scrollViewRef.current?.scrollTo({
+          x: Styled.width * index,
+          animated: true,
         });
       })}
     />
@@ -102,8 +109,17 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     [FormOrderEnum.ScreenShotAndExternalSource]: (
       <ScreenShotPreview {...{ files, setFiles }} />
     ),
-    ...JIRAComponents,
-    ...slackComponents,
+    [FormOrderEnum.Integrations]: (
+      <Integrations
+        enabledIntegrationsCount={
+          [isJIRAEnabled, isSlackEnabled].filter((b) => b).length
+        }
+        components={{
+          [IntegrationsEnum.JIRA]: JIRAComponents,
+          [IntegrationsEnum.Slack]: slackComponents,
+        }}
+      />
+    ),
   };
 
   const submissionComponents: Record<SubmissionOrderEnum, ReactNode> = {
@@ -128,20 +144,21 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   ];
 
   return (
-    <FlatList
+    <ScrollView
       horizontal
-      data={data}
       pagingEnabled
-      ref={flatListRef}
+      ref={scrollViewRef}
       scrollEnabled={false}
       showsHorizontalScrollIndicator={false}
-      renderItem={({
-        item: { components, order, ...keyboardAvoidingScrollView },
-      }) => (
-        <Styled.Wrapper {...keyboardAvoidingScrollView}>
+    >
+      {data.map(({ components, order, ...keyboardAvoidingScrollView }) => (
+        <Styled.Wrapper
+          {...keyboardAvoidingScrollView}
+          containerStyle={Styled.containerStyle}
+        >
           {order.map((key: keyof typeof components) => components[key])}
         </Styled.Wrapper>
-      )}
-    />
+      ))}
+    </ScrollView>
   );
 };

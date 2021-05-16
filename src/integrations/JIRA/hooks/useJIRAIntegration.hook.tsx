@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { Linking, LayoutAnimation } from 'react-native';
+import React, { useContext, useEffect, useCallback } from 'react';
+import { Linking, LayoutAnimation, View } from 'react-native';
 import { useFormContext } from 'react-hook-form';
 
 import { initJIRAApi } from '../JIRAApi.service';
@@ -12,15 +12,14 @@ import { useJIRASubmission } from './useJIRASubmission.hook';
 import { useJIRAProjects } from './useJIRAProjects.hook';
 import { useJIRAIssueType } from './useJIRAIssueType.hook';
 import { useJIRASwitch } from './useJIRASwitch.hook';
+import { JIRAComponents as JIRAComponentsEnum } from '../JIRA.types';
 
 import {
   Alert,
   Typography,
   GlobalProps,
-  FormOrderEnum,
   IReportFormValues,
   SubmissionOrderEnum,
-  CollapsibleView,
 } from '../../../components';
 
 export const useJIRAIntegration = () => {
@@ -32,6 +31,12 @@ export const useJIRAIntegration = () => {
   const isJIRAIssueCreated = jira ? !!issue : true;
   const { watch } = useFormContext<IReportFormValues>();
   const isEnabled = watch('JIRASwitch');
+  const order = jira?.order || [
+    JIRAComponentsEnum.JIRASwitch,
+    JIRAComponentsEnum.JIRAProjects,
+    JIRAComponentsEnum.JIRAIssueTypes,
+    JIRAComponentsEnum.JIRAAccountLinking,
+  ];
 
   useEffect(() => {
     if (!jira) return;
@@ -42,21 +47,21 @@ export const useJIRAIntegration = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isEnabled]);
 
-  const JIRAComponents = {
-    [FormOrderEnum.JIRASwitch]: Switch,
-    [FormOrderEnum.JIRAProjects]: isEnabled && (
-      <>
-        <ProjectSelector options={projectOptions} />
-        <CollapsibleView label="Link Account">
-          <ProjectSelector options={projectOptions} />
-        </CollapsibleView>
-      </>
+  const components = {
+    [JIRAComponentsEnum.JIRASwitch]: Switch,
+    [JIRAComponentsEnum.JIRAProjects]: isEnabled && (
+      <ProjectSelector options={projectOptions} />
     ),
-    [FormOrderEnum.JIRAIssueTypes]: isEnabled && (
+    [JIRAComponentsEnum.JIRAIssueTypes]: isEnabled && (
       <IssueTypeSelector options={issueTypeOptions} />
     ),
-    [FormOrderEnum.JIRAAccountLinking]: isEnabled && <AccountLinking />,
+    [JIRAComponentsEnum.JIRAAccountLinking]: isEnabled && <AccountLinking />,
   };
+
+  const JIRAComponents = useCallback(
+    (ref: any) => <View ref={ref}>{order.map((key) => components[key])}</View>,
+    [components]
+  );
 
   const JIRAConfirmationComponents = issue && (
     <>
@@ -94,6 +99,7 @@ export const useJIRAIntegration = () => {
     submitToJIRA: handleSubmit,
     JIRAComponents,
     isJIRAIssueCreated,
+    isJIRAEnabled: isEnabled,
     JIRAConfirmationComponents: {
       [SubmissionOrderEnum.Jira]: JIRAConfirmationComponents,
     },

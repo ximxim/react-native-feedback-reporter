@@ -1,10 +1,11 @@
 import { useFormContext } from 'react-hook-form';
-import React, { useContext, useEffect } from 'react';
-import { LayoutAnimation } from 'react-native';
+import { LayoutAnimation, View } from 'react-native';
+import React, { useContext, useEffect, useCallback } from 'react';
 
 import { SlackChannelsSelector } from './components';
 import { useSlackSubmission } from './useSlackSubmission.hook';
 import { useSlackChannels, useSlackSwitch } from './hooks';
+import { SlackComponents as SlackComponentsEnum } from './Slack.types';
 
 import { initSlackApi } from './slackApi.service';
 import {
@@ -12,7 +13,6 @@ import {
   Typography,
   GlobalProps,
   IReportFormValues,
-  FormOrderEnum,
   SubmissionOrderEnum,
 } from '../../components';
 
@@ -24,6 +24,10 @@ export const useSlackIntegration = () => {
   const { formState } = useFormContext<IReportFormValues>();
   const { watch } = useFormContext<IReportFormValues>();
   const isEnabled = watch('slackSwitch');
+  const order = slack?.order || [
+    SlackComponentsEnum.SlackSwitch,
+    SlackComponentsEnum.SlackChannelsSelector,
+  ];
 
   useEffect(() => {
     if (!slack) return;
@@ -34,12 +38,17 @@ export const useSlackIntegration = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isEnabled]);
 
-  const slackComponents = {
-    [FormOrderEnum.SlackSwitch]: Switch,
-    [FormOrderEnum.SlackChannelsSelector]: isEnabled && (
+  const components = {
+    [SlackComponentsEnum.SlackSwitch]: Switch,
+    [SlackComponentsEnum.SlackChannelsSelector]: isEnabled && (
       <SlackChannelsSelector options={slackChannels} />
     ),
   };
+
+  const slackComponents = useCallback(
+    (ref: any) => <View ref={ref}>{order.map((key) => components[key])}</View>,
+    [components]
+  );
 
   const slackConfirmationComponents = ts && (
     <>
@@ -71,6 +80,7 @@ export const useSlackIntegration = () => {
     submitToSlack: handleSubmit,
     slackComponents,
     slackFailureComponents,
+    isSlackEnabled: isEnabled,
     slackConfirmationComponents: {
       [SubmissionOrderEnum.Slack]: slackConfirmationComponents,
     },
