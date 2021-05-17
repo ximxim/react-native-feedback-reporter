@@ -37,10 +37,14 @@ export const useNavigation = (
   }, [height]);
 
   useEffect(() => {
-    elRefs[pageNumber].current?.measure((_x, _y, _width, elHeight) => {
-      if (elHeight <= 0 || elHeight === height) return;
-      setHeight(elHeight);
-    });
+    (async () => {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      elRefs[pageNumber].current?.measure((_x, _y, _width, elHeight) => {
+        if (elHeight <= 0 || elHeight === height) return;
+        setHeight(elHeight);
+      });
+    })();
   });
 
   useEffect(() => {
@@ -56,7 +60,7 @@ export const useNavigation = (
       pagingEnabled
       ref={scrollViewRef}
       style={{ height }}
-      contentContainerStyle={{ height: (height || 0) + 100 }}
+      contentContainerStyle={{ height: (height || 0) + 40 }}
       scrollEnabled={false}
       showsHorizontalScrollIndicator={false}
     >
