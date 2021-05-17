@@ -59,7 +59,7 @@ export const useJIRAComponents = () => {
     { component: IssueComponents },
   ];
 
-  const { Navigation, setPageNumber } = useNavigation({ data });
+  const { Navigation, setPageNumber } = useNavigation({ data }, [isEnabled]);
 
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
