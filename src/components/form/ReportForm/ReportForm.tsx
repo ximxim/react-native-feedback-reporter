@@ -25,27 +25,21 @@ import {
   IScreens,
 } from './ReportForm.types';
 import * as Styled from './ReportForm.style';
+import { IntegrationsEnum } from './components/Integrations/Integrations.types';
 
 import type { IFile } from '../../../utils';
 import { GlobalProps } from '../../contexts';
 import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
-import { IntegrationsEnum } from './components/Integrations/Integrations.types';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const formOrder: FormOrderEnum[] = [
+    FormOrderEnum.Title,
+    FormOrderEnum.Description,
     FormOrderEnum.Integrations,
-    // FormOrderEnum.Title,
-    // FormOrderEnum.Description,
-    // FormOrderEnum.SlackSwitch,
-    // FormOrderEnum.SlackChannelsSelector,
-    // FormOrderEnum.JIRASwitch,
-    // FormOrderEnum.JIRAProjects,
-    // FormOrderEnum.JIRAIssueTypes,
-    // FormOrderEnum.JIRAAccountLinking,
-    // FormOrderEnum.ScreenShotAndExternalSource,
+    FormOrderEnum.ScreenShotAndExternalSource,
   ];
   const submissionOrder: SubmissionOrderEnum[] = [
     SubmissionOrderEnum.Reporting,

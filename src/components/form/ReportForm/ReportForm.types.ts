@@ -9,12 +9,6 @@ import type {
 export enum FormOrderEnum {
   Title = 'title',
   Description = 'description',
-  // JIRAProjects = 'jira_projects',
-  // JIRAIssueTypes = 'jira_issue_types',
-  // JIRAAccountLinking = 'jira_account_linking',
-  // JIRASwitch = 'jira_switch',
-  // SlackSwitch = 'slack_switch',
-  // SlackChannelsSelector = 'slack_channels_selector',
   Integrations = 'integrations',
   AdditionalInformation = 'additional_information',
   ScreenShotAndExternalSource = 'screen_shot_and_external_sources',

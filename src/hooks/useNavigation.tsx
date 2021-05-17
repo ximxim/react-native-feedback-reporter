@@ -6,11 +6,14 @@ import React, {
   createRef,
   DependencyList,
 } from 'react';
-import { FlatList, View, Dimensions, LayoutAnimation } from 'react-native';
+import { ScrollView, View, Dimensions, LayoutAnimation } from 'react-native';
 
 const { width } = Dimensions.get('screen');
 
-export type NavigationElementType = (ref: any) => JSX.Element;
+export type NavigationElementType = (
+  ref: RefObject<View>,
+  setPageNumber: (index: number) => void
+) => JSX.Element;
 
 interface IData {
   component: NavigationElementType;
@@ -22,10 +25,10 @@ export interface IUseNavigationProps {
 
 export const useNavigation = (
   { data }: IUseNavigationProps,
-  dependancyList: DependencyList
+  dependancyList: DependencyList = []
 ) => {
   const [pageNumber, setPageNumber] = useState<number>(0);
-  const flatListRef = useRef<FlatList>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
   const [height, setHeight] = useState<number>();
   const elRefs = useRef<RefObject<View>[]>(data.map(() => createRef())).current;
 
@@ -41,22 +44,25 @@ export const useNavigation = (
   });
 
   useEffect(() => {
-    flatListRef.current?.scrollToIndex({ index: pageNumber, animated: true });
+    scrollViewRef.current?.scrollTo({
+      x: width * pageNumber,
+      animated: true,
+    });
   }, [pageNumber, ...dependancyList]);
 
   const Navigation = (
-    <FlatList
+    <ScrollView
       horizontal
       pagingEnabled
-      ref={flatListRef}
+      ref={scrollViewRef}
       style={{ height }}
       scrollEnabled={false}
-      data={data}
       showsHorizontalScrollIndicator={false}
-      renderItem={({ item: { component }, index }) => (
-        <View style={{ width }}>{component(elRefs[index])}</View>
-      )}
-    />
+    >
+      {data?.map(({ component }, index) => (
+        <View style={{ width }}>{component(elRefs[index], setPageNumber)}</View>
+      ))}
+    </ScrollView>
   );
   return {
     Navigation,
