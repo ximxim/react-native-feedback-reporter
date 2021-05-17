@@ -1,9 +1,9 @@
-type ElementType = (ref: any) => JSX.Element;
+import type { NavigationElementType } from '../../../../../hooks';
 
 export interface IIntegrationsProps {
   components: {
-    [IntegrationsEnum.JIRA]: ElementType;
-    [IntegrationsEnum.Slack]: ElementType;
+    [IntegrationsEnum.JIRA]: NavigationElementType;
+    [IntegrationsEnum.Slack]: NavigationElementType;
   };
   enabledIntegrationsCount: number;
 }
