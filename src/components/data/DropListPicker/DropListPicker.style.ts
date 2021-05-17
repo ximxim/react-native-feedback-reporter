@@ -8,8 +8,10 @@ export const Wrapper = styled(TouchableOpacity)<{
   isFocused: boolean;
   hasError: boolean;
 }>`
+  flex-grow: 1;
   margin: 8px;
   border-width: 1px;
+  position: relative;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.brandPrimary};
   border-color: ${({ theme, isFocused, hasError }) => {

@@ -38,7 +38,7 @@ export const useNavigation = (
 
   useEffect(() => {
     elRefs[pageNumber].current?.measure((_x, _y, _width, elHeight) => {
-      if (elHeight <= 0) return;
+      if (elHeight <= 0 || elHeight === height) return;
       setHeight(elHeight);
     });
   });
@@ -56,6 +56,7 @@ export const useNavigation = (
       pagingEnabled
       ref={scrollViewRef}
       style={{ height }}
+      contentContainerStyle={{ height: (height || 0) + 100 }}
       scrollEnabled={false}
       showsHorizontalScrollIndicator={false}
     >
