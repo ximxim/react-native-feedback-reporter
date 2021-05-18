@@ -3,7 +3,7 @@ import React, { FunctionComponent, useContext } from 'react';
 
 import { IntegrationsEnum, IIntegrationsProps } from './Integrations.types';
 
-import { Typography } from '../../../../ui';
+import { Tab, Box } from '../../../../ui';
 import { GlobalProps } from '../../../../contexts';
 import { useNavigation } from '../../../../../hooks';
 
@@ -25,7 +25,7 @@ export const Integrations: FunctionComponent<IIntegrationsProps> = ({
     component: components[integration],
   }));
 
-  const { Navigation, setPageNumber } = useNavigation(
+  const { Navigation, setPageNumber, pageNumber } = useNavigation(
     { data: integrationComponents },
     [enabledIntegrationsCount]
   );
@@ -36,12 +36,16 @@ export const Integrations: FunctionComponent<IIntegrationsProps> = ({
         data={data}
         horizontal
         showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingLeft: 8 }}
         renderItem={({ item, index }) => (
-          <Typography px={10} variant="h1" onPress={() => setPageNumber(index)}>
-            {item}
-          </Typography>
+          <Tab
+            label={item}
+            isSelected={index === pageNumber}
+            onPress={() => setPageNumber(index)}
+          />
         )}
       />
+      <Box mt={2} />
       {Navigation}
     </>
   );

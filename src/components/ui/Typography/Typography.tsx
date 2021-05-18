@@ -36,10 +36,15 @@ const textVariants = variant({
 
 type TextDecorations = 'underline' | 'line-through';
 
+type ColorNames = keyof typeof theme.base.colors;
+
 type Props = {
   variant?: keyof typeof theme.base.textVariants;
   textDecoration?: TextDecorations;
-  color?: keyof typeof theme.base.colors;
+  color?: ColorNames;
+  bg?: ColorNames;
+  backgroundColor?: ColorNames;
+  borderColor?: ColorNames;
   hasError?: boolean;
   isFocused?: boolean;
 } & PaddingProps &

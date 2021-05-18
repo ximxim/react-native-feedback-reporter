@@ -1,3 +1,5 @@
+export * from './Box';
+export * from './Tab';
 export * from './Alert';
 export * from './Button';
 export * from './Avatar';

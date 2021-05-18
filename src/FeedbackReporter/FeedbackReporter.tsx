@@ -25,12 +25,8 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   mode = 'onScreenShot',
   ...props
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const reportFormProps = useForm<IReportFormValues>({
-    reValidateMode: 'onChange',
-    resolver: yupResolver(ReportFormValidation({ mode, ...props })),
-  });
-  const linkAccountsFormProps = useForm<IReportFormValues>({
     reValidateMode: 'onChange',
     resolver: yupResolver(ReportFormValidation({ mode, ...props })),
   });
@@ -80,16 +76,14 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
           >
             <Popover>
               <FormProvider {...reportFormProps}>
-                <FormProvider {...linkAccountsFormProps}>
-                  <Styled.Wrapper>
-                    <ModalHeader
-                      heading={'Wanna talk about it?'}
-                      right={{ label: 'Close', onPress: handleClose }}
-                      {...header}
-                    />
-                    <ReportForm handleClose={handleClose} />
-                  </Styled.Wrapper>
-                </FormProvider>
+                <Styled.Wrapper>
+                  <ModalHeader
+                    heading={'Wanna talk about it?'}
+                    right={{ label: 'Close', onPress: handleClose }}
+                    {...header}
+                  />
+                  <ReportForm handleClose={handleClose} />
+                </Styled.Wrapper>
               </FormProvider>
             </Popover>
           </Modal>

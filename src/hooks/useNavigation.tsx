@@ -71,6 +71,7 @@ export const useNavigation = (
   );
   return {
     Navigation,
+    pageNumber,
     setPageNumber,
   };
 };
