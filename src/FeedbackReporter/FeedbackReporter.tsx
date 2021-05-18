@@ -6,6 +6,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 
 import { theme } from '../theme';
 import { ScreenShot } from '../utils';
+import { useAuthState } from '../hooks';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
@@ -25,7 +26,8 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   mode = 'onScreenShot',
   ...props
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const authState = useAuthState();
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const reportFormProps = useForm<IReportFormValues>({
     reValidateMode: 'onChange',
     resolver: yupResolver(ReportFormValidation({ mode, ...props })),
@@ -65,7 +67,9 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GlobalProps.Provider value={{ mode, isModalOpen, ...props }}>
+      <GlobalProps.Provider
+        value={{ mode, isModalOpen, ...props, ...authState }}
+      >
         <ThemeProvider theme={selectedTheme}>
           <Modal
             visible={isModalOpen}

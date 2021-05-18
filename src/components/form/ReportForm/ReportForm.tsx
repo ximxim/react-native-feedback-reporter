@@ -65,11 +65,8 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     handleSubmit,
     formState,
     getValues,
-    watch,
   } = useFormContext<IReportFormValues>();
   const { additionalInformation } = useContext(GlobalProps);
-
-  console.log(watch('uri'));
 
   useEffect(() => {
     register({ name: 'description' });

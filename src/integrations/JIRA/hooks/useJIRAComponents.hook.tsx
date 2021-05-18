@@ -6,6 +6,7 @@ import {
   ProjectSelector,
   IssueTypeSelector,
   AccountLinking,
+  AccountLinkingForm,
 } from '../components';
 import { useJIRAProjects } from './useJIRAProjects.hook';
 import { useJIRAIssueType } from './useJIRAIssueType.hook';
@@ -44,7 +45,7 @@ export const useJIRAComponents = () => {
   const AccountLinkingComponents = useCallback(
     (ref) => (
       <View ref={ref}>
-        <AccountLinking onPress={() => setPg(1)} />
+        <AccountLinkingForm next={() => setPg(1)} />
       </View>
     ),
     [components]

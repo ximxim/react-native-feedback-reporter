@@ -2,6 +2,7 @@ import { Animated } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Wrapper = styled.View<{ isFocused: boolean; hasError: boolean }>`
+  flex-grow: 1;
   margin: 8px;
   border-width: 1px;
   border-radius: 4px;

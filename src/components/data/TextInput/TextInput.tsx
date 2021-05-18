@@ -9,7 +9,7 @@ import {
 import * as Styled from './TextInput.style';
 import type { ITextInputProps } from './TextInput.types';
 
-import { Typography, Container, Spacing } from '../../ui';
+import { Typography, Box, Spacing } from '../../ui';
 
 export const TextInput = ({
   label,
@@ -107,7 +107,7 @@ export const TextInput = ({
   );
 
   return (
-    <Container>
+    <Box>
       <Styled.Wrapper {...{ hasError, isFocused, style: containerStyle }}>
         {Label}
         <Styled.TextInput
@@ -121,6 +121,6 @@ export const TextInput = ({
         />
       </Styled.Wrapper>
       {Error}
-    </Container>
+    </Box>
   );
 };
