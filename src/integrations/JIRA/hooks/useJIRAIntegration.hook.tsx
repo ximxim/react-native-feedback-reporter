@@ -15,13 +15,13 @@ import {
 export const useJIRAIntegration = () => {
   const { isEnabled, JIRAComponents } = useJIRAComponents();
   const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
-  const { jira } = useContext(GlobalProps);
+  const { jira, authState } = useContext(GlobalProps);
   const isJIRAIssueCreated = jira ? !!issue : true;
 
   useEffect(() => {
     if (!jira) return;
-    initJIRAApi(jira);
-  }, []);
+    initJIRAApi({ ...jira, ...authState });
+  }, [authState]);
 
   const JIRAConfirmationComponents = issue && (
     <>

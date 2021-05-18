@@ -8,9 +8,11 @@ interface IAdditionalProps extends IAuthStateReturn {
   isModalOpen: boolean;
 }
 
-export const GlobalProps = createContext<
-  IFeedbackReporterProps & IAdditionalProps
->({
+export interface IGlobalProps
+  extends IFeedbackReporterProps,
+    IAdditionalProps {}
+
+export const GlobalProps = createContext<IGlobalProps>({
   isModalOpen: false,
   authState: {},
   setAuthState: () => {},

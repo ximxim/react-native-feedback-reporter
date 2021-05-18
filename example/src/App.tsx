@@ -1,12 +1,6 @@
 import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 import * as Sentry from '@sentry/react-native';
-import {
-  SENTRY,
-  JIRA_TOKEN,
-  JIRA_DOMAIN,
-  JIRA_USERNAME,
-  SLACK_BOT_TOKEN,
-} from '@env';
+import { SENTRY, JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
@@ -47,8 +41,6 @@ export default function App() {
         }}
         jira={{
           domain: JIRA_DOMAIN,
-          username: JIRA_USERNAME,
-          token: JIRA_TOKEN,
           issueTypeField: {
             defaultValue: 'story',
             isVisible: false,

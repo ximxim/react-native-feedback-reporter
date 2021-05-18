@@ -1,17 +1,22 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useContext } from 'react';
 
 import type { IAccountLinkingProps } from './AccountLinking.types';
 
-import { Typography, Box } from '../../../../components';
+import { Typography, Box, GlobalProps } from '../../../../components';
 
 export const AccountLinking: FunctionComponent<IAccountLinkingProps> = ({
   ...props
 }) => {
+  const { authState } = useContext(GlobalProps);
+  const username = authState.jira?.username;
+
   return (
     <Box mx={2}>
-      <Typography variant="caption" {...props}>
-        Connected to azim@lazertechnologies.com long press here to disconnect.
-      </Typography>
+      {username && (
+        <Typography variant="caption" {...props}>
+          Connected to {username} long press here to disconnect.
+        </Typography>
+      )}
     </Box>
   );
 };

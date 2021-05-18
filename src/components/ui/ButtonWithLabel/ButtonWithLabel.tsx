@@ -4,7 +4,7 @@ import { GestureResponderEvent, Animated } from 'react-native';
 import * as Styled from './ButtonWithLabel.style';
 import type { IButtonWithLabelProps } from './ButtonWithLabel.types';
 
-import { Typography } from '../../ui';
+import { Typography, Box } from '../../ui';
 
 export const ButtonWithLabel = ({
   onPress,
@@ -56,7 +56,9 @@ export const ButtonWithLabel = ({
   const ButtonContent = isLoading ? (
     <Styled.ActivityIndicator />
   ) : (
-    <Typography variant="button">{children}</Typography>
+    <Box height={32}>
+      <Typography variant="button">{children}</Typography>
+    </Box>
   );
 
   return (

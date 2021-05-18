@@ -7,8 +7,10 @@ import { getJIRAIssueTypes } from '../queries';
 import { IReportFormValues, IOption, GlobalProps } from '../../../components';
 
 export const useJIRAIssueType = () => {
-  const { jira } = useContext(GlobalProps);
-  const { data, isLoading } = useQuery('issueTypes', getJIRAIssueTypes);
+  const { jira, authState } = useContext(GlobalProps);
+  const { data, isLoading } = useQuery('issueTypes', getJIRAIssueTypes, {
+    enabled: !!authState.jira?.token || !!jira?.token,
+  });
   const {
     setValue,
     register,

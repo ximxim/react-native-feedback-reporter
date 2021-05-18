@@ -2,12 +2,14 @@ import React, { FunctionComponent, useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Linking } from 'react-native';
+import { useQuery } from 'react-query';
 
 import type {
   IAccountLinkingFormProps,
   IAccountLinkingFormValues,
 } from './AccountLinkingForm.types';
 import { AccountLinkingFormValidation } from './AccountLinkingForm.validation';
+import { getJIRASelf } from '../../queries';
 
 import {
   Box,
@@ -20,7 +22,10 @@ import {
 export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = ({
   next,
 }) => {
-  const { setAuthState } = useContext(GlobalProps);
+  const { setAuthState, authState } = useContext(GlobalProps);
+  const { data, isLoading } = useQuery('JIRASelf', getJIRASelf, {
+    enabled: !!authState.jira?.username && !!authState.jira.token,
+  });
   const {
     setValue,
     errors,
@@ -36,10 +41,15 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
     setAuthState({
       jira: {
         ...values,
+        username: values.username.toLowerCase(),
       },
     });
-    next();
   });
+
+  useEffect(() => {
+    if (!data?.data.emailAddress) return;
+    next();
+  }, [data]);
 
   useEffect(() => {
     register({ name: 'username' });
@@ -52,6 +62,7 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
     <Box mb={40}>
       <TextInput
         label="Username"
+        autoCapitalize="none"
         error={errors.username?.message}
         onChangeText={(text) => setValue('username', text)}
       />
@@ -75,7 +86,9 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
           Guide me
         </Typography>
       </Typography>
-      <ButtonWithLabel onPress={onSubmit}>Link Account</ButtonWithLabel>
+      <ButtonWithLabel onPress={onSubmit} isLoading={isLoading}>
+        Link Account
+      </ButtonWithLabel>
     </Box>
   );
 };

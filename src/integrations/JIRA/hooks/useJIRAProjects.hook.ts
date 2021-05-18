@@ -7,9 +7,9 @@ import { getJIRAProjects } from '../queries';
 import { IReportFormValues, IOption, GlobalProps } from '../../../components';
 
 export const useJIRAProjects = () => {
-  const { jira } = useContext(GlobalProps);
+  const { jira, authState } = useContext(GlobalProps);
   const { data, isLoading } = useQuery('JIRAProjects', getJIRAProjects, {
-    enabled: !!jira,
+    enabled: !!authState.jira?.token || !!jira?.token,
   });
   const {
     setValue,

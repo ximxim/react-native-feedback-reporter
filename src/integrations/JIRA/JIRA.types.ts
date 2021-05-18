@@ -4,9 +4,9 @@ interface IOptional {
 }
 
 export interface JIRAIntegrationProps {
-  token: string;
+  token?: string;
   domain: string;
-  username: string;
+  username?: string;
   projectField?: IOptional;
   issueTypeField?: IOptional;
   order?: JIRAComponents[];
