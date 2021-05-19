@@ -20,6 +20,7 @@ export const TextInput = ({
   onChangeText,
   containerStyle,
   // maskType,
+  hideErrorMessage,
   value: propValue,
   ...textInputProps
 }: ITextInputProps) => {
@@ -120,7 +121,7 @@ export const TextInput = ({
           placeholder={isFocused ? placeholder : ''}
         />
       </Styled.Wrapper>
-      {Error}
+      {!hideErrorMessage && Error}
     </Box>
   );
 };

@@ -51,11 +51,17 @@ export default function App() {
         }}
         extraSource="react-native-image-crop-picker"
         asyncStorage={{
-          getItem: (key) => RNSecureKeyStore.get(key),
-          setItem: (key, value) =>
-            RNSecureKeyStore.set(key, value, {
+          getItem: (key) => {
+            console.log('getItem', key);
+            return RNSecureKeyStore.get(key);
+          },
+          setItem: (key, value) => {
+            console.log('setItem', key, value);
+
+            return RNSecureKeyStore.set(key, value, {
               accessible: ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY,
-            }),
+            });
+          },
         }}
         devNotes={async () => {
           const [

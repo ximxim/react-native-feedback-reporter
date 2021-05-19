@@ -1,6 +1,4 @@
-export interface IAccountLinkingFormProps {
-  next: () => void;
-}
+export interface IAccountLinkingFormProps {}
 
 export interface IAccountLinkingFormValues {
   token: string;

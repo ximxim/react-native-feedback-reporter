@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Linking } from 'react-native';
+import { Linking, ScrollView } from 'react-native';
 import { useQuery } from 'react-query';
 
 import type {
@@ -19,26 +19,25 @@ import { getJIRASelf } from '../../queries';
 import { initJIRAApi } from '../../JIRAApi.service';
 
 import {
-  Box,
   TextInput,
   Typography,
   ButtonWithLabel,
   GlobalProps,
 } from '../../../../components';
 
-export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = ({
-  next,
-}) => {
+export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = () => {
   const { setAuthState, jira } = useContext(GlobalProps);
   const [initialized, setInitialized] = useState<boolean>(false);
   const {
     setValue,
     errors,
-    handleSubmit,
+    control,
     register,
     getValues,
     unregister,
+    handleSubmit,
   } = useForm<IAccountLinkingFormValues>({
+    mode: 'onBlur',
     reValidateMode: 'onChange',
     resolver: yupResolver(AccountLinkingFormValidation),
   });
@@ -61,11 +60,11 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
         username: values.username.toLowerCase(),
       },
     });
-    next();
   }, [data]);
 
   useEffect(() => {
     if (!error) return;
+    setInitialized(false);
     setAuthState({});
   }, [error]);
 
@@ -77,17 +76,23 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
   }, [register]);
 
   return (
-    <Box mb={40}>
+    <ScrollView scrollEnabled={false}>
       <TextInput
         label="Username"
+        hideErrorMessage
         autoCapitalize="none"
+        onBlur={() => control.trigger('username')}
         error={errors.username?.message}
+        placeholder={errors.username?.message}
         onChangeText={(text) => setValue('username', text)}
       />
       <TextInput
         label="API token"
         secureTextEntry
+        hideErrorMessage
         error={errors.token?.message}
+        onBlur={() => control.trigger('token')}
+        placeholder={errors.token?.message}
         onChangeText={(text) => setValue('token', text)}
       />
       <Typography variant="caption" mx={2}>
@@ -104,9 +109,9 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
           Guide me
         </Typography>
       </Typography>
-      <ButtonWithLabel onPress={onSubmit}>
-        {isLoading ? 'Linking...' : 'Link Account'}
+      <ButtonWithLabel onPress={onSubmit} isLoading={isLoading}>
+        Link Account
       </ButtonWithLabel>
-    </Box>
+    </ScrollView>
   );
 };

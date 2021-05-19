@@ -17,7 +17,6 @@ export type NavigationElementType = (
 
 interface IData {
   component: NavigationElementType;
-  isHidden?: boolean;
 }
 
 export interface IUseNavigationProps {
@@ -25,10 +24,9 @@ export interface IUseNavigationProps {
 }
 
 export const useNavigation = (
-  { data: navigationData }: IUseNavigationProps,
+  { data }: IUseNavigationProps,
   dependancyList: DependencyList = []
 ) => {
-  const data = navigationData.filter((item) => !item.isHidden);
   const [pageNumber, setPageNumber] = useState<number>(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const [height, setHeight] = useState<number>();

@@ -21,7 +21,7 @@ export const useJIRAComponents = () => {
   const projectOptions = useJIRAProjects();
   const issueTypeOptions = useJIRAIssueType();
   const Switch = useJIRASwitch();
-  const { jira, setAuthState } = useContext(GlobalProps);
+  const { jira, setAuthState, authState } = useContext(GlobalProps);
   const { watch } = useFormContext<IReportFormValues>();
   const isEnabled = watch('JIRASwitch');
   const components = {
@@ -34,10 +34,11 @@ export const useJIRAComponents = () => {
     ),
     [JIRAComponentsEnum.JIRAAccountLinking]: isEnabled && (
       <AccountLinking
-        onPress={() => {
-          setAuthState({});
-          setPg(0);
-        }}
+        onLongPress={() =>
+          setAuthState({
+            jira: undefined,
+          })
+        }
       />
     ),
   };
@@ -50,7 +51,7 @@ export const useJIRAComponents = () => {
   const AccountLinkingComponents = useCallback(
     (ref) => (
       <View ref={ref}>
-        <AccountLinkingForm next={() => setPg(1)} />
+        <AccountLinkingForm />
       </View>
     ),
     [components]
@@ -70,6 +71,11 @@ export const useJIRAComponents = () => {
   useEffect(() => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isEnabled]);
+
+  useEffect(() => {
+    if (authState.jira?.token) setPg(1);
+    else setPg(0);
+  }, [authState]);
 
   const JIRAComponents = useCallback(
     (ref: any) => <View ref={ref}>{Navigation}</View>,

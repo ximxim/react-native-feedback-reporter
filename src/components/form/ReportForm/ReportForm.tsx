@@ -29,11 +29,15 @@ import { IntegrationsEnum } from './components/Integrations/Integrations.types';
 
 import type { IFile } from '../../../utils';
 import { GlobalProps } from '../../contexts';
+import { useStorage } from '../../../hooks';
 import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
+  const { setItem, getItem } = useStorage({
+    key: 'FEEDBACK_REPORTER_AUTH_STATE',
+  });
   const scrollViewRef = useRef<ScrollView>(null);
   const formOrder: FormOrderEnum[] = [
     FormOrderEnum.Title,
@@ -47,6 +51,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     SubmissionOrderEnum.Slack,
   ];
   const [files, setFiles] = useState<IFile[]>([]);
+  const [isAuthFetched, setIsAuthFetched] = useState<boolean>(false);
   const {
     JIRAComponents,
     submitToJIRA,
@@ -66,7 +71,9 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     formState,
     getValues,
   } = useFormContext<IReportFormValues>();
-  const { additionalInformation } = useContext(GlobalProps);
+  const { additionalInformation, authState, setAuthState } = useContext(
+    GlobalProps
+  );
 
   useEffect(() => {
     register({ name: 'description' });
@@ -74,6 +81,19 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
     return () => unregister(['description', 'title']);
   }, [register]);
+
+  useEffect(() => {
+    if (!isAuthFetched) return;
+    setItem(authState);
+  }, [authState, isAuthFetched]);
+
+  useEffect(() => {
+    (async () => {
+      const newState = await getItem();
+      setAuthState(JSON.parse(newState));
+      setIsAuthFetched(true);
+    })();
+  }, []);
 
   const disableReporting = !submitToSlack && !submitToJIRA;
 
