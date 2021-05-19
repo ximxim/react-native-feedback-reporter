@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext, useEffect } from 'react';
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Linking } from 'react-native';
@@ -9,7 +9,9 @@ import type {
   IAccountLinkingFormValues,
 } from './AccountLinkingForm.types';
 import { AccountLinkingFormValidation } from './AccountLinkingForm.validation';
+
 import { getJIRASelf } from '../../queries';
+import { initJIRAApi } from '../../JIRAApi.service';
 
 import {
   Box,
@@ -22,34 +24,45 @@ import {
 export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = ({
   next,
 }) => {
-  const { setAuthState, authState } = useContext(GlobalProps);
-  const { data, isLoading } = useQuery('JIRASelf', getJIRASelf, {
-    enabled: !!authState.jira?.username && !!authState.jira.token,
-  });
+  const { setAuthState, jira } = useContext(GlobalProps);
+  const [initialized, setInitialized] = useState<boolean>(false);
   const {
     setValue,
     errors,
     handleSubmit,
     register,
+    getValues,
     unregister,
   } = useForm<IAccountLinkingFormValues>({
     reValidateMode: 'onChange',
     resolver: yupResolver(AccountLinkingFormValidation),
   });
+  const { data, isLoading, error } = useQuery('JIRASelf', getJIRASelf, {
+    enabled: initialized,
+  });
 
   const onSubmit = handleSubmit((values) => {
+    if (!jira) return;
+    initJIRAApi({ ...jira, jira: values });
+    setInitialized(true);
+  });
+
+  useEffect(() => {
+    if (!data?.data.emailAddress) return;
+    const values = getValues();
     setAuthState({
       jira: {
         ...values,
         username: values.username.toLowerCase(),
       },
     });
-  });
-
-  useEffect(() => {
-    if (!data?.data.emailAddress) return;
     next();
   }, [data]);
+
+  useEffect(() => {
+    if (!error) return;
+    setAuthState({});
+  }, [error]);
 
   useEffect(() => {
     register({ name: 'username' });
@@ -86,8 +99,8 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
           Guide me
         </Typography>
       </Typography>
-      <ButtonWithLabel onPress={onSubmit} isLoading={isLoading}>
-        Link Account
+      <ButtonWithLabel onPress={onSubmit}>
+        {isLoading ? 'Linking...' : 'Link Account'}
       </ButtonWithLabel>
     </Box>
   );

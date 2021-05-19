@@ -21,7 +21,7 @@ export const useJIRAComponents = () => {
   const projectOptions = useJIRAProjects();
   const issueTypeOptions = useJIRAIssueType();
   const Switch = useJIRASwitch();
-  const { jira } = useContext(GlobalProps);
+  const { jira, setAuthState } = useContext(GlobalProps);
   const { watch } = useFormContext<IReportFormValues>();
   const isEnabled = watch('JIRASwitch');
   const components = {
@@ -33,7 +33,12 @@ export const useJIRAComponents = () => {
       <IssueTypeSelector options={issueTypeOptions} />
     ),
     [JIRAComponentsEnum.JIRAAccountLinking]: isEnabled && (
-      <AccountLinking onPress={() => setPg(0)} />
+      <AccountLinking
+        onPress={() => {
+          setAuthState({});
+          setPg(0);
+        }}
+      />
     ),
   };
   const order = jira?.order || [

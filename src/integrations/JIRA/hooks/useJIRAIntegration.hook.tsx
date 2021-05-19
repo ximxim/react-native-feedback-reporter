@@ -20,8 +20,8 @@ export const useJIRAIntegration = () => {
 
   useEffect(() => {
     if (!jira) return;
-    initJIRAApi({ ...jira, ...authState });
-  }, [authState]);
+    initJIRAApi({ ...jira, jira: authState.jira });
+  }, []);
 
   const JIRAConfirmationComponents = issue && (
     <>
