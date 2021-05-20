@@ -16,6 +16,7 @@ export default function App() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    RNSecureKeyStore.setResetOnAppUninstallTo(false);
     dispatch({ type: LOGIN_SUCCESS });
   }, []);
 
@@ -52,12 +53,9 @@ export default function App() {
         extraSource="react-native-image-crop-picker"
         asyncStorage={{
           getItem: (key) => {
-            console.log('getItem', key);
             return RNSecureKeyStore.get(key);
           },
           setItem: (key, value) => {
-            console.log('setItem', key, value);
-
             return RNSecureKeyStore.set(key, value, {
               accessible: ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY,
             });

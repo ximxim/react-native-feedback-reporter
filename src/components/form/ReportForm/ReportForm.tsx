@@ -51,7 +51,6 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     SubmissionOrderEnum.Slack,
   ];
   const [files, setFiles] = useState<IFile[]>([]);
-  const [isAuthFetched, setIsAuthFetched] = useState<boolean>(false);
   const {
     JIRAComponents,
     submitToJIRA,
@@ -83,15 +82,15 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   }, [register]);
 
   useEffect(() => {
-    if (!isAuthFetched) return;
+    if (!authState.jira) return;
+    console.log('authState', authState);
     setItem(authState);
-  }, [authState, isAuthFetched]);
+  }, [authState]);
 
   useEffect(() => {
     (async () => {
       const newState = await getItem();
       setAuthState(JSON.parse(newState));
-      setIsAuthFetched(true);
     })();
   }, []);
 
