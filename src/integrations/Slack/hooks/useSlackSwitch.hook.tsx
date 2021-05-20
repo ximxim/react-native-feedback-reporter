@@ -39,7 +39,8 @@ export const useSlackSwitch = () => {
   }, [register]);
 
   return (
-    !!slack && isReady && (
+    !!slack &&
+    isReady && (
       <Switch
         onChange={(val) => {
           setItem(val ? 'true' : 'false');

@@ -18,7 +18,6 @@ export const useJIRASwitch = () => {
     unregister,
   } = useFormContext<IReportFormValues>();
 
-
   useEffect(() => {
     (async () => {
       if (!jira) return;
@@ -39,7 +38,8 @@ export const useJIRASwitch = () => {
   }, [register]);
 
   return (
-    !!jira && isReady && (
+    !!jira &&
+    isReady && (
       <Switch
         onChange={(val) => {
           setItem(val ? 'true' : 'false');
