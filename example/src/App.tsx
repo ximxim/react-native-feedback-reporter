@@ -16,7 +16,7 @@ export default function App() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    RNSecureKeyStore.setResetOnAppUninstallTo(false);
+    RNSecureKeyStore?.setResetOnAppUninstallTo?.(false);
     dispatch({ type: LOGIN_SUCCESS });
   }, []);
 

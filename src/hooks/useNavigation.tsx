@@ -40,10 +40,15 @@ export const useNavigation = (
     (async () => {
       await new Promise((resolve) => setTimeout(resolve, 200));
 
-      elRefs[pageNumber].current?.measure((_x, _y, _width, elHeight) => {
-        if (elHeight <= 0 || elHeight === height) return;
-        setHeight(elHeight);
-      });
+      elRefs[pageNumber].current?.measureLayout(
+        // @ts-ignore: ref typescript is weird and old so ignoring it
+        scrollViewRef.current,
+        (_left, _top, _width, elHeight) => {
+          if (elHeight <= 0 || elHeight === height) return;
+          setHeight(elHeight);
+        },
+        console.log
+      );
     })();
   });
 

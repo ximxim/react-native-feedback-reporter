@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 
 export const Wrapper = styled(TouchableOpacity)<{ hasIcon: boolean }>`
   flex: 1;
-  flex-grow: 1;
   margin: 8px;
   overflow: hidden;
   min-height: 40px;
