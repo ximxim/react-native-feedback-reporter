@@ -1,5 +1,4 @@
-import React from 'react';
-import { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { useStorage } from '../../../hooks';
@@ -7,7 +6,7 @@ import { IReportFormValues, GlobalProps, Switch } from '../../../components';
 
 export const useJIRASwitch = () => {
   const [isReady, setIsReady] = useState<boolean>(false);
-  const { jira } = useContext(GlobalProps);
+  const { jira, authState } = useContext(GlobalProps);
   const { setItem, getItem } = useStorage({
     key: 'FEEDBACK_REPORTER_JIRA_SWITCH',
   });
@@ -23,6 +22,11 @@ export const useJIRASwitch = () => {
       if (!jira) return;
 
       register('JIRASwitch');
+
+      if (!(authState.jira?.token || jira.token)) {
+        return setValue('JIRASwitch', false);
+      }
+
       try {
         const value = await getItem();
         setValue('JIRASwitch', value ? value === 'true' : !!jira);
@@ -35,7 +39,7 @@ export const useJIRASwitch = () => {
     return () => {
       unregister(['JIRASwitch']);
     };
-  }, [register]);
+  }, [register, authState]);
 
   return (
     !!jira &&

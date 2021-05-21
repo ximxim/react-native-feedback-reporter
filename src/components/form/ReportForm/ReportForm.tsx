@@ -82,8 +82,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   }, [register]);
 
   useEffect(() => {
-    if (!authState.jira) return;
-    console.log('authState', authState);
+    if (!Object.keys(authState).length) return;
     setItem(authState);
   }, [authState]);
 
