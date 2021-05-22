@@ -1,0 +1,1 @@
+(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[556],{3132:function(e){"use strict";e.exports=JSON.parse('{"allTagsPath":"/react-native-feedback-reporter/blog/tags","slug":"hola","name":"hola","count":1,"permalink":"/react-native-feedback-reporter/blog/tags/hola"}')}}]);
