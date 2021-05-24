@@ -1,33 +1,39 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'React Native Feedback Reporter',
+  tagline: 'Fill the communication gap between devs and testers',
   url: 'https://ximxim.github.io',
   baseUrl: '/react-native-feedback-reporter/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'ximxim', // Usually your GitHub org/user name.
-  projectName: 'react-native-feedback-reporter', // Usually your repo name.
+  organizationName: 'ximxim',
+  projectName: 'react-native-feedback-reporter',
   themeConfig: {
     navbar: {
-      title: 'My Site',
+      title: 'RNFR',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'React Native Feedback Reporter Logo',
         src: 'img/logo.svg',
       },
       items: [
         {
-          type: 'doc',
-          docId: 'intro',
+          to: 'docs/install',
+          activeBasePath: 'docs',
+          label: 'Docs',
           position: 'left',
-          label: 'Tutorial',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
+          to: 'docs/contributing',
+          activeBasePath: 'contributing',
+          label: 'Contributing',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/ximxim/react-native-feedback-reporter',
           position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
         },
       ],
     },
@@ -38,8 +44,16 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'Getting Started',
+              to: '/docs/getting-started',
+            },
+            {
+              label: 'Guides',
+              to: '/docs/snapshot-testing',
+            },
+            {
+              label: 'API Reference',
+              to: '/docs/api',
             },
           ],
         },
@@ -74,7 +88,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: 'made with ❤️ by ximxim',
     },
   },
   presets: [
@@ -85,13 +99,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/ximxim/react-native-feedback-reporter/tree/master/website',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
