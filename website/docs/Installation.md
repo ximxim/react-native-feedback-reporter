@@ -24,7 +24,7 @@ yarn add react-native-feedback-reporter
 
 [CLI autolink feature](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) links the module while building the app.
 
-On iOS, use CocoaPods to add the native `RNAsyncStorage` to your project:
+On iOS, use CocoaPods to add the native `FeedbackReporter` to your project:
 
 ```bash
 npx pod-install
@@ -36,14 +36,3 @@ npx pod-install
 ```bash
 react-native link react-native-feedback-reporter
 ```
-
-#### Windows
-
-- **React Native Windows >= 0.63**
-[CLI autolink feature](https://microsoft.github.io/react-native-windows/docs/native-modules-autolinking) links the module while building the app.
-
-- **React Native Windows <= 0.62**
-For earlier versions check [manual linking](link)
-
-#### macOS
-For `macOS` the [manual linking](link) is currently the only linking option.
