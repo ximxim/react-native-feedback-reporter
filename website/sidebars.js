@@ -1,7 +1,5 @@
 module.exports = {
-  someSidebar: {
-    'Getting Started': [
-      'install',
-    ],
+  docs: {
+    'Getting started': ['install', 'usage', 'link', 'api'],
   },
 };

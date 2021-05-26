@@ -21,13 +21,7 @@ module.exports = {
           to: 'docs/install',
           activeBasePath: 'docs',
           label: 'Docs',
-          position: 'left',
-        },
-        {
-          to: 'docs/contributing',
-          activeBasePath: 'contributing',
-          label: 'Contributing',
-          position: 'left',
+          position: 'right',
         },
         {
           href: 'https://github.com/ximxim/react-native-feedback-reporter',
@@ -41,33 +35,21 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Documentation',
           items: [
             {
-              label: 'Getting Started',
-              to: '/docs/getting-started',
+              label: 'Installation',
+              to: 'docs/install',
             },
             {
-              label: 'Guides',
-              to: '/docs/snapshot-testing',
-            },
-            {
-              label: 'API Reference',
-              to: '/docs/api',
+              label: 'API reference',
+              to: 'docs/api',
             },
           ],
         },
         {
           title: 'Community',
           items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
             {
               label: 'Twitter',
               href: 'https://twitter.com/docusaurus',
@@ -78,17 +60,13 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/ximxim/react-native-feedback-reporter',
             },
           ],
         },
       ],
-      copyright: 'made with ❤️ by ximxim',
+      copyright: `Copyright © ${new Date().getFullYear()} ximxim. Built with Docusaurus.`,
     },
   },
   presets: [
