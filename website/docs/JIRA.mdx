@@ -4,35 +4,44 @@ title: JIRA
 sidebar_label: JIRA
 ---
 
-### Get library
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-With npm:
-```bash
-npm install react-native-feedback-reporter
+## Setup JIRA integration
+
+1. Get your JIRA domain name
+<img alt="Base Theme" src={useBaseUrl('/img/jira-domain.png')} />
+
+2. Use `jira.domain` prop to configure the domain from previous step
+```js
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  jira={{
+    domain: 'https://ximxim.atlassian.net', // https://{ORGANIZATION}.atlassian.net
+  }}
+/>
 ```
 
-With Yarn:
-```bash
-yarn add react-native-feedback-reporter
+ALL SET. This should allow users to link their JIRA account.
+
+<img alt="Base Theme" src={useBaseUrl('/img/jira-account-linking.gif')} />
+
+## Setup JIRA integration (Default Account)
+
+1. Get your JIRA domain name
+<img alt="Base Theme" src={useBaseUrl('/img/jira-domain.png')} />
+
+2. Use `jira.domain` prop to configure the domain from previous step
+```js
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  jira={{
+    username: 'azim.ahmed7@gmial.com',
+    token: 'SUPER_SECRET_API_TOKEN'
+    domain: 'https://ximxim.atlassian.net', // https://{ORGANIZATION}.atlassian.net
+  }}
+/>
 ```
 
-### Link
-
-#### Android & iOS
-
-- **React Native 0.60+**
-
-[CLI autolink feature](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) links the module while building the app.
-
-On iOS, use CocoaPods to add the native `FeedbackReporter` to your project:
-
-```bash
-npx pod-install
-```
-
-- **React Native <= 0.59**
-
-
-```bash
-react-native link react-native-feedback-reporter
-```
+ALL SET. This should allow users to report issue using the default JIRA account.
