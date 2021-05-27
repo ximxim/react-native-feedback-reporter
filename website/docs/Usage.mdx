@@ -1,32 +1,46 @@
-import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
-import * as Sentry from '@sentry/react-native';
-import { SENTRY, JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
+---
+id: usage
+title: Usage
+sidebar_label: Usage
+---
+
+### Basic
+
+```jsx
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  theme,
-  SlackComponents,
-  JIRAComponents,
-  FeedbackReporter,
-} from 'react-native-feedback-reporter';
-import DeviceInfo from 'react-native-device-info';
-
-import { LOGIN_SUCCESS } from './userReducers';
-
-Sentry.init({ dsn: SENTRY });
+import { FeedbackReporter } from 'react-native-feedback-reporter';
 
 export default function App() {
-  const handleShow = () => console.log('OMG you showed');
-  const dispatch = useDispatch();
+  return (
+    <View>
+      <Text>Result of some sort</Text>
+      <FeedbackReporter />
+    </View>
+  );
+}
+```
+
+### Advanced
+
+```jsx
+import * as React from 'react';
+import DeviceInfo from 'react-native-device-info';
+import { JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
+import { View, Text, StyleSheet } from 'react-native';
+import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
+import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
+
+export default function App() {
+  const handleShow = () => console.log('Modal appeared');
 
   React.useEffect(() => {
     RNSecureKeyStore?.setResetOnAppUninstallTo?.(false);
-    dispatch({ type: LOGIN_SUCCESS });
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text>Result of some sort</Text>
       <FeedbackReporter
         theme={{
@@ -43,26 +57,17 @@ export default function App() {
         }}
         slack={{
           channel: 'random',
-          botToken: SLACK_BOT_TOKEN,
-          order: [
-            SlackComponents.SlackSwitch,
-            SlackComponents.SlackChannelsSelector,
-          ],
+          botToken: SLACK_BOT_TOKEN, // Read Slack inegration doc to get this token for your slack team
         }}
         jira={{
-          domain: JIRA_DOMAIN,
+          domain: JIRA_DOMAIN, // https://{ORGANIZATION}.atlassian.net
           issueTypeField: {
             defaultValue: 'story',
+            isVisible: false,
           },
           projectField: {
             defaultValue: 'apitest',
           },
-          order: [
-            JIRAComponents.JIRASwitch,
-            JIRAComponents.JIRAProjects,
-            JIRAComponents.JIRAIssueTypes,
-            JIRAComponents.JIRAAccountLinking,
-          ],
         }}
         extraSource="react-native-image-crop-picker"
         asyncStorage={{
@@ -109,17 +114,9 @@ Version: ${DeviceInfo.getVersion()}
     </View>
   );
 }
+```
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
+### More
+
+For more examples, [head over to API section.](api)
+

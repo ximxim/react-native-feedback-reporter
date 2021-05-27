@@ -1,0 +1,41 @@
+---
+id: reduxEnhancer
+title: Redux Enhancer
+sidebar_label: Redux Enhancer
+---
+
+## `createReduxEnhancer`
+
+Use this redux store enhancer to generate an attachment to add to the feedback report. This attachment would allow developers to import the redux state into redux devtools for a better debugging experience.
+
+**Example**:
+
+```js
+import { createReduxEnhancer } from 'react-native-feedback-reporter';
+import {
+  compose,
+  Middleware,
+  createStore,
+  applyMiddleware,
+  combineReducers,
+} from 'redux';
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const middleware: Middleware[] = [];
+
+const enhancers = __DEV__
+  ? composeEnhancers(applyMiddleware(...middleware), createReduxEnhancer())
+  : composeEnhancers(applyMiddleware(...middleware));
+
+let store = createStore(combineReducers({ userReducers }), enhancers);
+
+const WrapperApp = () => (
+  <Provider store={store}>
+    {/* APP CODE */}
+  </Provider>
+);
+```
+
+<br />
+<br />

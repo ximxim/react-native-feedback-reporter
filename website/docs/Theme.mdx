@@ -1,0 +1,183 @@
+---
+id: theme
+title: Theme
+sidebar_label: Theme
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+Use `theme` prop to override the look and feel of the feedback reporter to match your app.
+
+## Themes Presets
+
+<details>
+  <summary>Base</summary>
+
+  <img alt="Base Theme" src={useBaseUrl('/img/themes/baseTheme.png')} style={{ maxWidth: 250 }} />
+</details>
+
+<details>
+  <summary>Champagne</summary>
+
+  <img alt="Champagne Theme" src={useBaseUrl('/img/themes/champagneTheme.png')} style={{ maxWidth: 250 }} />
+</details>
+
+<details>
+  <summary>Crystal</summary>
+
+  <img alt="Crystal Theme" src={useBaseUrl('/img/themes/crystalTheme.png')} style={{ maxWidth: 250 }} />
+</details>
+
+<details>
+  <summary>Dark</summary>
+
+  <img alt="Dark Theme" src={useBaseUrl('/img/themes/darkTheme.png')} style={{ maxWidth: 250 }} />
+</details>
+
+<details>
+  <summary>Grape</summary>
+
+  <img alt="Grape Theme" src={useBaseUrl('/img/themes/grapeTheme.png')} style={{ maxWidth: 250 }} />
+</details>
+
+<details>
+  <summary>Navy Blue</summary>
+
+  <img alt="Navy Blue Theme" src={useBaseUrl('/img/themes/navyBlueTheme.png')} style={{ maxWidth: 250 }} />
+</details>
+
+<details>
+  <summary>Pastel Gray</summary>
+
+  <img alt="Pastel Gray Theme" src={useBaseUrl('/img/themes/pastelGrayTheme.png')} style={{ maxWidth: 250 }} />
+</details>
+
+<details>
+  <summary>Tea Green</summary>
+
+  <img alt="Tea Green Theme" src={useBaseUrl('/img/themes/teaGreenTheme.png')} style={{ maxWidth: 250 }} />
+</details>
+
+
+## Theme Object
+
+
+```js
+{
+  textVariants: {
+    h1: {
+      fontSize: 26,
+      fontWeight: 600,
+      lineHeight: 26 * 1.167,
+      letterSpacing: 3,
+      marginBottom: 26,
+    },
+    h2: {
+      fontSize: 24.44,
+      fontWeight: 600,
+      lineHeight: 24.44 * 1.2,
+      letterSpacing: 2,
+      marginBottom: 24.44,
+    },
+    h3: {
+      fontSize: 22.88,
+      fontWeight: 600,
+      lineHeight: 22.88 * 1.167,
+      marginBottom: 22.88,
+    },
+    h4: {
+      fontSize: 21.32,
+      fontWeight: 500,
+      lineHeight: 21.32 * 1.235,
+      letterSpacing: 0.5,
+      marginBottom: 21.32,
+    },
+    h5: {
+      fontSize: 19.5,
+      fontWeight: 400,
+      lineHeight: 19.5 * 1.334,
+      letterSpacing: 0.5,
+      marginBottom: 19.5,
+    },
+    h6: {
+      fontSize: 17.94,
+      fontWeight: 500,
+      lineHeight: 17.94 * 1.6,
+      marginBottom: 17.94,
+    },
+    subtitle1: {
+      fontSize: 16.38,
+      fontWeight: 300,
+      lineHeight: 16.38 * 1.3,
+      marginBottom: 16.38,
+    },
+    subtitle2: {
+      fontSize: 13,
+      fontWeight: 500,
+      lineHeight: 13 * 1.57,
+      marginBottom: 13,
+    },
+    body1: {
+      fontSize: 16.38,
+      fontWeight: 400,
+      lineHeight: 16.38 * 1.3,
+      marginBottom: 16.38,
+    },
+    body2: {
+      fontSize: 14.82,
+      fontWeight: 300,
+      lineHeight: 14.82 * 1.43,
+      marginBottom: 14.82,
+    },
+    button: {
+      fontSize: 14.82,
+      fontWeight: 500,
+      letterSpacing: 1.5,
+      textTransform: 'uppercase',
+      lineHeight: 14.82 * 1.75,
+      marginBottom: 14.82,
+    },
+    caption: {
+      fontSize: 13,
+      fontWeight: 400,
+      lineHeight: 13 * 1.66,
+      marginBottom: 13,
+    },
+    overline: {
+      fontSize: 13,
+      fontWeight: 300,
+      letterSpacing: 2,
+      textTransform: 'uppercase',
+      lineHeight: 13 * 2.66,
+      marginBottom: 13,
+    },
+    link: {
+      textDecorationLine: 'underline',
+      textDecorationStyle: 'solid',
+      backgroundColor: 'transparent',
+    },
+  },
+  colors: {
+    blurType: 'light',
+    brandPrimary: '#FEF2C2',
+    brandSecondary: '#373700',
+    brandMuted: '#373700',
+    brandSuccess: '#2A7F4F',
+    brandDanger: '#B21F2D',
+    incomingMessagebg: '#FFDBC1',
+    incomingMessageColor: '#000000',
+    outgoingMessagebg: '#E0EEDE',
+    outgoingMessageColor: '#000000',
+    maleColor: '#328EB9',
+    femaleColor: '#F490A7',
+    otherColor: '#6b747d',
+    barStyle: 'dark-content',
+    transparent: 'transparent',
+    lightenLevels: {
+      lvl1: 0,
+      lvl2: 0.05,
+      lvl3: 0.08,
+    },
+  },
+}
+```
