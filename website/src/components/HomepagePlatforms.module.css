@@ -1,0 +1,14 @@
+/* stylelint-disable docusaurus/copyright-header */
+
+.platforms {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.platformSvg {
+  height: 120px;
+  width: 200px;
+}

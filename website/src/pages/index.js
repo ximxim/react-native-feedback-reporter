@@ -5,6 +5,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './index.module.css';
 import HomepageFeatures from '../components/HomepageFeatures';
+import HomepagePlatforms from '../components/HomepagePlatforms';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
@@ -16,8 +17,14 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+            to="/docs/install"
+          >
+            Read Docs
+          </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to="https://github.com/ximxim/react-native-feedback-reporter/tree/master/example">
+            Try It
           </Link>
         </div>
       </div>
@@ -34,6 +41,7 @@ export default function Home() {
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <HomepagePlatforms />
       </main>
     </Layout>
   );

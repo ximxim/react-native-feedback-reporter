@@ -4,7 +4,12 @@ import { SENTRY, JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { View, Text, StyleSheet } from 'react-native';
-import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
+import {
+  theme,
+  SlackComponents,
+  JIRAComponents,
+  FeedbackReporter,
+} from 'react-native-feedback-reporter';
 import DeviceInfo from 'react-native-device-info';
 
 import { LOGIN_SUCCESS } from './userReducers';
@@ -39,16 +44,25 @@ export default function App() {
         slack={{
           channel: 'random',
           botToken: SLACK_BOT_TOKEN,
+          order: [
+            SlackComponents.SlackSwitch,
+            SlackComponents.SlackChannelsSelector,
+          ],
         }}
         jira={{
           domain: JIRA_DOMAIN,
           issueTypeField: {
             defaultValue: 'story',
-            isVisible: false,
           },
           projectField: {
             defaultValue: 'apitest',
           },
+          order: [
+            JIRAComponents.JIRASwitch,
+            JIRAComponents.JIRAProjects,
+            JIRAComponents.JIRAIssueTypes,
+            JIRAComponents.JIRAAccountLinking,
+          ],
         }}
         extraSource="react-native-image-crop-picker"
         asyncStorage={{

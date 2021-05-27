@@ -1,6 +1,5 @@
 interface IOptional {
   defaultValue?: string;
-  isVisible?: boolean;
 }
 
 export interface JIRAIntegrationProps {

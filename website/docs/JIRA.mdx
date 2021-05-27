@@ -1,0 +1,47 @@
+---
+id: jira
+title: JIRA
+sidebar_label: JIRA
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+## Setup JIRA integration
+
+1. Get your JIRA domain name
+<img alt="Base Theme" src={useBaseUrl('/img/jira-domain.png')} />
+
+2. Use `jira.domain` prop to configure the domain from previous step
+```js
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  jira={{
+    domain: 'https://ximxim.atlassian.net', // https://{ORGANIZATION}.atlassian.net
+  }}
+/>
+```
+
+ALL SET. This should allow users to link their JIRA account.
+
+<img alt="Base Theme" src={useBaseUrl('/img/jira-account-linking.gif')} />
+
+## Setup JIRA integration (Default Account)
+
+1. Get your JIRA domain name
+<img alt="Base Theme" src={useBaseUrl('/img/jira-domain.png')} />
+
+2. Use `jira.domain` prop to configure the domain from previous step
+```js
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  jira={{
+    username: 'azim.ahmed7@gmial.com',
+    token: 'SUPER_SECRET_API_TOKEN'
+    domain: 'https://ximxim.atlassian.net', // https://{ORGANIZATION}.atlassian.net
+  }}
+/>
+```
+
+ALL SET. This should allow users to report issue using the default JIRA account.
