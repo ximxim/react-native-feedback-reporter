@@ -314,6 +314,8 @@ PODS:
   - RNSentry (2.4.0):
     - React-Core
     - Sentry (= 6.1.4)
+  - RNShare (6.1.0):
+    - React-Core
   - Sentry (6.1.4):
     - Sentry/Core (= 6.1.4)
   - Sentry/Core (6.1.4)
@@ -374,6 +376,7 @@ DEPENDENCIES:
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNSecureKeyStore (from `../node_modules/react-native-secure-key-store/ios`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
+  - RNShare (from `../node_modules/react-native-share`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -454,6 +457,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-secure-key-store/ios"
   RNSentry:
     :path: "../node_modules/@sentry/react-native"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -499,6 +504,7 @@ SPEC CHECKSUMS:
   RNImageCropPicker: e641bf83ac47324994cac139bde74635ec52c17c
   RNSecureKeyStore: f1ad870e53806453039f650720d2845c678d89c8
   RNSentry: b0d55027200c96f52e26b9bfb20296d47fc5051d
+  RNShare: c93ee0df653c76d913554272d56f6ffd8bdcb3cc
   Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6

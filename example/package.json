@@ -16,6 +16,7 @@
     "react-native-dotenv": "^2.5.3",
     "react-native-image-crop-picker": "^0.36.0",
     "react-native-secure-key-store": "^2.0.9",
+    "react-native-share": "^6.1.0",
     "react-redux": "^7.2.3",
     "redux": "^4.0.5",
     "styled-components": "^5.2.1"
