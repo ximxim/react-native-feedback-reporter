@@ -45,3 +45,12 @@ html[data-theme='dark'] .header-github-link:before {
 .navbar__logo {
   filter: brightness(0.5);
 }
+
+.hero--primary {
+  background-color: #5987b5;
+}
+
+.button--lg {
+  margin-left: 10px;
+  margin-right: 10px;
+}

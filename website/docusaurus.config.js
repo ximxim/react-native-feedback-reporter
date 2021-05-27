@@ -1,7 +1,8 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'React Native Feedback Reporter',
-  tagline: 'Fill the communication gap between devs and testers',
+  tagline:
+    'Unlock a suite of features designed to give you crystal clear insight into users’ interactions with your app.',
   url: 'https://ximxim.github.io',
   baseUrl: '/react-native-feedback-reporter/',
   onBrokenLinks: 'throw',
