@@ -23,6 +23,7 @@ export const useJIRASubmission = () => {
 
     postIssueAttachments({
       files,
+      devNotes,
       content: uri,
       key: issueRes.data.key,
     });
@@ -41,15 +42,11 @@ export const useJIRASubmission = () => {
 
     if (!jira || !projectId || !issueTypeId) return;
 
-    const generatedDevNotes =
-      typeof devNotes === 'string' ? devNotes : await devNotes?.();
-
     postIssue({
       title,
       projectId,
       issueTypeId,
       description,
-      devNotes: generatedDevNotes,
     });
   };
 

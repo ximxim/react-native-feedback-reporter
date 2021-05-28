@@ -15,7 +15,7 @@ const filename = 'screenshot.png';
 const filepath = `${module.TemporaryDirectoryPath}/${filename}`;
 
 export const useRNShare = ({ files }: IUseRNShareProps) => {
-  const { setModalHeaderLeftState } = useContext(GlobalProps);
+  const { setModalHeaderLeftState, devNotes } = useContext(GlobalProps);
   const { getValues } = useFormContext<IReportFormValues>();
   const handleShare = useCallback(async () => {
     const { uri: content } = getValues();
@@ -30,12 +30,13 @@ export const useRNShare = ({ files }: IUseRNShareProps) => {
           filetype: 'image/png',
         },
       ],
+      devNotes,
     });
     Share.open({
       title: 'Share file',
-      urls: filesToUpload.map((file) => `file://${file.filepath}`),
-      message: 'React Native Feedback Reporter',
       failOnCancel: false,
+      message: 'React Native Feedback Reporter',
+      urls: filesToUpload.map((file) => `file://${file.filepath}`),
     });
   }, [files]);
 

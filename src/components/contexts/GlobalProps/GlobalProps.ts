@@ -15,6 +15,7 @@ export interface IGlobalProps
     IAdditionalProps {}
 
 export const GlobalProps = createContext<IGlobalProps>({
+  devNotes: undefined,
   isModalOpen: false,
   authState: {},
   setAuthState: () => {},

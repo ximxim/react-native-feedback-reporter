@@ -1,30 +1,27 @@
 import { NativeModules } from 'react-native';
 
-import type { IFile } from '../../../utils';
 import { JIRAApi } from '../JIRAApi.service';
-import { uploadFiles } from '../../../utils';
+import type { DevNotesType } from '../../../components';
+import { IFile, uploadFiles, writeFiles } from '../../../utils';
 
 interface IPostJIRAIssueAttachmentsProps {
   key: string;
   files: IFile[];
   content?: string;
+  devNotes: DevNotesType;
 }
 
 const module = NativeModules.FeedbackReporter;
 const filename = 'screenshot.png';
 const filepath = `${module.TemporaryDirectoryPath}/${filename}`;
 
-export const postJIRAIssueAttachents = ({
+export const postJIRAIssueAttachents = async ({
   key,
   files,
   content,
-}: IPostJIRAIssueAttachmentsProps) =>
-  uploadFiles({
-    toUrl: `${JIRAApi.defaults.baseURL}issue/${key}/attachments`,
-    headers: {
-      ...JIRAApi.defaults.headers.common,
-      'X-Atlassian-Token': 'no-check',
-    },
+  devNotes,
+}: IPostJIRAIssueAttachmentsProps) => {
+  const filesToUpload = await writeFiles({
     files: [
       ...files,
       {
@@ -35,4 +32,14 @@ export const postJIRAIssueAttachents = ({
         filetype: 'image/png',
       },
     ],
+    devNotes,
   });
+  return await uploadFiles({
+    files: filesToUpload,
+    toUrl: `${JIRAApi.defaults.baseURL}issue/${key}/attachments`,
+    headers: {
+      ...JIRAApi.defaults.headers.common,
+      'X-Atlassian-Token': 'no-check',
+    },
+  });
+};

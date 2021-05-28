@@ -31,7 +31,7 @@ export const useSlackSubmission = () => {
 
     if (!ts || !slack) return;
 
-    postFile({ files, content, ts, channel: slackChannel });
+    postFile({ files, content, ts, channel: slackChannel, devNotes });
   }, [messageRes]);
 
   useEffect(() => {
@@ -39,14 +39,11 @@ export const useSlackSubmission = () => {
 
     (async () => {
       const { title, description } = getValues();
-      const generatedDevNotes =
-        typeof devNotes === 'string' ? devNotes : await devNotes?.();
 
       postMessage({
         title,
         description,
         channel: slackChannel,
-        devNotes: generatedDevNotes,
       });
     })();
   }, [joinConversationRes]);
