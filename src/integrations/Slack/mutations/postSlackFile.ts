@@ -1,8 +1,7 @@
 import { NativeModules } from 'react-native';
 
-import { uploadFiles } from '../../../utils';
-import type { IFile } from '../../../utils';
 import { slackApi } from '../slackApi.service';
+import { IFile, writeFiles, uploadFiles } from '../../../utils';
 
 interface IPostSlackThreadAttachmentsProps {
   ts: string;
@@ -15,18 +14,13 @@ const module = NativeModules.FeedbackReporter;
 const filename = 'screenshot.png';
 const filepath = `${module.TemporaryDirectoryPath}/${filename}`;
 
-export const postSlackFile = ({
+export const postSlackFile = async ({
   ts,
   files,
   content,
   channel,
-}: IPostSlackThreadAttachmentsProps) =>
-  uploadFiles({
-    submitIndividually: true,
-    toUrl: `${slackApi.defaults.baseURL}files.upload?thread_ts=${ts}&channels=${
-      channel || 'general'
-    }`,
-    headers: slackApi.defaults.headers.common,
+}: IPostSlackThreadAttachmentsProps) => {
+  const filesToUpload = await writeFiles({
     files: [
       ...files,
       {
@@ -38,3 +32,12 @@ export const postSlackFile = ({
       },
     ],
   });
+  return await uploadFiles({
+    submitIndividually: true,
+    toUrl: `${slackApi.defaults.baseURL}files.upload?thread_ts=${ts}&channels=${
+      channel || 'general'
+    }`,
+    headers: slackApi.defaults.headers.common,
+    files: filesToUpload,
+  });
+};

@@ -1,3 +1,4 @@
+import type { ITabProps } from '../../../../ui';
 import type { NavigationElementType } from '../../../../../hooks';
 
 export interface IIntegrationsProps {
@@ -8,7 +9,12 @@ export interface IIntegrationsProps {
   enabledIntegrationsCount: number;
 }
 
+export interface IIntegrationTab extends Partial<ITabProps> {
+  name: IntegrationsEnum;
+}
+
 export enum IntegrationsEnum {
   JIRA = 'Jira',
   Slack = 'Slack',
+  Share = 'Share',
 }

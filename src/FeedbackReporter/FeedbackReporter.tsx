@@ -1,8 +1,9 @@
-import { Modal } from 'react-native';
-import { useForm, FormProvider } from 'react-hook-form';
-import { ThemeProvider } from 'styled-components';
-import { yupResolver } from '@hookform/resolvers/yup';
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ThemeProvider } from 'styled-components';
+// import Share from 'react-native-share';
+import { Modal } from 'react-native';
 
 import { theme } from '../theme';
 import { ScreenShot } from '../utils';
@@ -64,6 +65,15 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   }
 
   const { header, ...modalProps } = props.modalProps || { header: {} };
+  const handleShare = () => {
+    // console.log(filesToUpload.map(file => `file://${file.filepath}`));
+    // Share.open({
+    //   title: 'Share file',
+    //   urls: filesToUpload.map(file => `file://${file.filepath}`),
+    //   message: 'wassup',
+    //   failOnCancel: false,
+    // });
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -82,6 +92,7 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
               <FormProvider {...reportFormProps}>
                 <Styled.Wrapper>
                   <ModalHeader
+                    left={{ label: 'Share', onPress: handleShare }}
                     heading={'Wanna talk about it?'}
                     right={{ label: 'Close', onPress: handleClose }}
                     {...header}

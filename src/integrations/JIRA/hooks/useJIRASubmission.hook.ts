@@ -39,8 +39,6 @@ export const useJIRASubmission = () => {
       JIRAIssueType: issueTypeId,
     } = getValues();
 
-    console.log(projectId, issueTypeId);
-
     if (!jira || !projectId || !issueTypeId) return;
 
     const generatedDevNotes =
