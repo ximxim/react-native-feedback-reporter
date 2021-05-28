@@ -2,12 +2,11 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ThemeProvider } from 'styled-components';
-// import Share from 'react-native-share';
 import { Modal } from 'react-native';
 
 import { theme } from '../theme';
 import { ScreenShot } from '../utils';
-import { useAuthState } from '../hooks';
+import { useAuthState, useModalHeaderLeftState } from '../hooks';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
@@ -28,6 +27,10 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   ...props
 }) => {
   const authState = useAuthState();
+  const {
+    modalHeaderLeftState,
+    setModalHeaderLeftState,
+  } = useModalHeaderLeftState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const reportFormProps = useForm<IReportFormValues>({
     reValidateMode: 'onChange',
@@ -65,20 +68,17 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   }
 
   const { header, ...modalProps } = props.modalProps || { header: {} };
-  const handleShare = () => {
-    // console.log(filesToUpload.map(file => `file://${file.filepath}`));
-    // Share.open({
-    //   title: 'Share file',
-    //   urls: filesToUpload.map(file => `file://${file.filepath}`),
-    //   message: 'wassup',
-    //   failOnCancel: false,
-    // });
-  };
 
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalProps.Provider
-        value={{ mode, isModalOpen, ...props, ...authState }}
+        value={{
+          mode,
+          isModalOpen,
+          setModalHeaderLeftState,
+          ...props,
+          ...authState,
+        }}
       >
         <ThemeProvider theme={selectedTheme}>
           <Modal
@@ -92,7 +92,7 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
               <FormProvider {...reportFormProps}>
                 <Styled.Wrapper>
                   <ModalHeader
-                    left={{ label: 'Share', onPress: handleShare }}
+                    left={modalHeaderLeftState}
                     heading={'Wanna talk about it?'}
                     right={{ label: 'Close', onPress: handleClose }}
                     {...header}
