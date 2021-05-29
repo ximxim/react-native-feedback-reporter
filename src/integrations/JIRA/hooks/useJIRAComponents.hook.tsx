@@ -73,9 +73,13 @@ export const useJIRAComponents = () => {
   }, [isEnabled]);
 
   useEffect(() => {
-    if (authState.jira?.token) setPg(1);
+    if (
+      (authState.jira?.token && authState.jira?.username) ||
+      (jira?.username && jira?.token)
+    )
+      setPg(1);
     else setPg(0);
-  }, [authState]);
+  }, [authState, jira]);
 
   const JIRAComponents = useCallback(
     (ref: any) => <View ref={ref}>{Navigation}</View>,
