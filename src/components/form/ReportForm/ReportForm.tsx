@@ -29,7 +29,7 @@ import { IntegrationsEnum } from './components/Integrations/Integrations.types';
 
 import type { IFile } from '../../../utils';
 import { GlobalProps } from '../../contexts';
-import { useStorage } from '../../../hooks';
+import { useStorage, useRNShare } from '../../../hooks';
 import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
@@ -51,6 +51,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     SubmissionOrderEnum.Slack,
   ];
   const [files, setFiles] = useState<IFile[]>([]);
+  useRNShare({ files });
   const {
     JIRAComponents,
     submitToJIRA,

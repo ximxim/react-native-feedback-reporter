@@ -14,6 +14,12 @@ export interface IAsyncStorageProps {
   setItem: (key: string, value: string) => Promise<void>;
 }
 
+export type DevNotesType =
+  | string
+  | undefined
+  | (() => string)
+  | (() => Promise<string>);
+
 export interface IFeedbackReporterProps {
   mode?: 'onScreenShot';
 
@@ -25,7 +31,7 @@ export interface IFeedbackReporterProps {
   /**
    * Dev notes
    */
-  devNotes?: string | (() => Promise<string>) | (() => string);
+  devNotes: DevNotesType;
 
   /**
    * JIRA Integration

@@ -1,7 +1,11 @@
 import { FlatList } from 'react-native';
 import React, { FunctionComponent, useContext } from 'react';
 
-import { IntegrationsEnum, IIntegrationsProps } from './Integrations.types';
+import {
+  IIntegrationTab,
+  IntegrationsEnum,
+  IIntegrationsProps,
+} from './Integrations.types';
 
 import { Tab, Box } from '../../../../ui';
 import { GlobalProps } from '../../../../contexts';
@@ -12,17 +16,20 @@ export const Integrations: FunctionComponent<IIntegrationsProps> = ({
   enabledIntegrationsCount,
 }) => {
   const { jira, slack } = useContext(GlobalProps);
-  const data: IntegrationsEnum[] = [
-    IntegrationsEnum.JIRA,
-    IntegrationsEnum.Slack,
+  const data: IIntegrationTab[] = [
+    { name: IntegrationsEnum.JIRA },
+    { name: IntegrationsEnum.Slack },
   ].filter((d) => {
     return (
-      (jira && d === IntegrationsEnum.JIRA) ||
-      (slack && d === IntegrationsEnum.Slack)
+      (jira && d.name === IntegrationsEnum.JIRA) ||
+      (slack && d.name === IntegrationsEnum.Slack)
     );
   });
   const integrationComponents = data.map((integration) => ({
-    component: components[integration],
+    component:
+      integration.name === IntegrationsEnum.Share
+        ? components.Slack
+        : components[integration.name],
   }));
 
   const { Navigation, setPageNumber, pageNumber } = useNavigation(
@@ -37,11 +44,12 @@ export const Integrations: FunctionComponent<IIntegrationsProps> = ({
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingLeft: 8 }}
-        renderItem={({ item, index }) => (
+        renderItem={({ item: { name, ...tabProps }, index }) => (
           <Tab
-            label={item}
+            label={name}
             isSelected={index === pageNumber}
             onPress={() => setPageNumber(index)}
+            {...tabProps}
           />
         )}
       />

@@ -1,12 +1,12 @@
-import { Modal } from 'react-native';
-import { useForm, FormProvider } from 'react-hook-form';
-import { ThemeProvider } from 'styled-components';
-import { yupResolver } from '@hookform/resolvers/yup';
 import React, { FunctionComponent, useEffect, useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ThemeProvider } from 'styled-components';
+import { Modal } from 'react-native';
 
 import { theme } from '../theme';
 import { ScreenShot } from '../utils';
-import { useAuthState } from '../hooks';
+import { useAuthState, useModalHeaderLeftState } from '../hooks';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
@@ -27,6 +27,10 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   ...props
 }) => {
   const authState = useAuthState();
+  const {
+    modalHeaderLeftState,
+    setModalHeaderLeftState,
+  } = useModalHeaderLeftState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const reportFormProps = useForm<IReportFormValues>({
     reValidateMode: 'onChange',
@@ -68,7 +72,13 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalProps.Provider
-        value={{ mode, isModalOpen, ...props, ...authState }}
+        value={{
+          mode,
+          isModalOpen,
+          setModalHeaderLeftState,
+          ...props,
+          ...authState,
+        }}
       >
         <ThemeProvider theme={selectedTheme}>
           <Modal
@@ -82,6 +92,7 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
               <FormProvider {...reportFormProps}>
                 <Styled.Wrapper>
                   <ModalHeader
+                    left={modalHeaderLeftState}
                     heading={'Wanna talk about it?'}
                     right={{ label: 'Close', onPress: handleClose }}
                     {...header}

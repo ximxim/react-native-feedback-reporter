@@ -8147,6 +8147,11 @@ react-native-keyboard-avoiding-scroll-view@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-keyboard-avoiding-scroll-view/-/react-native-keyboard-avoiding-scroll-view-1.0.1.tgz#61fe9a921474b789610a746bb30dc2b7b265b4fd"
   integrity sha512-l+CYCbQ7fueM4kat28zSdi7r1ABxRBHikVCTmjGQLIvJBABxS7qgi3Y9ozU8CpqD6wEeqPb02AnBS+jiAYXBvA==
 
+react-native-share@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-6.1.0.tgz#b576461104ed0e5b3b974b679de66999ec15d63a"
+  integrity sha512-3X71U4Hz69zoQsaUMmZMBzE2BbpJdze1iGs0ifmHmLre2/0RtW2bATHH2QpQgyZry4uwFG0y4RyZBl54pvX3gw==
+
 react-native@0.63.4:
   version "0.63.4"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.63.4.tgz#2210fdd404c94a5fa6b423c6de86f8e48810ec36"

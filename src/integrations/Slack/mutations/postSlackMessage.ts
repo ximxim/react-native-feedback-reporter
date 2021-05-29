@@ -28,7 +28,6 @@ interface IPostSlackMessageResponse {
 interface IPostSlackMessageProps {
   title: string;
   channel?: string;
-  devNotes?: string;
   description: string;
 }
 
@@ -36,12 +35,11 @@ export const postSlackMessage = ({
   description,
   title,
   channel,
-  devNotes,
 }: IPostSlackMessageProps) =>
   slackApi.post<IPostSlackMessageResponse>('chat.postMessage', null, {
     params: {
       text: title,
       channel: channel || 'general',
-      attachments: JSON.stringify([{ pretext: description, text: devNotes }]),
+      attachments: JSON.stringify([{ pretext: description }]),
     },
   });
