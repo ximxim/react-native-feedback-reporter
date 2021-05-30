@@ -18,8 +18,14 @@ import { GlobalProps, IReportFormValues } from '../../../components';
 
 export const useJIRAComponents = () => {
   const [pg, setPg] = useState<number>(0);
-  const projectOptions = useJIRAProjects();
-  const issueTypeOptions = useJIRAIssueType();
+  const {
+    options: projectOptions,
+    error: projectRequestError,
+  } = useJIRAProjects();
+  const {
+    options: issueTypeOptions,
+    error: issueTypeRequestError,
+  } = useJIRAIssueType();
   const Switch = useJIRASwitch();
   const { jira, setAuthState, authState } = useContext(GlobalProps);
   const { watch } = useFormContext<IReportFormValues>();
@@ -89,6 +95,11 @@ export const useJIRAComponents = () => {
   useEffect(() => {
     setPageNumber(pg);
   }, [pg]);
+
+  useEffect(() => {
+    if (!projectRequestError && !issueTypeRequestError) return;
+    setPg(0);
+  }, [projectRequestError, issueTypeRequestError]);
 
   return {
     isEnabled,
