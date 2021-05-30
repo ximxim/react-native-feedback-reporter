@@ -9,5 +9,9 @@ module.exports = {
       'api',
     ],
     'Integrations': ['jira', 'slack'],
+    'Optional Dependencies': [
+      'react-native-share',
+      'react-native-image-crop-picker',
+    ],
   },
 };

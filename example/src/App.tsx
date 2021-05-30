@@ -16,6 +16,8 @@ import { LOGIN_SUCCESS } from './userReducers';
 
 Sentry.init({ dsn: SENTRY });
 
+// console.disableYellowBox = true;
+
 export default function App() {
   const handleShow = () => console.log('OMG you showed');
   const dispatch = useDispatch();
