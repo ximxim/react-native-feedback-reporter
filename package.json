@@ -1,6 +1,6 @@
 {
   "name": "react-native-feedback-reporter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "tke ",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
