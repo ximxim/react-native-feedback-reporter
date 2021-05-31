@@ -78,6 +78,11 @@
     "react-native": "*",
     "react-native-image-crop-picker": "*"
   },
+  "peerDependenciesMeta": {
+    "react-native-image-crop-picker": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "@hookform/resolvers": "1.x.x",
     "axios": "^0.21.1",

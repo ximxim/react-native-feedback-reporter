@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Dimensions, TouchableOpacity } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
+import { Dimensions, TouchableOpacity, NativeModules } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -25,6 +24,7 @@ export const ImagePreview: FunctionComponent<{
 }> = ({ value, onChange }) => (
   <TouchableOpacity
     onPress={async () => {
+      const ImagePicker = NativeModules.ImageCropPicker;
       const image = await ImagePicker.openPicker({});
       image.sourceURL && onChange(image.path);
     }}
