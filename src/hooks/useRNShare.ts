@@ -31,7 +31,8 @@ export const useRNShare = ({ files }: IUseRNShareProps) => {
       ],
       devNotes,
     });
-    const Share = require('react-native-share').default;
+
+    const Share = require(require.resolve('react-native-share')).default;
     Share.open({
       title: 'Share file',
       failOnCancel: false,
