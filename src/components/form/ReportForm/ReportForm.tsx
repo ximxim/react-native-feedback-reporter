@@ -152,7 +152,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
 
   const data: IScreens[] = [
     {
-      stickyFooter: Submit,
+      stickyFooter: enabledIntegrationsCount ? Submit : null,
       components: formComponents,
       order: formOrder,
       name: 'bugReport',
