@@ -1,6 +1,7 @@
 import { useContext, useCallback, useEffect } from 'react';
 import { NativeModules } from 'react-native';
 import { useFormContext } from 'react-hook-form';
+import Share from 'react-native-share';
 
 import { writeFiles, IFile } from '../utils';
 import { GlobalProps, IReportFormValues } from '../components';
@@ -32,7 +33,6 @@ export const useRNShare = ({ files }: IUseRNShareProps) => {
       devNotes,
     });
 
-    const Share = require(require.resolve('react-native-share')).default;
     Share.open({
       title: 'Share file',
       failOnCancel: false,

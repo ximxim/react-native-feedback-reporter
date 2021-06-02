@@ -76,6 +76,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
+    "react-native-share": "*",
     "react-native-image-crop-picker": "*"
   },
   "peerDependenciesMeta": {

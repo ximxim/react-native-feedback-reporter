@@ -39,17 +39,6 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     key: 'FEEDBACK_REPORTER_AUTH_STATE',
   });
   const scrollViewRef = useRef<ScrollView>(null);
-  const formOrder: FormOrderEnum[] = [
-    FormOrderEnum.Title,
-    FormOrderEnum.Description,
-    FormOrderEnum.Integrations,
-    FormOrderEnum.ScreenShotAndExternalSource,
-  ];
-  const submissionOrder: SubmissionOrderEnum[] = [
-    SubmissionOrderEnum.Reporting,
-    SubmissionOrderEnum.Jira,
-    SubmissionOrderEnum.Slack,
-  ];
   const [files, setFiles] = useState<IFile[]>([]);
   useRNShare({ files });
   const {
@@ -74,6 +63,28 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   const { additionalInformation, authState, setAuthState } = useContext(
     GlobalProps
   );
+  const enabledIntegrationsCount = [isJIRAEnabled, isSlackEnabled].filter(
+    (b) => b
+  ).length;
+  const formOrder: FormOrderEnum[] = [
+    FormOrderEnum.Title,
+    FormOrderEnum.Description,
+    FormOrderEnum.Integrations,
+    FormOrderEnum.ScreenShotAndExternalSource,
+  ].filter((name) => {
+    switch (name) {
+      case FormOrderEnum.Title:
+      case FormOrderEnum.Description:
+        return !!enabledIntegrationsCount;
+      default:
+        return true;
+    }
+  });
+  const submissionOrder: SubmissionOrderEnum[] = [
+    SubmissionOrderEnum.Reporting,
+    SubmissionOrderEnum.Jira,
+    SubmissionOrderEnum.Slack,
+  ];
 
   useEffect(() => {
     register({ name: 'description' });
@@ -124,9 +135,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     ),
     [FormOrderEnum.Integrations]: (
       <Integrations
-        enabledIntegrationsCount={
-          [isJIRAEnabled, isSlackEnabled].filter((b) => b).length
-        }
+        enabledIntegrationsCount={enabledIntegrationsCount}
         components={{
           [IntegrationsEnum.JIRA]: JIRAComponents,
           [IntegrationsEnum.Slack]: slackComponents,
