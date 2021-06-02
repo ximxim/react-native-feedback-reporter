@@ -31,7 +31,7 @@ export interface IFeedbackReporterProps {
   /**
    * Dev notes
    */
-  devNotes: DevNotesType;
+  devNotes?: DevNotesType;
 
   /**
    * JIRA Integration
