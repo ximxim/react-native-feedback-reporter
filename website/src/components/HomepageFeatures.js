@@ -4,37 +4,25 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('../../static/img/communication.svg').default,
+    title: 'iOS and Android Friendly',
+    Svg: require('../../static/img/platforms-logo.svg').default,
     description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
+      <>Currently, this package supports android and iOS platforms.</>
     ),
   },
   {
     title: 'Frictionless Setup',
     Svg: require('../../static/img/html-coding.svg').default,
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
+    description: <>This tool works right out the box.</>,
   },
   {
     title: 'User Insight',
     Svg: require('../../static/img/react-native-mobile.svg').default,
-    description: (
-      <>
-        Get insight into a tester's experience.
-      </>
-    ),
+    description: <>Get insight into a tester's experience.</>,
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({ Svg, title, description }) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">

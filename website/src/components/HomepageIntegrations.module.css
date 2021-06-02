@@ -1,0 +1,25 @@
+/* stylelint-disable docusaurus/copyright-header */
+
+.heading {
+  font-size: 28px;
+  margin: 0px;
+  padding: 30px;
+  color: black;
+  text-align: center;
+  background-color: white;
+}
+
+.integrations {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  width: 100%;
+  background-color: white;
+}
+
+.integrationsSvg {
+  height: auto;
+  width: 100%;
+  padding: 30px;
+}
