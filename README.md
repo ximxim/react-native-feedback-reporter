@@ -22,7 +22,7 @@ Sentry SDK for React Native
 - Android
 ## Getting Started
 
-Head over to [documentation] to learn more.
+Head over to [documentation](https://ximxim.github.io/react-native-feedback-reporter/) to learn more.
 
 See the [CONTRIBUTING](CONTRIBUTING.md) file for more information.
 
