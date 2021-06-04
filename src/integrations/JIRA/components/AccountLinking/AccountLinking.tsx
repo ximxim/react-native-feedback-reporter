@@ -11,7 +11,7 @@ export const AccountLinking: FunctionComponent<IAccountLinkingProps> = ({
   const username = authState.jira?.username;
 
   return (
-    <Box mx={2}>
+    <Box mx={8}>
       {username && (
         <Typography variant="caption" {...props}>
           Connected to {username} long press here to disconnect.

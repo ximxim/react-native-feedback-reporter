@@ -96,7 +96,7 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
         placeholder={errors.token?.message}
         onChangeText={(text) => setValue('token', text)}
       />
-      <Typography variant="caption" mx={2}>
+      <Typography variant="caption" mx={8}>
         How to create a JIRA api token?{' '}
         <Typography
           ml={2}
