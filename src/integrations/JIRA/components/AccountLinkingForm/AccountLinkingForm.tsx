@@ -54,6 +54,7 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
   useEffect(() => {
     if (!data?.data.emailAddress) return;
     const values = getValues();
+    if (!values.username || !values.token) return;
     setAuthState({
       jira: {
         ...values,
