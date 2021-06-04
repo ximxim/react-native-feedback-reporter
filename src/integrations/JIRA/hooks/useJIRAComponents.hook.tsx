@@ -99,7 +99,11 @@ export const useJIRAComponents = () => {
   }, [pg]);
 
   useEffect(() => {
-    console.log(projectRequestError, issueTypeRequestError, !projectRequestError && !issueTypeRequestError);
+    console.log(
+      projectRequestError,
+      issueTypeRequestError,
+      !projectRequestError && !issueTypeRequestError
+    );
     if (!projectRequestError && !issueTypeRequestError) return;
     setPg(0);
   }, [projectRequestError, issueTypeRequestError]);
