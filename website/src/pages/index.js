@@ -14,6 +14,7 @@ function HomepageHeader() {
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <iframe className={styles.iframe} src="https://www.youtube.com/embed/tq4wKtOgxHs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"

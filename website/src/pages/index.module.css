@@ -19,7 +19,14 @@
 }
 
 .buttons {
+  margin-top: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.iframe {
+  width: 560px;
+  height: 315px;
+  max-width: 100%;
 }
