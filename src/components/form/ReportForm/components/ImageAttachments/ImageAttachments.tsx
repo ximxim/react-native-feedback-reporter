@@ -24,7 +24,7 @@ export const ImageAttachments: FunctionComponent<IImageAttachmentsProps> = ({
   const onChange = (val: IFile[]) => setFiles(val);
 
   return (
-    <Wrapper>
+    <Wrapper nestedScrollEnabled>
       {files.length ? (
         files.map((file) => (
           <ImagePicker {...{ onChange }} previewFile={file} />

@@ -171,12 +171,14 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       pagingEnabled
       ref={scrollViewRef}
       scrollEnabled={false}
+      nestedScrollEnabled
       showsHorizontalScrollIndicator={false}
     >
       {data.map(({ components, order, ...keyboardAvoidingScrollView }) => (
         <Styled.Wrapper
           {...keyboardAvoidingScrollView}
           containerStyle={Styled.containerStyle}
+          nestedScrollEnabled
         >
           {order.map((key: keyof typeof components) => components[key])}
         </Styled.Wrapper>

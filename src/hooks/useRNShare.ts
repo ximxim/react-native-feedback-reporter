@@ -42,12 +42,9 @@ export const useRNShare = ({ files }: IUseRNShareProps) => {
   }, [files]);
 
   useEffect(() => {
-    const isRNShareEnabled = Object.keys(NativeModules).includes('RNShare');
-    if (!isRNShareEnabled) return;
-
     setModalHeaderLeftState({
       label: 'Share',
       onPress: handleShare,
     });
-  }, [NativeModules]);
+  }, [files]);
 };

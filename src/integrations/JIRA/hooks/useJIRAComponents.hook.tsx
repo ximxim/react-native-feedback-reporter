@@ -82,9 +82,10 @@ export const useJIRAComponents = () => {
     if (
       (authState.jira?.token && authState.jira?.username) ||
       (jira?.username && jira?.token)
-    )
+    ) {
+      console.log('move to page 1');
       setPg(1);
-    else setPg(0);
+    } else setPg(0);
   }, [authState, jira]);
 
   const JIRAComponents = useCallback(
@@ -93,10 +94,12 @@ export const useJIRAComponents = () => {
   );
 
   useEffect(() => {
+    console.log(pg);
     setPageNumber(pg);
   }, [pg]);
 
   useEffect(() => {
+    console.log(projectRequestError, issueTypeRequestError, !projectRequestError && !issueTypeRequestError);
     if (!projectRequestError && !issueTypeRequestError) return;
     setPg(0);
   }, [projectRequestError, issueTypeRequestError]);
