@@ -1,0 +1,12 @@
+
+{
+  "increment": "conventional:angular",
+  "changelogCommand": "conventional-changelog -p angular | tail -n +3",
+  "safeBump": false,
+  "npm": {
+    "publish": true
+  },
+  "github": {
+    "release": true
+  }
+}
