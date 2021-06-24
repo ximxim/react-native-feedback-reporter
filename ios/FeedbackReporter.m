@@ -6,15 +6,16 @@
 #import <Foundation/Foundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <UIKit/UIKit.h>
-
-#import <React/RCTBridgeModule.h>
-#import <React/RCTEventDispatcher.h>
 #import <React/RCTLog.h>
 
 #import "Uploader.h"
 
-#import <React/RCTEventDispatcher.h>
 #import <React/RCTUtils.h>
+#import <React/RCTScrollView.h>
+#import <React/RCTUIManager.h>
+#import <React/RCTUIManagerUtils.h>
+#import <React/RCTViewManager.h>
+
 
 #if __has_include(<React/RCTImageLoader.h>)
 #import <React/RCTImageLoader.h>
@@ -43,7 +44,10 @@ RCT_EXPORT_MODULE()
   };
 }
 
-@synthesize bridge = _bridge;
+- (dispatch_queue_t)methodQueue
+{
+  return RCTGetUIManagerQueue();
+}
 
 - (NSArray<NSString *> *)supportedEvents {
   return @[@"ScreenshotTaken",@"UploadBegin",@"UploadProgress"];
@@ -220,6 +224,77 @@ RCT_EXPORT_METHOD(getThumbnail:(NSString *)filepath resolve:(RCTPromiseResolveBl
     } @catch(NSException *e) {
         reject(e.reason, nil, nil);
     }
+}
+
+RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
+                  withOptions:(NSDictionary *)options
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+
+    // Get view
+    UIView *view;
+
+    if ([target intValue] == -1) {
+      UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+      view = window.rootViewController.view;
+    } else {
+      view = viewRegistry[target];
+    }
+
+    if (!view) {
+      reject(RCTErrorUnspecified, [NSString stringWithFormat:@"No view found with reactTag: %@", target], nil);
+      return;
+    }
+
+    // Capture image
+    BOOL success;
+
+    UIView* rendered;
+    rendered = view;
+
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0);
+
+    success = [rendered drawViewHierarchyInRect:(CGRect){CGPointZero, view.bounds.size} afterScreenUpdates:YES];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    if (!success) {
+      reject(RCTErrorUnspecified, @"The view cannot be captured. drawViewHierarchyInRect was not successful. This is a potential technical or security limitation.", nil);
+      return;
+    }
+
+    if (!image) {
+      reject(RCTErrorUnspecified, @"Failed to capture view snapshot. UIGraphicsGetImageFromCurrentImageContext() returned nil!", nil);
+      return;
+    }
+
+    // Convert image to data (on a background thread)
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+      NSData *data = UIImagePNGRepresentation(image);
+
+      NSError *error = nil;
+      NSString *res = nil;
+
+      NSString *path = RCTTempFilePath(@"jpg", &error);
+      if (path && !error) {
+        if ([data writeToFile:path options:(NSDataWritingOptions)0 error:&error]) {
+          res = path;
+        }
+      }
+
+      if (res && !error) {
+        resolve(res);
+        return;
+      }
+
+      // If we reached here, something went wrong
+      if (error) reject(RCTErrorUnspecified, error.localizedDescription, error);
+      else reject(RCTErrorUnspecified, @"viewshot unknown error", nil);
+    });
+  }];
 }
 
 @end

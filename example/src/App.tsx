@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react-native';
 import { SENTRY, JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, NativeModules } from 'react-native';
 import {
   theme,
   SlackComponents,
@@ -18,9 +18,12 @@ Sentry.init({ dsn: SENTRY });
 
 // console.disableYellowBox = true;
 
+const captureRef = NativeModules.FeedbackReporter.captureRef;
+
 export default function App() {
   const handleShow = () => console.log('OMG you showed');
   const dispatch = useDispatch();
+  const viewRef = React.useRef<View>(null);
 
   React.useEffect(() => {
     RNSecureKeyStore?.setResetOnAppUninstallTo?.(false);
@@ -28,7 +31,26 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View
+      ref={viewRef}
+      style={styles.container}
+      onTouchStart={async ({ nativeEvent }) => {
+        if (!viewRef) return;
+
+        try {
+          console.log(nativeEvent);
+          // console.log(viewRef.current._nativeTag);
+          // @ts-ignore: _nativeTag causes ts error
+          const res = await captureRef(viewRef.current._nativeTag, {
+            format: 'jpg',
+            quality: 0.8,
+          });
+          console.log('res', res);
+        } catch (error) {
+          console.log(error.message);
+        }
+      }}
+    >
       <Text>Result of some sort</Text>
       <FeedbackReporter
         theme={{
