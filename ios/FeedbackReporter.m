@@ -31,6 +31,7 @@
 @interface FeedbackReporter()
 
 @property (retain) NSMutableDictionary* uploaders;
+@property (retain) NSMutableArray* breadcrumbs;
 
 @end
 
@@ -232,7 +233,7 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
                   reject:(RCTPromiseRejectBlock)reject)
 {
   [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-
+    if (!self.breadcrumbs) self.breadcrumbs = [[NSMutableArray alloc] init];
     // Get view
     UIView *view;
 
@@ -247,17 +248,19 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
       reject(RCTErrorUnspecified, [NSString stringWithFormat:@"No view found with reactTag: %@", target], nil);
       return;
     }
+      
+    CGPoint tapPoint = [RCTConvert CGPoint:options];
 
     // Capture image
     BOOL success;
 
-    UIView* rendered;
-    rendered = view;
+    UIView* rendered = view;
 
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0);
 
     success = [rendered drawViewHierarchyInRect:(CGRect){CGPointZero, view.bounds.size} afterScreenUpdates:YES];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *orgimage = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *image = [self imageByDrawingCircleOnImage:orgimage tapPoint:tapPoint];
     UIGraphicsEndImageContext();
 
     if (!success) {
@@ -278,15 +281,17 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
       NSError *error = nil;
       NSString *res = nil;
 
-      NSString *path = RCTTempFilePath(@"jpg", &error);
+      NSString *path = RCTTempFilePath(@"png", &error);
+
       if (path && !error) {
         if ([data writeToFile:path options:(NSDataWritingOptions)0 error:&error]) {
+          [self.breadcrumbs addObject:path];
           res = path;
         }
       }
 
       if (res && !error) {
-        resolve(res);
+        resolve(self.breadcrumbs);
         return;
       }
 
@@ -295,6 +300,40 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
       else reject(RCTErrorUnspecified, @"viewshot unknown error", nil);
     });
   }];
+}
+
+- (UIImage *)imageByDrawingCircleOnImage:(UIImage *)image
+                                tapPoint:(CGPoint) tapPoint
+{
+    // begin a graphics context of sufficient size
+    UIGraphicsBeginImageContext(image.size);
+
+    // draw original image into the context
+    [image drawAtPoint:CGPointZero];
+
+    // get the context for CoreGraphics
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+    // set stroking color and draw circle
+    [[UIColor redColor] setStroke];
+
+    // make circle rect 5 px from border
+    CGRect circleRect = CGRectMake(
+               tapPoint.x - 25,
+               tapPoint.y - 25,
+                50,
+                50);
+
+    // draw circle
+    CGContextStrokeEllipseInRect(ctx, circleRect);
+
+    // make image out of bitmap context
+    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
+
+    // free the context
+    UIGraphicsEndImageContext();
+
+    return retImage;
 }
 
 @end

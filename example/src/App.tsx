@@ -42,8 +42,8 @@ export default function App() {
           // console.log(viewRef.current._nativeTag);
           // @ts-ignore: _nativeTag causes ts error
           const res = await captureRef(viewRef.current._nativeTag, {
-            format: 'jpg',
-            quality: 0.8,
+            x: nativeEvent.pageX,
+            y: nativeEvent.pageY,
           });
           console.log('res', res);
         } catch (error) {
