@@ -3,7 +3,13 @@ import * as Sentry from '@sentry/react-native';
 import { SENTRY, JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, NativeModules, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  NativeModules,
+  TouchableOpacity,
+} from 'react-native';
 import {
   theme,
   SlackComponents,
