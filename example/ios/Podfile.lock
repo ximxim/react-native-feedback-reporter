@@ -187,6 +187,7 @@ PODS:
   - React-jsinspector (0.63.4)
   - react-native-feedback-reporter (0.3.6):
     - React-Core
+    - SSZipArchive (= 2.2.3)
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
   - React-RCTAnimation (0.63.4):
@@ -268,6 +269,7 @@ PODS:
   - Sentry (6.1.4):
     - Sentry/Core (= 6.1.4)
   - Sentry/Core (6.1.4)
+  - SSZipArchive (2.2.3)
   - TOCropViewController (2.6.0)
   - Yoga (1.14.0)
 
@@ -311,6 +313,7 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - Sentry
+    - SSZipArchive
     - TOCropViewController
 
 EXTERNAL SOURCES:
@@ -396,7 +399,7 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
-  react-native-feedback-reporter: c84f9d6944639d866287bec4a6f7252b620d209d
+  react-native-feedback-reporter: adec873e319994ad0e0ce586e37f3b0254cf72c7
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
@@ -413,6 +416,7 @@ SPEC CHECKSUMS:
   RNSentry: b0d55027200c96f52e26b9bfb20296d47fc5051d
   RNShare: c93ee0df653c76d913554272d56f6ffd8bdcb3cc
   Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
+  SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 

@@ -302,6 +302,29 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
   }];
 }
 
+RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    NSMutableArray *newPaths = [[NSMutableArray alloc] init];
+    for (id path in self.breadcrumbs) {
+        NSUInteger index = [self.breadcrumbs indexOfObject:path];
+        NSString *dir = [path stringByDeletingLastPathComponent];
+        NSString *toPath = [dir stringByAppendingString:[NSString stringWithFormat:@"/%lu.png", index + 1]];
+        BOOL success = [[NSFileManager defaultManager] moveItemAtPath:path toPath:toPath error:nil];
+        if (success) {
+            [newPaths addObject:toPath];
+        }
+    }
+    BOOL success = [SSZipArchive createZipFileAtPath:destinationPath withFilesAtPaths:newPaths];
+
+    if (success) {
+        resolve(destinationPath);
+    } else {
+        NSError *error = nil;
+        reject(@"zip_error", @"unable to zip", error);
+    }
+}
+
 - (UIImage *)imageByDrawingCircleOnImage:(UIImage *)image
                                 tapPoint:(CGPoint) tapPoint
 {

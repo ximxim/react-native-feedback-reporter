@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react-native';
 import { SENTRY, JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, NativeModules } from 'react-native';
+import { View, Text, StyleSheet, NativeModules, TouchableOpacity } from 'react-native';
 import {
   theme,
   SlackComponents,
@@ -18,7 +18,10 @@ Sentry.init({ dsn: SENTRY });
 
 // console.disableYellowBox = true;
 
-const captureRef = NativeModules.FeedbackReporter.captureRef;
+const module = NativeModules.FeedbackReporter;
+const captureRef = module.captureRef;
+const zipBreadcrumbs = module.zipBreadcrumbs;
+const directory = `${module.TemporaryDirectoryPath}/breadcrumbs.zip`;
 
 export default function App() {
   const handleShow = () => console.log('OMG you showed');
@@ -51,7 +54,21 @@ export default function App() {
         }
       }}
     >
-      <Text>Result of some sort</Text>
+      <TouchableOpacity
+        onPress={async () => {
+          console.log('zipping');
+          const res = await zipBreadcrumbs(directory);
+          console.log(res);
+        }}
+        hitSlop={{
+          top: 40,
+          bottom: 40,
+          left: 40,
+          right: 40,
+        }}
+      >
+        <Text>Result of some sort</Text>
+      </TouchableOpacity>
       <FeedbackReporter
         theme={{
           ...theme.base,
