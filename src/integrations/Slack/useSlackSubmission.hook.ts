@@ -8,13 +8,11 @@ import {
   postSlackConversationJoin,
 } from './mutations';
 
-import type { IFile } from '../../utils';
-import { useCreatePackage } from '../../hooks';
+import type { IUploadFile } from '../../utils';
 import { IReportFormValues, GlobalProps } from '../../components';
 
 export const useSlackSubmission = () => {
-  const [files, setFiles] = useState<IFile[]>([]);
-  const { createPackage } = useCreatePackage({ files });
+  const [filesToUpload, setFilesToUpload] = useState<IUploadFile[]>([]);
   const { data: joinConversationRes, mutate: joinConversation } = useMutation(
     postSlackConversationJoin
   );
@@ -34,7 +32,6 @@ export const useSlackSubmission = () => {
     if (!ts || !slack) return;
 
     (async () => {
-      const filesToUpload = await createPackage();
       postFile({ filesToUpload, ts, channel: slackChannel });
     })();
   }, [messageRes]);
@@ -53,8 +50,8 @@ export const useSlackSubmission = () => {
     })();
   }, [joinConversationRes]);
 
-  const submitToSlack = async (files: IFile[]) => {
-    setFiles(files);
+  const submitToSlack = async (files: IUploadFile[]) => {
+    setFilesToUpload(files);
 
     if (!slack) return;
 

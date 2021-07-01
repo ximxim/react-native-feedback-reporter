@@ -29,7 +29,7 @@ import { IntegrationsEnum } from './components/Integrations/Integrations.types';
 
 import type { IFile } from '../../../utils';
 import { GlobalProps } from '../../contexts';
-import { useStorage, useRNShare } from '../../../hooks';
+import { useStorage, useRNShare, useCreatePackage } from '../../../hooks';
 import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
 
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
@@ -40,6 +40,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   });
   const scrollViewRef = useRef<ScrollView>(null);
   const [files, setFiles] = useState<IFile[]>([]);
+  const { createPackage } = useCreatePackage({ files });
   useRNShare({ files });
   const {
     JIRAComponents,
@@ -112,9 +113,10 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       label={disableReporting ? 'Unable to report' : 'Report'}
       disabled={disableReporting}
       isLoading={formState.isSubmitting}
-      onPress={handleSubmit(() => {
-        submitToJIRA?.(files);
-        submitToSlack?.(files);
+      onPress={handleSubmit(async () => {
+        const filesToUpload = await createPackage();
+        submitToJIRA?.(filesToUpload);
+        submitToSlack?.(filesToUpload);
         const index = data.findIndex((item) => item.name === 'submission');
         scrollViewRef.current?.scrollTo({
           x: Styled.width * index,
