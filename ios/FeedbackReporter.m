@@ -328,6 +328,7 @@ RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
 - (UIImage *)imageByDrawingCircleOnImage:(UIImage *)image
                                 tapPoint:(CGPoint) tapPoint
 {
+    int radius = 20;
     // begin a graphics context of sufficient size
     UIGraphicsBeginImageContext(image.size);
 
@@ -338,17 +339,20 @@ RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
     CGContextRef ctx = UIGraphicsGetCurrentContext();
 
     // set stroking color and draw circle
-    [[UIColor redColor] setStroke];
+    [[UIColor colorWithRed: 0.69 green: 0.69 blue: 0.69 alpha: 1.00] setStroke];
+    [[UIColor colorWithRed: 0.69 green: 0.69 blue: 0.69 alpha: 0.50] setFill];
+    
+    CGContextSetShadowWithColor(ctx, CGSizeMake(-0.0f,  0.0f), 5.0f, [UIColor lightGrayColor].CGColor);
 
     // make circle rect 5 px from border
     CGRect circleRect = CGRectMake(
-               tapPoint.x - 25,
-               tapPoint.y - 25,
-                50,
-                50);
-
+               tapPoint.x - radius,
+               tapPoint.y - radius,
+                radius * 2,
+                radius * 2);
+    
     // draw circle
-    CGContextStrokeEllipseInRect(ctx, circleRect);
+    CGContextFillEllipseInRect(ctx, circleRect);
 
     // make image out of bitmap context
     UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
