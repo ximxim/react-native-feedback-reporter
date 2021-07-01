@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { ModalProps } from 'react-native';
+import type { ModalProps, ViewProps } from 'react-native';
 
 import type { theme } from '../../../theme';
 import type { IModalHeaderProps } from '../../ui';
@@ -67,4 +67,9 @@ export interface IFeedbackReporterProps {
    * Async storage plugin
    */
   asyncStorage?: IAsyncStorageProps;
+
+  /**
+   * Container view props
+   */
+  containerViewProps?: ViewProps;
 }

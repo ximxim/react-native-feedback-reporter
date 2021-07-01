@@ -9,10 +9,12 @@ import {
 } from './mutations';
 
 import type { IFile } from '../../utils';
+import { useCreatePackage } from '../../hooks';
 import { IReportFormValues, GlobalProps } from '../../components';
 
 export const useSlackSubmission = () => {
   const [files, setFiles] = useState<IFile[]>([]);
+  const { createPackage } = useCreatePackage({ files });
   const { data: joinConversationRes, mutate: joinConversation } = useMutation(
     postSlackConversationJoin
   );
@@ -23,15 +25,18 @@ export const useSlackSubmission = () => {
     postSlackFile
   );
   const { getValues } = useFormContext<IReportFormValues>();
-  const { slack, devNotes } = useContext(GlobalProps);
-  const { uri: content, slackChannel } = getValues();
+  const { slack } = useContext(GlobalProps);
+  const { slackChannel } = getValues();
 
   useEffect(() => {
     const ts = messageRes?.data.ts;
 
     if (!ts || !slack) return;
 
-    postFile({ files, content, ts, channel: slackChannel, devNotes });
+    (async () => {
+      const filesToUpload = await createPackage();
+      postFile({ filesToUpload, ts, channel: slackChannel });
+    })();
   }, [messageRes]);
 
   useEffect(() => {
