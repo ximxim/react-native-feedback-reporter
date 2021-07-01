@@ -363,4 +363,23 @@ RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
     return retImage;
 }
 
+RCT_EXPORT_METHOD(clearTmpDirectory) {
+    NSString *rnTempPath = RCTTempFilePath(@"png", nil);
+    NSString *rctTempDir = [rnTempPath stringByDeletingLastPathComponent];
+    self.breadcrumbs = [[NSMutableArray alloc] init];
+    NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
+    for (NSString *file in tmpDirectory) {
+        NSString *fullPath = [NSTemporaryDirectory() stringByAppendingString:file];
+        if (![fullPath isEqualToString:rctTempDir]) {
+            [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] error:NULL];
+        }
+    }
+    
+    NSArray* rnTempDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:rctTempDir error:NULL];
+    for (NSString *file in rnTempDirectory) {
+        NSString *filePath = [[rctTempDir stringByAppendingString:@"/"] stringByAppendingString:file];
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:NULL];
+    }
+}
+
 @end

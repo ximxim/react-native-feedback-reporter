@@ -2,7 +2,7 @@ import React, { useEffect, useContext, FunctionComponent } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ThemeProvider } from 'styled-components';
-import { Modal } from 'react-native';
+import { Modal, NativeModules } from 'react-native';
 
 import { theme } from '../theme';
 import { ScreenShot } from '../utils';
@@ -19,6 +19,8 @@ import {
 import * as Styled from './FeedbackReporterModal.style';
 
 const queryClient = new QueryClient();
+const module = NativeModules.FeedbackReporter;
+const clearTmpDirectory = module.clearTmpDirectory;
 
 export const FeedbackReporterModal: FunctionComponent<unknown> = () => {
   const props = useContext(GlobalProps);
@@ -27,6 +29,7 @@ export const FeedbackReporterModal: FunctionComponent<unknown> = () => {
     resolver: yupResolver(ReportFormValidation({ ...props })),
   });
   const handleClose = () => {
+    clearTmpDirectory();
     props.setIsModalOpen(false);
     reportFormProps.reset();
   };
