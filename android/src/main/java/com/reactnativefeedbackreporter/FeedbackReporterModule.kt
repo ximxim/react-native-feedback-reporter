@@ -2,21 +2,23 @@ package com.reactnativefeedbackreporter
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.os.Environment
 import android.util.Base64
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
+import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.modules.core.PermissionAwareActivity
 import com.facebook.react.modules.core.PermissionListener
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
+import com.facebook.react.uimanager.UIManagerModule
 import java.io.*
 import java.net.URL
 import java.util.*
@@ -26,6 +28,7 @@ import kotlin.collections.HashMap
 
 
 class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), ScreenshotDetectionListener {
+  val RNFeedback_Reporter = "RNFeedbackReporter"
   private val TemporaryDirectoryPath = "TemporaryDirectoryPath"
   private val screenshotDetectionDelegate = ScreenshotDetectionDelegate(reactContext, this)
   private val EVENT_NAME = "ScreenshotTaken"
@@ -53,6 +56,23 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
     screenshotDetectionDelegate.stopScreenshotDetection()
   }
 
+  @ReactMethod
+  fun captureRef(tag: Int, options: ReadableMap, promise: Promise) {
+    val context: ReactApplicationContext = getReactApplicationContext();
+    try {
+      var outputFile: File = createTempFile(context)
+      val activity = currentActivity
+      val uiManager = reactContext.getNativeModule(UIManagerModule::class.java)
+      uiManager.addUIBlock(ViewShot(
+        tag, outputFile, reactContext, activity, promise)
+      )
+    } catch (ex: Throwable) {
+      Log.e(RNFeedback_Reporter, "Failed to snapshot view tag $tag", ex)
+      promise.reject(ViewShot.ERROR_UNABLE_TO_SNAPSHOT, "Failed to snapshot view tag $tag")
+    }
+  }
+
+
   override fun onScreenCaptured(path: String) {
     val encoded = takeScreenshot()
 
@@ -77,7 +97,7 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
 
   private fun takeScreenshot(): String? {
     try {
-      val v1: View = currentActivity?.getWindow()?.getDecorView()!!.findViewById(android.R.id.content)
+      val v1: View = currentActivity?.window?.decorView!!.findViewById(android.R.id.content)
       v1.isDrawingCacheEnabled = true
       val bitmap = Bitmap.createBitmap(v1.drawingCache)
       v1.isDrawingCacheEnabled = false
@@ -295,5 +315,27 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       Log.e("E_RNThumnail_ERROR", e.message)
       promise.reject("E_RNThumnail_ERROR", e)
     }
+  }
+
+  private val TEMP_FILE_PREFIX = "ReactNative-snapshot-image"
+
+  @NonNull
+  @Throws(IOException::class)
+  private fun createTempFile(@NonNull context: Context): File {
+    val externalCacheDir: File? = context.externalCacheDir
+    val internalCacheDir: File = context.cacheDir
+    val cacheDir: File
+    if (externalCacheDir == null && internalCacheDir == null) {
+      throw IOException("No cache directory available")
+    }
+    cacheDir = if (externalCacheDir == null) {
+      internalCacheDir
+    } else if (internalCacheDir == null) {
+      externalCacheDir
+    } else {
+      if (externalCacheDir.freeSpace > internalCacheDir.freeSpace) externalCacheDir else internalCacheDir
+    }
+    val suffix = ".png"
+    return File.createTempFile(TEMP_FILE_PREFIX, suffix, cacheDir)
   }
 }

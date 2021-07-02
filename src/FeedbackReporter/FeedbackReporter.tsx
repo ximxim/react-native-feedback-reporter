@@ -22,16 +22,18 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
 
   return (
     <Wrapper
+      collapsable={false}
       ref={viewRef}
       onTouchStart={async ({ nativeEvent }) => {
         if (!viewRef || isModalOpen) return;
 
         try {
           // @ts-ignore: _nativeTag causes ts error
-          await captureRef(viewRef.current._nativeTag, {
+          const res = await captureRef(viewRef.current._nativeTag, {
             x: nativeEvent.pageX,
             y: nativeEvent.pageY,
           });
+          console.log(res);
         } catch (error) {
           console.log(error.message);
         }
