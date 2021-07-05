@@ -5,12 +5,14 @@ import android.app.Activity
 import android.graphics.*
 import android.graphics.Bitmap.CompressFormat
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.view.TextureView
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.NativeViewHierarchyManager
@@ -18,10 +20,10 @@ import com.facebook.react.uimanager.UIBlock
 import java.io.*
 import java.nio.ByteBuffer
 import java.util.*
-import android.graphics.Bitmap
 
 class ViewShot: UIBlock {
   private val TAG = ViewShot::class.java.simpleName
+  private var tapPoint: Point = Point()
   private val PREALLOCATE_SIZE = 64 * 1024
   private val ARGB_SIZE = 4
   private var outputBuffer = ByteArray(PREALLOCATE_SIZE)
@@ -37,17 +39,20 @@ class ViewShot: UIBlock {
 
   constructor(
     tag: Int,
+    tapPoint: Point,
     output: File,
     reactContext: ReactApplicationContext,
     currentActivity: Activity?,
     promise: Promise) {
     this.tag = tag
+    this.tapPoint = tapPoint
     this.output = output
     this.reactContext = reactContext
     this.currentActivity = currentActivity
     this.promise = promise
   }
 
+  @RequiresApi(Build.VERSION_CODES.O)
   override fun execute(nativeViewHierarchyManager: NativeViewHierarchyManager?) {
     val view: View?
 
@@ -74,6 +79,7 @@ class ViewShot: UIBlock {
     }
   }
 
+  @RequiresApi(Build.VERSION_CODES.O)
   @Throws(IOException::class)
   private fun saveToTempFileOnDevice(view: View) {
     val fos = FileOutputStream(output)
@@ -81,6 +87,7 @@ class ViewShot: UIBlock {
     promise?.resolve(Uri.fromFile(output).toString())
   }
 
+  @RequiresApi(Build.VERSION_CODES.O)
   @Throws(IOException::class)
   private fun captureView(view: View, os: OutputStream): Point? {
     return try {
@@ -90,6 +97,7 @@ class ViewShot: UIBlock {
     }
   }
 
+  @RequiresApi(Build.VERSION_CODES.O)
   private fun captureViewImpl(view: View, os: OutputStream): Point? {
     val w = view.width
     var h = view.height
@@ -104,8 +112,6 @@ class ViewShot: UIBlock {
     paint.isFilterBitmap = true
     paint.isDither = true
 
-    // Uncomment next line if you want to wait attached android studio debugger:
-    //   Debug.waitForDebugger();
     val c = Canvas(bitmap)
     view.draw(c)
 
@@ -128,6 +134,17 @@ class ViewShot: UIBlock {
       c.restoreToCount(countCanvasSave)
       recycleBitmap(childBitmapBuffer)
     }
+
+    val circleRadius = 20f
+    val paintCircle = Paint().apply {
+      color = Color.argb(0.5f, 0.69f, 0.69f, 0.69f)
+      style = Paint.Style.FILL
+      setShadowLayer(5f, 0f, 0f, Color.argb(0.5f, 0.69f, 0.69f, 0.69f))
+    }
+    val x = tapPoint.x.toFloat()
+    val y = tapPoint.y.toFloat()
+    val factor = 3.5f;
+    c.drawCircle(x * factor , y * factor, circleRadius * 2, paintCircle)
 
     bitmap.compress(CompressFormat.PNG, 100, os)
     recycleBitmap(bitmap)

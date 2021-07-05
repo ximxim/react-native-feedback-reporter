@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.util.Base64
@@ -58,13 +59,18 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
 
   @ReactMethod
   fun captureRef(tag: Int, options: ReadableMap, promise: Promise) {
+    val x = if (options.hasKey("x")) (options.getInt("x")) else 0
+    val y = if (options.hasKey("y")) (options.getInt("y")) else 0
+    val tapPoint = Point(x, y)
+
+
     val context: ReactApplicationContext = getReactApplicationContext();
     try {
       var outputFile: File = createTempFile(context)
       val activity = currentActivity
       val uiManager = reactContext.getNativeModule(UIManagerModule::class.java)
       uiManager.addUIBlock(ViewShot(
-        tag, outputFile, reactContext, activity, promise)
+        tag, tapPoint, outputFile, reactContext, activity, promise)
       )
     } catch (ex: Throwable) {
       Log.e(RNFeedback_Reporter, "Failed to snapshot view tag $tag", ex)
