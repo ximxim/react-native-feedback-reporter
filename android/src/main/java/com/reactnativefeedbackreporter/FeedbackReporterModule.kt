@@ -34,15 +34,17 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
   private val screenshotDetectionDelegate = ScreenshotDetectionDelegate(reactContext, this)
   private val EVENT_NAME = "ScreenshotTaken"
   private val uploaders = SparseArray<Uploader>()
+  private val cacheDir: File = reactApplicationContext.cacheDir.resolveSibling("RNFR")
 
   override fun getName(): String {
+    cacheDir.mkdir()
     return "FeedbackReporter"
   }
 
   override fun getConstants(): Map<String, Any> {
     val constants = HashMap<String, Any>()
 
-    constants.put(TemporaryDirectoryPath, this.getReactApplicationContext().getCacheDir().getAbsolutePath())
+    constants.put(TemporaryDirectoryPath, cacheDir.absolutePath)
 
     return constants
   }
@@ -328,19 +330,6 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
   @NonNull
   @Throws(IOException::class)
   private fun createTempFile(@NonNull context: Context): File {
-    val externalCacheDir: File? = context.externalCacheDir
-    val internalCacheDir: File = context.cacheDir
-    val cacheDir: File
-    if (externalCacheDir == null && internalCacheDir == null) {
-      throw IOException("No cache directory available")
-    }
-    cacheDir = if (externalCacheDir == null) {
-      internalCacheDir
-    } else if (internalCacheDir == null) {
-      externalCacheDir
-    } else {
-      if (externalCacheDir.freeSpace > internalCacheDir.freeSpace) externalCacheDir else internalCacheDir
-    }
     val suffix = ".png"
     return File.createTempFile(TEMP_FILE_PREFIX, suffix, cacheDir)
   }
