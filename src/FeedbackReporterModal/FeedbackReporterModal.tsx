@@ -68,7 +68,6 @@ export const FeedbackReporterModal: FunctionComponent<unknown> = () => {
         <Modal
           visible={props.isModalOpen}
           animationType="slide"
-          onDismiss={handleClose}
           onRequestClose={handleClose}
           {...modalProps}
         >

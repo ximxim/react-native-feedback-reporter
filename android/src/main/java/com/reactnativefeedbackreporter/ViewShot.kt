@@ -20,6 +20,7 @@ import com.facebook.react.uimanager.UIBlock
 import java.io.*
 import java.nio.ByteBuffer
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ViewShot: UIBlock {
   private val TAG = ViewShot::class.java.simpleName
@@ -32,6 +33,8 @@ class ViewShot: UIBlock {
   private var promise: Promise? = null
   private var reactContext: ReactApplicationContext? = null
   private var currentActivity: Activity? = null
+  private var breadcrumbs: ArrayList<String> = ArrayList<String>()
+
 
   companion object {
     val ERROR_UNABLE_TO_SNAPSHOT = "E_UNABLE_TO_SNAPSHOT"
@@ -39,12 +42,14 @@ class ViewShot: UIBlock {
 
   constructor(
     tag: Int,
+    breadcrumbs: ArrayList<String>,
     tapPoint: Point,
     output: File,
     reactContext: ReactApplicationContext,
     currentActivity: Activity?,
     promise: Promise) {
     this.tag = tag
+    this.breadcrumbs = breadcrumbs
     this.tapPoint = tapPoint
     this.output = output
     this.reactContext = reactContext
@@ -84,6 +89,7 @@ class ViewShot: UIBlock {
   private fun saveToTempFileOnDevice(view: View) {
     val fos = FileOutputStream(output)
     captureView(view, fos)
+    breadcrumbs.add(Uri.fromFile(output).path.toString())
     promise?.resolve(Uri.fromFile(output).toString())
   }
 
