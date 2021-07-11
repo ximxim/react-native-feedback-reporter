@@ -72,4 +72,8 @@ export interface IFeedbackReporterProps {
    * Container view props
    */
   containerViewProps?: ViewProps;
+  /**
+   * disableBreadrumbs
+   */
+  disableBreadrumbs?: boolean;
 }

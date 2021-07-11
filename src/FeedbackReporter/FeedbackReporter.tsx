@@ -25,7 +25,7 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
       collapsable={false}
       ref={viewRef}
       onTouchStart={async ({ nativeEvent }) => {
-        if (!viewRef || isModalOpen) return;
+        if (props.disableBreadrumbs || !viewRef || isModalOpen) return;
 
         try {
           // @ts-ignore: _nativeTag causes ts error
