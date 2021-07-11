@@ -72,7 +72,13 @@ export const SegmentSelector = ({
 
   const Options = options.map(
     (
-      { key, value, onPress, disabled, ...otherTouchaleOpacityProps },
+      {
+        key,
+        value: optionValue,
+        onPress,
+        disabled,
+        ...otherTouchaleOpacityProps
+      },
       index
     ) => (
       <Styled.Option
@@ -84,7 +90,7 @@ export const SegmentSelector = ({
         key={key}
       >
         <Styled.OptionLabel isSelected={key === selected} hasError={hasError}>
-          {value}
+          {optionValue}
         </Styled.OptionLabel>
         {key === selected && (
           <Styled.OptionPulse

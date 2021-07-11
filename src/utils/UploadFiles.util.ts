@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable no-useless-escape */
 import { NativeModules } from 'react-native';
 
 const module = NativeModules.FeedbackReporter;

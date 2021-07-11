@@ -8,11 +8,11 @@ import {
   postSlackConversationJoin,
 } from './mutations';
 
-import type { IFile } from '../../utils';
+import type { IUploadFile } from '../../utils';
 import { IReportFormValues, GlobalProps } from '../../components';
 
 export const useSlackSubmission = () => {
-  const [files, setFiles] = useState<IFile[]>([]);
+  const [filesToUpload, setFilesToUpload] = useState<IUploadFile[]>([]);
   const { data: joinConversationRes, mutate: joinConversation } = useMutation(
     postSlackConversationJoin
   );
@@ -23,15 +23,17 @@ export const useSlackSubmission = () => {
     postSlackFile
   );
   const { getValues } = useFormContext<IReportFormValues>();
-  const { slack, devNotes } = useContext(GlobalProps);
-  const { uri: content, slackChannel } = getValues();
+  const { slack } = useContext(GlobalProps);
+  const { slackChannel } = getValues();
 
   useEffect(() => {
     const ts = messageRes?.data.ts;
 
     if (!ts || !slack) return;
 
-    postFile({ files, content, ts, channel: slackChannel, devNotes });
+    (async () => {
+      postFile({ filesToUpload, ts, channel: slackChannel });
+    })();
   }, [messageRes]);
 
   useEffect(() => {
@@ -48,8 +50,8 @@ export const useSlackSubmission = () => {
     })();
   }, [joinConversationRes]);
 
-  const submitToSlack = async (files: IFile[]) => {
-    setFiles(files);
+  const submitToSlack = async (files: IUploadFile[]) => {
+    setFilesToUpload(files);
 
     if (!slack) return;
 

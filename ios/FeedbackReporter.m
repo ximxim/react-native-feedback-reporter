@@ -6,15 +6,16 @@
 #import <Foundation/Foundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <UIKit/UIKit.h>
-
-#import <React/RCTBridgeModule.h>
-#import <React/RCTEventDispatcher.h>
 #import <React/RCTLog.h>
 
 #import "Uploader.h"
 
-#import <React/RCTEventDispatcher.h>
 #import <React/RCTUtils.h>
+#import <React/RCTScrollView.h>
+#import <React/RCTUIManager.h>
+#import <React/RCTUIManagerUtils.h>
+#import <React/RCTViewManager.h>
+
 
 #if __has_include(<React/RCTImageLoader.h>)
 #import <React/RCTImageLoader.h>
@@ -30,6 +31,7 @@
 @interface FeedbackReporter()
 
 @property (retain) NSMutableDictionary* uploaders;
+@property (retain) NSMutableArray* breadcrumbs;
 
 @end
 
@@ -43,7 +45,10 @@ RCT_EXPORT_MODULE()
   };
 }
 
-@synthesize bridge = _bridge;
+- (dispatch_queue_t)methodQueue
+{
+  return RCTGetUIManagerQueue();
+}
 
 - (NSArray<NSString *> *)supportedEvents {
   return @[@"ScreenshotTaken",@"UploadBegin",@"UploadProgress"];
@@ -219,6 +224,161 @@ RCT_EXPORT_METHOD(getThumbnail:(NSString *)filepath resolve:(RCTPromiseResolveBl
                        @"height" : [NSNumber numberWithFloat: thumbnail.size.height] });
     } @catch(NSException *e) {
         reject(e.reason, nil, nil);
+    }
+}
+
+RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
+                  withOptions:(NSDictionary *)options
+                  resolve:(RCTPromiseResolveBlock)resolve
+                  reject:(RCTPromiseRejectBlock)reject)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    if (!self.breadcrumbs) self.breadcrumbs = [[NSMutableArray alloc] init];
+    // Get view
+    UIView *view;
+
+    if ([target intValue] == -1) {
+      UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+      view = window.rootViewController.view;
+    } else {
+      view = viewRegistry[target];
+    }
+
+    if (!view) {
+      reject(RCTErrorUnspecified, [NSString stringWithFormat:@"No view found with reactTag: %@", target], nil);
+      return;
+    }
+      
+    CGPoint tapPoint = [RCTConvert CGPoint:options];
+
+    // Capture image
+    BOOL success;
+
+    UIView* rendered = view;
+
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0);
+
+    success = [rendered drawViewHierarchyInRect:(CGRect){CGPointZero, view.bounds.size} afterScreenUpdates:YES];
+    UIImage *orgimage = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *image = [self imageByDrawingCircleOnImage:orgimage tapPoint:tapPoint];
+    UIGraphicsEndImageContext();
+
+    if (!success) {
+      reject(RCTErrorUnspecified, @"The view cannot be captured. drawViewHierarchyInRect was not successful. This is a potential technical or security limitation.", nil);
+      return;
+    }
+
+    if (!image) {
+      reject(RCTErrorUnspecified, @"Failed to capture view snapshot. UIGraphicsGetImageFromCurrentImageContext() returned nil!", nil);
+      return;
+    }
+
+    // Convert image to data (on a background thread)
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+
+      NSData *data = UIImagePNGRepresentation(image);
+
+      NSError *error = nil;
+      NSString *res = nil;
+
+      NSString *path = RCTTempFilePath(@"png", &error);
+
+      if (path && !error) {
+        if ([data writeToFile:path options:(NSDataWritingOptions)0 error:&error]) {
+          [self.breadcrumbs addObject:path];
+          res = path;
+        }
+      }
+
+      if (res && !error) {
+        resolve(self.breadcrumbs);
+        return;
+      }
+
+      // If we reached here, something went wrong
+      if (error) reject(RCTErrorUnspecified, error.localizedDescription, error);
+      else reject(RCTErrorUnspecified, @"viewshot unknown error", nil);
+    });
+  }];
+}
+
+RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    NSMutableArray *newPaths = [[NSMutableArray alloc] init];
+    for (id path in self.breadcrumbs) {
+        NSUInteger index = [self.breadcrumbs indexOfObject:path];
+        NSString *dir = [path stringByDeletingLastPathComponent];
+        NSString *toPath = [dir stringByAppendingString:[NSString stringWithFormat:@"/%lu.png", index + 1]];
+        BOOL success = [[NSFileManager defaultManager] moveItemAtPath:path toPath:toPath error:nil];
+        if (success) {
+            [newPaths addObject:toPath];
+        }
+    }
+    BOOL success = [SSZipArchive createZipFileAtPath:destinationPath withFilesAtPaths:newPaths];
+
+    if (success) {
+        resolve(destinationPath);
+    } else {
+        NSError *error = nil;
+        reject(@"zip_error", @"unable to zip", error);
+    }
+}
+
+- (UIImage *)imageByDrawingCircleOnImage:(UIImage *)image
+                                tapPoint:(CGPoint) tapPoint
+{
+    int radius = 20;
+    // begin a graphics context of sufficient size
+    UIGraphicsBeginImageContext(image.size);
+
+    // draw original image into the context
+    [image drawAtPoint:CGPointZero];
+
+    // get the context for CoreGraphics
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+    // set stroking color and draw circle
+    [[UIColor colorWithRed: 0.69 green: 0.69 blue: 0.69 alpha: 1.00] setStroke];
+    [[UIColor colorWithRed: 0.69 green: 0.69 blue: 0.69 alpha: 0.50] setFill];
+    
+    CGContextSetShadowWithColor(ctx, CGSizeMake(-0.0f,  0.0f), 5.0f, [UIColor lightGrayColor].CGColor);
+
+    // make circle rect 5 px from border
+    CGRect circleRect = CGRectMake(
+               tapPoint.x - radius,
+               tapPoint.y - radius,
+                radius * 2,
+                radius * 2);
+    
+    // draw circle
+    CGContextFillEllipseInRect(ctx, circleRect);
+
+    // make image out of bitmap context
+    UIImage *retImage = UIGraphicsGetImageFromCurrentImageContext();
+
+    // free the context
+    UIGraphicsEndImageContext();
+
+    return retImage;
+}
+
+RCT_EXPORT_METHOD(clearTmpDirectory) {
+    NSString *rnTempPath = RCTTempFilePath(@"png", nil);
+    NSString *rctTempDir = [rnTempPath stringByDeletingLastPathComponent];
+    self.breadcrumbs = [[NSMutableArray alloc] init];
+    NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
+    for (NSString *file in tmpDirectory) {
+        NSString *fullPath = [NSTemporaryDirectory() stringByAppendingString:file];
+        if (![fullPath isEqualToString:rctTempDir]) {
+            [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] error:NULL];
+        }
+    }
+    
+    NSArray* rnTempDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:rctTempDir error:NULL];
+    for (NSString *file in rnTempDirectory) {
+        NSString *filePath = [[rctTempDir stringByAppendingString:@"/"] stringByAppendingString:file];
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:NULL];
     }
 }
 

@@ -7,6 +7,8 @@ import type { IModalButtonProps } from '../../../components';
 
 interface IAdditionalProps extends IAuthStateReturn {
   isModalOpen: boolean;
+  modalHeaderLeftState?: IModalButtonProps;
+  setIsModalOpen: (isModalOpen: boolean) => void;
   setModalHeaderLeftState: (props: IModalButtonProps) => void;
 }
 
@@ -15,9 +17,10 @@ export interface IGlobalProps
     IAdditionalProps {}
 
 export const GlobalProps = createContext<IGlobalProps>({
-  devNotes: undefined,
-  isModalOpen: false,
   authState: {},
+  isModalOpen: false,
+  devNotes: undefined,
   setAuthState: () => {},
+  setIsModalOpen: () => {},
   setModalHeaderLeftState: () => {},
 });

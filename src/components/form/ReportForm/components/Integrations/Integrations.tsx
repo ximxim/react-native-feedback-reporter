@@ -1,4 +1,4 @@
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import React, { FunctionComponent, useContext } from 'react';
 
 import {
@@ -43,7 +43,7 @@ export const Integrations: FunctionComponent<IIntegrationsProps> = ({
         data={data}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingLeft: 8 }}
+        contentContainerStyle={style.contentContainerStyle}
         renderItem={({ item: { name, ...tabProps }, index }) => (
           <Tab
             label={name}
@@ -58,3 +58,9 @@ export const Integrations: FunctionComponent<IIntegrationsProps> = ({
     </>
   );
 };
+
+const style = StyleSheet.create({
+  contentContainerStyle: {
+    paddingLeft: 8,
+  },
+});

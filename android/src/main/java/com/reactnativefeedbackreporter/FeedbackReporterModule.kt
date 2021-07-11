@@ -2,21 +2,29 @@ package com.reactnativefeedbackreporter
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.os.Environment
+import android.os.FileUtils
 import android.util.Base64
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
+import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.facebook.react.modules.core.PermissionAwareActivity
 import com.facebook.react.modules.core.PermissionListener
 import com.facebook.react.modules.core.RCTNativeAppEventEmitter
+import com.facebook.react.uimanager.UIManagerModule
+import net.lingala.zip4j.ZipFile
+import net.lingala.zip4j.model.ZipParameters
+import net.lingala.zip4j.model.enums.CompressionLevel
+import net.lingala.zip4j.model.enums.CompressionMethod
 import java.io.*
 import java.net.URL
 import java.util.*
@@ -26,19 +34,24 @@ import kotlin.collections.HashMap
 
 
 class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), ScreenshotDetectionListener {
+  val RNFeedback_Reporter = "RNFeedbackReporter"
   private val TemporaryDirectoryPath = "TemporaryDirectoryPath"
   private val screenshotDetectionDelegate = ScreenshotDetectionDelegate(reactContext, this)
   private val EVENT_NAME = "ScreenshotTaken"
   private val uploaders = SparseArray<Uploader>()
+  private val cacheDir: File = reactApplicationContext.cacheDir.resolveSibling("RNFR")
+  private val breadcrumbs: ArrayList<String> = ArrayList<String>()
 
   override fun getName(): String {
+    cacheDir.mkdir()
+    clearTmpDirectory()
     return "FeedbackReporter"
   }
 
   override fun getConstants(): Map<String, Any> {
     val constants = HashMap<String, Any>()
 
-    constants.put(TemporaryDirectoryPath, this.getReactApplicationContext().getCacheDir().getAbsolutePath())
+    constants.put(TemporaryDirectoryPath, cacheDir.absolutePath)
 
     return constants
   }
@@ -52,6 +65,28 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
   fun stopListener() {
     screenshotDetectionDelegate.stopScreenshotDetection()
   }
+
+  @ReactMethod
+  fun captureRef(tag: Int, options: ReadableMap, promise: Promise) {
+    val x = if (options.hasKey("x")) (options.getInt("x")) else 0
+    val y = if (options.hasKey("y")) (options.getInt("y")) else 0
+    val tapPoint = Point(x, y)
+
+
+    val context: ReactApplicationContext = getReactApplicationContext();
+    try {
+      var outputFile: File = createTempFile(context)
+      val activity = currentActivity
+      val uiManager = reactContext.getNativeModule(UIManagerModule::class.java)
+      uiManager.addUIBlock(ViewShot(
+        tag, breadcrumbs, tapPoint, outputFile, reactContext, activity, promise)
+      )
+    } catch (ex: Throwable) {
+      Log.e(RNFeedback_Reporter, "Failed to snapshot view tag $tag", ex)
+      promise.reject(ViewShot.ERROR_UNABLE_TO_SNAPSHOT, "Failed to snapshot view tag $tag")
+    }
+  }
+
 
   override fun onScreenCaptured(path: String) {
     val encoded = takeScreenshot()
@@ -77,7 +112,7 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
 
   private fun takeScreenshot(): String? {
     try {
-      val v1: View = currentActivity?.getWindow()?.getDecorView()!!.findViewById(android.R.id.content)
+      val v1: View = currentActivity?.window?.decorView!!.findViewById(android.R.id.content)
       v1.isDrawingCacheEnabled = true
       val bitmap = Bitmap.createBitmap(v1.drawingCache)
       v1.isDrawingCacheEnabled = false
@@ -295,5 +330,58 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       Log.e("E_RNThumnail_ERROR", e.message)
       promise.reject("E_RNThumnail_ERROR", e)
     }
+  }
+
+  @ReactMethod
+  fun clearTmpDirectory() {
+    val children = cacheDir.list()
+    for (i in children.indices) {
+      val childPath = cacheDir.absolutePath.plus("/").plus(children[i])
+      File(childPath).delete()
+    }
+  }
+
+  @ReactMethod
+  fun zipBreadcrumbs(destinationPath: String, promise: Promise) {
+    try {
+      val parameters = ZipParameters()
+      parameters.compressionMethod = CompressionMethod.DEFLATE
+      parameters.compressionLevel = CompressionLevel.NORMAL
+      processZip(breadcrumbs, destinationPath, parameters, promise)
+    } catch (ex: java.lang.Exception) {
+      promise.reject(null, ex.message)
+      return
+    }
+  }
+
+  private fun processZip(entries: ArrayList<String>, destFile: String, parameters: ZipParameters, promise: Promise) {
+    Thread(Runnable {
+      try {
+        val zipFile = ZipFile(destFile)
+        for (i in 0 until entries.size) {
+          val f = File(entries[i])
+          if (f.exists()) {
+            val newFile = File(cacheDir.absolutePath.plus("/").plus((i + 1).toString()).plus(".png"))
+            f.renameTo(newFile)
+            zipFile.addFile(newFile, parameters)
+          } else {
+            promise.reject(null, "File or folder does not exist")
+          }
+        }
+        promise.resolve(destFile)
+      } catch (ex: java.lang.Exception) {
+        promise.reject(null, ex.message)
+        return@Runnable
+      }
+    }).start()
+  }
+
+  private val TEMP_FILE_PREFIX = "ReactNative-snapshot-image"
+
+  @NonNull
+  @Throws(IOException::class)
+  private fun createTempFile(@NonNull context: Context): File {
+    val suffix = ".png"
+    return File.createTempFile(TEMP_FILE_PREFIX, suffix, cacheDir)
   }
 }
