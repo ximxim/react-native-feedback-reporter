@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react-native';
 import { SENTRY, JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
   theme,
   SlackComponents,
@@ -12,6 +12,9 @@ import {
 } from 'react-native-feedback-reporter';
 import DeviceInfo from 'react-native-device-info';
 
+import { Form } from './Form';
+import { Modal } from './Modal';
+import { WebView } from './WebView';
 import { LOGIN_SUCCESS } from './userReducers';
 
 Sentry.init({ dsn: SENTRY });
@@ -110,7 +113,9 @@ Version: ${DeviceInfo.getVersion()}
       }}
     >
       <View style={styles.container}>
-        <Text>Result of some sort</Text>
+        <WebView />
+        <Modal />
+        <Form />
       </View>
     </FeedbackReporter>
   );
