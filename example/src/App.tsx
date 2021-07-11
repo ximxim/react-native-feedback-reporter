@@ -32,6 +32,7 @@ export default function App() {
 
   return (
     <FeedbackReporter
+      disableBreadrumbs={false}
       containerViewProps={{
         style: { justifyContent: 'center', alignItems: 'center' },
       }}

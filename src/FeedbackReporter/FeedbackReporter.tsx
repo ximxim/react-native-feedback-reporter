@@ -29,11 +29,10 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
 
         try {
           // @ts-ignore: _nativeTag causes ts error
-          const res = await captureRef(viewRef.current._nativeTag, {
+          await captureRef(viewRef.current._nativeTag, {
             x: nativeEvent.pageX,
             y: nativeEvent.pageY,
           });
-          console.log(res);
         } catch (error) {
           console.log(error.message);
         }
