@@ -42,10 +42,6 @@ html[data-theme='dark'] .header-github-link:before {
     no-repeat;
 }
 
-.navbar__logo {
-  filter: brightness(0.5);
-}
-
 .hero--primary {
   background-color: #5987b5;
 }

@@ -28,7 +28,7 @@ import {
   opacity,
   OpacityProps,
 } from 'styled-system';
-import type { theme } from '../../../theme';
+import type { theme as ThemeType } from '../../../theme';
 
 const textVariants = variant({
   scale: 'textVariants',
@@ -36,10 +36,10 @@ const textVariants = variant({
 
 type TextDecorations = 'underline' | 'line-through';
 
-type ColorNames = keyof typeof theme.base.colors;
+type ColorNames = keyof typeof ThemeType.base.colors;
 
 type Props = {
-  variant?: keyof typeof theme.base.textVariants;
+  variant?: keyof typeof ThemeType.base.textVariants;
   textDecoration?: TextDecorations;
   color?: ColorNames;
   bg?: ColorNames;
