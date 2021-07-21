@@ -149,8 +149,7 @@ class ViewShot: UIBlock {
     }
     val x = tapPoint.x.toFloat()
     val y = tapPoint.y.toFloat()
-    val factor = 3.5f;
-    c.drawCircle(x * factor , y * factor, circleRadius * 2, paintCircle)
+    c.drawCircle(x , y, circleRadius * 2, paintCircle)
 
     bitmap.compress(CompressFormat.PNG, 100, os)
     recycleBitmap(bitmap)

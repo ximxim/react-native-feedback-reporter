@@ -1,4 +1,4 @@
-import { View, NativeModules } from 'react-native';
+import { View, NativeModules, Dimensions, Platform } from 'react-native';
 import React, { FunctionComponent, useRef, useState } from 'react';
 
 import { Wrapper } from './FeedbackReporter.style';
@@ -9,6 +9,7 @@ import { FeedbackReporterModal } from '../FeedbackReporterModal';
 
 const module = NativeModules.FeedbackReporter;
 const captureRef = module.captureRef;
+const { scale } = Dimensions.get('screen');
 
 export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   children,
@@ -30,8 +31,14 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
         try {
           // @ts-ignore: _nativeTag causes ts error
           await captureRef(viewRef.current._nativeTag, {
-            x: nativeEvent.pageX,
-            y: nativeEvent.pageY,
+            x: Platform.select({
+              android: nativeEvent.pageX * scale,
+              default: nativeEvent.pageX,
+            }),
+            y: Platform.select({
+              android: nativeEvent.pageY * scale,
+              default: nativeEvent.pageY,
+            }),
           });
         } catch (error) {
           console.log(error.message);
