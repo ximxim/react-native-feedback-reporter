@@ -6,7 +6,7 @@
 
 RNFR is on a mission to help developers get useful information from testers to help debug issues by automatically gathering of information and integrating with popular tools.
 
-Sentry SDK for React Native
+React Native Feedback Reporter
 ===========================
 
 [![npm version](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=npm&prefix=v&query=version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fximxim%2Freact-native-feedback-reporter%2Fmaster%2Fpackage.json)](https://www.npmjs.com/package/react-native-feedback-reporter)
