@@ -11,6 +11,11 @@ module.exports = {
   organizationName: 'ximxim',
   projectName: 'react-native-feedback-reporter',
   themeConfig: {
+    announcementBar: {
+      id: 'announcementBar-1',
+      content:
+        '⭐️ If you like RNFR, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/ximxim/react-native-feedback-reporter">GitHub</a>! ⭐',
+    },
     navbar: {
       title: 'RNFR',
       logo: {
@@ -18,6 +23,11 @@ module.exports = {
         src: 'img/logo.svg',
       },
       items: [
+        {
+          to: 'https://medium.com/tag/rnfeedbackreporter',
+          label: 'Blogs',
+          position: 'right',
+        },
         {
           to: 'docs/install',
           activeBasePath: 'docs',
