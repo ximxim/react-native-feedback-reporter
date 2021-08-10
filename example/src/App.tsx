@@ -15,6 +15,7 @@ import DeviceInfo from 'react-native-device-info';
 import { Form } from './Form';
 import { Modal } from './Modal';
 import { WebView } from './WebView';
+import { SomeText } from './SomeText';
 import { LOGIN_SUCCESS } from './userReducers';
 
 Sentry.init({ dsn: SENTRY });
@@ -117,6 +118,7 @@ Version: ${DeviceInfo.getVersion()}
         <WebView />
         <Modal />
         <Form />
+        <SomeText />
       </View>
     </FeedbackReporter>
   );
