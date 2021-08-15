@@ -34,8 +34,9 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
         ref={viewRef}
         collapsable={false}
         onTouchStart={async ({ nativeEvent }) => {
-          const res = await module.setValue('key', 'value');
-          console.log(res);
+          // const res = await module.setValue('app ki adalat', 'obsessive na raho');
+          // const res = await module.getValue('app ki adalat');
+          // console.log(res);
           if (!isEnabled || props.disableBreadrumbs || !viewRef || isModalOpen)
             return;
 
