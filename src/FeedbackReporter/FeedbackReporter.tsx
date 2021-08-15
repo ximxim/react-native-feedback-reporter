@@ -34,6 +34,8 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
         ref={viewRef}
         collapsable={false}
         onTouchStart={async ({ nativeEvent }) => {
+          const res = await module.setValue('key', 'value');
+          console.log(res);
           if (!isEnabled || props.disableBreadrumbs || !viewRef || isModalOpen)
             return;
 
