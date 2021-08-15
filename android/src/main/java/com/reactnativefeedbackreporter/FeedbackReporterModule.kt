@@ -8,12 +8,14 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Build
 import android.os.FileUtils
 import android.util.Base64
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
@@ -353,6 +355,35 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       return
     }
   }
+
+  @ReactMethod
+  fun setValue(key: String, value: String, promise: Promise) {
+    val storage = RNFRStorage(reactContext);
+    val result = storage.setValue(key, value);
+    val code = result.getInt("code");
+    val error = result.getString("error");
+
+    if (code == 200) {
+      promise.resolve(result);
+    } else {
+      promise.reject(null, error);
+    }
+  }
+
+  @ReactMethod
+  fun getValue(key: String, promise: Promise) {
+    val storage = RNFRStorage(reactContext);
+    val result = storage.getValue(key);
+    val code = result.getInt("code");
+    val error = result.getString("error");
+
+    if (code == 200) {
+      promise.resolve(result);
+    } else {
+      promise.reject(null, error);
+    }
+  }
+
 
   private fun processZip(entries: ArrayList<String>, destFile: String, parameters: ZipParameters, promise: Promise) {
     Thread(Runnable {
