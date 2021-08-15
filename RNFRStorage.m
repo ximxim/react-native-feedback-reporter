@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Storage.h"
+#import "RNFRStorage.h"
 
 @interface RNFRStorage()
 
@@ -14,10 +14,11 @@
 
 @implementation RNFRStorage
 
-- (NSDictionary *)setValue {
+- (NSDictionary *)setValue: (NSString *)key value:(NSString *)value {
     return @{
-        @"code": @500,
-        @"error": @"that can be a problem",
+        @"code": @200,
+        @"key": key,
+        @"value": value,
     };
 }
 

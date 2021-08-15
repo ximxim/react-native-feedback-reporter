@@ -388,7 +388,7 @@ RCT_EXPORT_METHOD(setValue: (NSString *)key
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     RNFRStorage *storage = [RNFRStorage alloc];
-    NSDictionary *result = [storage setValue];
+    NSDictionary *result = [storage setValue:key value:value];
     NSNumber *code = [result valueForKey:@"code"];
     NSString *error = [result valueForKey:@"error"];
 

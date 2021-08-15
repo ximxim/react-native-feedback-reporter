@@ -15,6 +15,6 @@
 
 @interface RNFRStorage : NSObject
 
-- (NSDictionary*)setValue;
+- (NSDictionary*)setValue: (NSString *)key value:(NSString *)value;
 
 @end
