@@ -1,4 +1,3 @@
-import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 import * as Sentry from '@sentry/react-native';
 import { SENTRY, JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
 import * as React from 'react';
@@ -15,6 +14,7 @@ import DeviceInfo from 'react-native-device-info';
 import { Form } from './Form';
 import { Modal } from './Modal';
 import { WebView } from './WebView';
+import { SomeText } from './SomeText';
 import { LOGIN_SUCCESS } from './userReducers';
 
 Sentry.init({ dsn: SENTRY });
@@ -26,7 +26,6 @@ export default function App() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    RNSecureKeyStore?.setResetOnAppUninstallTo?.(false);
     dispatch({ type: LOGIN_SUCCESS });
   }, []);
 
@@ -72,16 +71,6 @@ export default function App() {
         ],
       }}
       extraSource="react-native-image-crop-picker"
-      asyncStorage={{
-        getItem: (key) => {
-          return RNSecureKeyStore.get(key);
-        },
-        setItem: (key, value) => {
-          return RNSecureKeyStore.set(key, value, {
-            accessible: ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY,
-          });
-        },
-      }}
       devNotes={async () => {
         const [
           deviceName,
@@ -117,6 +106,7 @@ Version: ${DeviceInfo.getVersion()}
         <WebView />
         <Modal />
         <Form />
+        <SomeText />
       </View>
     </FeedbackReporter>
   );

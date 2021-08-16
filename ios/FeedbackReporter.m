@@ -9,6 +9,7 @@
 #import <React/RCTLog.h>
 
 #import "Uploader.h"
+#import "RNFRStorage.h"
 
 #import <React/RCTUtils.h>
 #import <React/RCTScrollView.h>
@@ -379,6 +380,37 @@ RCT_EXPORT_METHOD(clearTmpDirectory) {
     for (NSString *file in rnTempDirectory) {
         NSString *filePath = [[rctTempDir stringByAppendingString:@"/"] stringByAppendingString:file];
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:NULL];
+    }
+}
+
+RCT_EXPORT_METHOD(setValue: (NSString *)key
+                  value:(NSString *)value
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNFRStorage *storage = [RNFRStorage alloc];
+    NSDictionary *result = [storage setValue:key value:value];
+    NSNumber *code = [result valueForKey:@"code"];
+    NSString *error = [result valueForKey:@"error"];
+
+    if ([code intValue] == [@200 intValue]) {
+        resolve(result);
+    } else {
+        reject(@"ENOENT", error, nil);
+    }
+}
+
+RCT_EXPORT_METHOD(getValue: (NSString *)key
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    RNFRStorage *storage = [RNFRStorage alloc];
+    NSDictionary *result = [storage getValue:key];
+    NSNumber *code = [result valueForKey:@"code"];
+    NSString *error = [result valueForKey:@"error"];
+
+    if ([code intValue] == [@200 intValue]) {
+        resolve(result);
+    } else {
+        reject(@"ENOENT", error, nil);
     }
 }
 

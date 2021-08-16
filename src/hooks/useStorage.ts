@@ -1,24 +1,29 @@
-import { useContext } from 'react';
-
-import { GlobalProps } from '../components';
+import { NativeModules } from 'react-native';
 
 interface IUseStorageProps {
   key: string;
 }
 
-export const useStorage = ({ key }: IUseStorageProps) => {
-  const { asyncStorage } = useContext(GlobalProps);
+interface IGetItemResult {
+  code: string;
+  value: string;
+}
 
+const module = NativeModules.FeedbackReporter;
+
+export const useStorage = ({ key }: IUseStorageProps) => {
   const setItem = async (value: string | object): Promise<void> => {
-    if (!asyncStorage?.setItem) return;
     const val = typeof value === 'string' ? value : JSON.stringify(value);
-    return asyncStorage?.setItem?.(key, val);
+    return module.setValue(key, val);
   };
 
-  const getItem = async (): Promise<string> => {
-    if (!asyncStorage?.getItem) return '';
-    const result = await asyncStorage?.getItem?.(key);
-    return result;
+  const getItem = async (): Promise<string | undefined> => {
+    try {
+      const result: IGetItemResult = await module.getValue(key);
+      return result.value;
+    } catch (ex) {
+      return;
+    }
   };
 
   return { setItem, getItem };
