@@ -14,14 +14,14 @@ export const useDeveloperOverride = (times: number) => {
   }, [counter]);
 
   useEffect(() => {
-    if (!isEnabled) return;
+    if (!isEnabled || counter < times) return;
 
     Alert.alert(
       'RNFR',
       'React native feedback reporter is now enabled. Try taking a screen shot.',
       [{ text: 'Okay' }]
     );
-  }, [isEnabled]);
+  }, [isEnabled, counter]);
 
   return {
     increment: () => setCounter((count) => count + 1),

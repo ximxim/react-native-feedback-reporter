@@ -102,6 +102,9 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   useEffect(() => {
     (async () => {
       const newState = await getItem();
+
+      if (!newState) return;
+
       setAuthState(JSON.parse(newState));
     })();
   }, []);

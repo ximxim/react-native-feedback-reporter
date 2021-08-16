@@ -3,7 +3,7 @@ import React, { FunctionComponent, useRef, useState } from 'react';
 
 import { Wrapper } from './FeedbackReporter.style';
 
-import { useAuthState, useModalHeaderLeftState } from '../hooks';
+import { useAuthState, useModalHeaderLeftState, useIsEnabled } from '../hooks';
 import {
   IFeedbackReporterProps,
   GlobalProps,
@@ -21,12 +21,10 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   ...props
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const { isEnabled, setIsEnabled } = useIsEnabled();
   const viewRef = useRef<View>(null);
   const authState = useAuthState();
   const modalHeaderLeftState = useModalHeaderLeftState();
-
-  console.log('isEnabled', isEnabled);
 
   return (
     <ConsumerProps.Provider value={{ setIsEnabled, isEnabled }}>
@@ -34,9 +32,6 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
         ref={viewRef}
         collapsable={false}
         onTouchStart={async ({ nativeEvent }) => {
-          // const res = await module.setValue('app ki adalat', 'obsessive na raho');
-          // const res = await module.getValue('app ki adalat');
-          // console.log(res);
           if (!isEnabled || props.disableBreadrumbs || !viewRef || isModalOpen)
             return;
 

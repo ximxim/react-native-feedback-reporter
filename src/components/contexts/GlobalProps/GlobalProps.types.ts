@@ -9,11 +9,6 @@ import type {
   SlackIntegrationProps,
 } from '../../../integrations';
 
-export interface IAsyncStorageProps {
-  getItem: (key: string) => Promise<string>;
-  setItem: (key: string, value: string) => Promise<void>;
-}
-
 export type DevNotesType =
   | string
   | undefined
@@ -62,11 +57,6 @@ export interface IFeedbackReporterProps {
    * Form order
    */
   order?: FormOrderEnum[];
-
-  /**
-   * Async storage plugin
-   */
-  asyncStorage?: IAsyncStorageProps;
 
   /**
    * Container view props
