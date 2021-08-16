@@ -328,3 +328,7 @@ export const theme = {
   champagne,
   pastelGray,
 };
+
+declare module 'styled-components' {
+  export interface DefaultTheme extends ThemeType {}
+}
