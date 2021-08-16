@@ -235,60 +235,6 @@ import { FeedbackReporter } from 'react-native-feedback-reporter';
 <br />
 <br />
 
-<!-- ------------------------ ASYNC STORAGE ------------------------ -->
-
-## `asyncStorage`
-
-Use this prop to enable storage of preferences and credentials. It is recommended to use [react-native-secure-key-store](https://github.com/pradeep1991singh/react-native-secure-key-store) package since it provides extra layer of security when saving .
-
-### `getItem *`
-
-Use this prop to order jira components, exclude any control that you wish to hide from this array.
-
-| Type |
-| ---- |
-| `(key: string) => Promise<string>` |
-
-### `setItem *`
-
-Use this prop to order jira components, exclude any control that you wish to hide from this array.
-
-| Type |
-| ---- |
-| `(key: string, value: string) => Promise<void>` |
-
-
-**Example**:
-
-```js
-import { FeedbackReporter } from 'react-native-feedback-reporter';
-import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
-
-React.useEffect(() => {
-  /*
-  * OPTIONAL: add this line if you would like have the credentials saved
-  * even after app reinstall
-  */
-  RNSecureKeyStore?.setResetOnAppUninstallTo?.(false);
-}, []);
-
-<FeedbackReporter
-  asyncStorage={{
-    getItem: (key) => {
-      return RNSecureKeyStore.get(key);
-    },
-    setItem: (key, value) => {
-      return RNSecureKeyStore.set(key, value, {
-        accessible: ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY,
-      });
-    },
-  }}
-/>
-```
-
-<br />
-<br />
-
 <!-- ------------------------ DEV NOTES ------------------------ -->
 
 ## `devNotes`
