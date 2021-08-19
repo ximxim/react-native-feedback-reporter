@@ -55,7 +55,7 @@ export const BubbleWrapper = styled(Animated.View)<IPopoverStylePayload>`
   }};
 `;
 
-export const Bubble = styled.View<IPopoverStylePayload>`
+export const Bubble = styled.View<IPopoverStylePayload & RNFRThemeType>`
   ${({ component }) =>
     !component
       ? `
@@ -105,7 +105,7 @@ export const Bubble = styled.View<IPopoverStylePayload>`
   }};
 `;
 
-export const Triangle = styled.View<IPopoverStylePayload>`
+export const Triangle = styled.View<IPopoverStylePayload & RNFRThemeType>`
   ${({ anchor, bubbleHeight, theme }) => {
     switch (anchor) {
       case 'top-left':

@@ -1,4 +1,4 @@
-import { Animated } from 'react-native';
+import { Animated, SwitchProps } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Wrapper = styled.View`
@@ -12,12 +12,14 @@ export const IconWrapper = styled.View`
   justify-content: center;
 `;
 
-export const Icon = styled.Switch.attrs(({ theme: { colors }, value }) => ({
-  thumbColor: value ? colors.brandPrimary : colors.brandSecondary,
-  trackColor: { false: colors.brandPrimary, true: colors.brandSecondary },
-}))<{ hasError: boolean }>``;
+export const Icon = styled.Switch.attrs(
+  ({ theme: { colors }, value }: RNFRThemeType & SwitchProps) => ({
+    thumbColor: value ? colors.brandPrimary : colors.brandSecondary,
+    trackColor: { false: colors.brandPrimary, true: colors.brandSecondary },
+  })
+)<{ hasError: boolean }>``;
 
-export const IconPulse = styled(Animated.View)`
+export const IconPulse = styled(Animated.View)<RNFRThemeType>`
   width: 1px;
   height: 1px;
   opacity: 0.3;

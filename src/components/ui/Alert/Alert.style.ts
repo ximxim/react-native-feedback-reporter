@@ -3,7 +3,9 @@ import { lighten } from 'polished';
 
 import type { IAlertVariantType } from './Alert.types';
 
-export const Wrapper = styled.View<{ variant: IAlertVariantType }>`
+export const Wrapper = styled.View<
+  { variant: IAlertVariantType } & RNFRThemeType
+>`
   margin: 8px;
   padding: 6px 16px;
   border-radius: 4px;

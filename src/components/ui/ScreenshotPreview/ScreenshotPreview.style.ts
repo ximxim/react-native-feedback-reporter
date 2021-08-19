@@ -14,7 +14,7 @@ export const Wrapper = styled.View`
   height: ${calcHeight}px;
 `;
 
-export const Image = styled.Image`
+export const Image = styled.Image<RNFRThemeType>`
   border-radius: 4px;
   border-width: 0.5px;
   align-self: center;

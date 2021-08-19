@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 
-export const ModalHeader = styled.View`
+export const ModalHeader = styled.View<RNFRThemeType>`
   flex-direction: row;
   border-bottom-width: 2px;
   justify-content: space-between;

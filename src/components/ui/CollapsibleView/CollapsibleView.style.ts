@@ -1,12 +1,14 @@
 import styled from 'styled-components/native';
 import { lighten } from 'polished';
 
-export const Wrapper = styled.View`
+export const Wrapper = styled.View<RNFRThemeType>`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.brandPrimary};
 `;
 
-export const LabelWrapper = styled.TouchableOpacity<{ isOpen: boolean }>`
+export const LabelWrapper = styled.TouchableOpacity<
+  { isOpen: boolean } & RNFRThemeType
+>`
   padding-top: 8px;
   padding-bottom: 4px;
   padding-left: 16px;
@@ -38,7 +40,7 @@ export const ArrowWrapper = styled.View`
   justify-content: center;
 `;
 
-export const ContentWrapper = styled.View`
+export const ContentWrapper = styled.View<RNFRThemeType>`
   padding-top: 8px;
   margin-bottom: 8px;
   border-bottom-width: 1px;

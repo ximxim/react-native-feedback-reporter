@@ -5,13 +5,15 @@ import type { IOptionsWrapperProps } from './RadioButton.types';
 
 export const Wrapper = styled(View)``;
 
-export const OptionsList = styled.View`
+export const OptionsList = styled.View<RNFRThemeType>`
   border-top-width: 0.5px;
   border-bottom-width: 0.5px;
   border-color: ${({ theme }) => theme.colors.brandSecondary};
 `;
 
-export const OptionWrapper = styled(TouchableOpacity)<IOptionsWrapperProps>`
+export const OptionWrapper = styled(TouchableOpacity)<
+  IOptionsWrapperProps & RNFRThemeType
+>`
   flex-direction: row;
   align-items: center;
   margin-left: 30px;
@@ -25,7 +27,7 @@ export const IconWrapper = styled.View`
   justify-content: center;
 `;
 
-export const Icon = styled.View<{ isSelected: boolean }>`
+export const Icon = styled.View<{ isSelected: boolean } & RNFRThemeType>`
   width: 20px;
   height: 20px;
   border-radius: 10px;
@@ -38,7 +40,7 @@ export const Icon = styled.View<{ isSelected: boolean }>`
     `0px 0px ${isSelected ? 2 : 0}px ${theme.colors.brandSecondary}`};
 `;
 
-export const IconPulse = styled(Animated.View)`
+export const IconPulse = styled(Animated.View)<RNFRThemeType>`
   width: 1px;
   height: 1px;
   opacity: 0.3;

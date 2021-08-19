@@ -329,6 +329,8 @@ export const theme = {
   pastelGray,
 };
 
-declare module 'styled-components' {
-  export interface DefaultTheme extends ThemeType {}
+declare global {
+  interface RNFRThemeType {
+    theme: ThemeType;
+  }
 }
