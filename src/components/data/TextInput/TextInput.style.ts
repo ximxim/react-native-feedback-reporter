@@ -1,7 +1,9 @@
 import { Animated } from 'react-native';
 import styled from 'styled-components/native';
 
-export const Wrapper = styled.View<{ isFocused: boolean; hasError: boolean } & RNFRThemeType>`
+export const Wrapper = styled.View<
+  { isFocused: boolean; hasError: boolean } & RNFRThemeType
+>`
   flex-grow: 1;
   margin: 8px;
   border-width: 1px;
