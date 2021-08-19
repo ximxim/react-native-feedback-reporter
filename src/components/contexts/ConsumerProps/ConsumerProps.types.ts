@@ -1,4 +1,6 @@
+import type { IRNFRPermission } from '../../../hooks';
+
 export interface IConsumerProps {
-  isEnabled: boolean;
-  setIsEnabled: (isEnabled: boolean) => void;
+  RNFRPermission: IRNFRPermission;
+  setRNFRPermission: (RNFRPermission: IRNFRPermission) => void;
 }

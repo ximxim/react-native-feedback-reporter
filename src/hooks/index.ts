@@ -1,5 +1,5 @@
 export * from './useNavigation';
-export * from './useIsEnabled';
+export * from './useRNFRPermission';
 export * from './useAuthState';
 export * from './useStorage';
 export * from './useRNShare';

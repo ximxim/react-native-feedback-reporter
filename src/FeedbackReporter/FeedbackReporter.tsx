@@ -3,7 +3,11 @@ import React, { FunctionComponent, useRef, useState } from 'react';
 
 import { Wrapper } from './FeedbackReporter.style';
 
-import { useAuthState, useModalHeaderLeftState, useIsEnabled } from '../hooks';
+import {
+  useAuthState,
+  useModalHeaderLeftState,
+  useRNFRPermission,
+} from '../hooks';
 import {
   IFeedbackReporterProps,
   GlobalProps,
@@ -21,13 +25,13 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   ...props
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { isEnabled, setIsEnabled } = useIsEnabled();
+  const { RNFRPermission, setRNFRPermission, isEnabled } = useRNFRPermission();
   const viewRef = useRef<View>(null);
   const authState = useAuthState();
   const modalHeaderLeftState = useModalHeaderLeftState();
 
   return (
-    <ConsumerProps.Provider value={{ setIsEnabled, isEnabled }}>
+    <ConsumerProps.Provider value={{ RNFRPermission, setRNFRPermission }}>
       <Wrapper
         ref={viewRef}
         collapsable={false}

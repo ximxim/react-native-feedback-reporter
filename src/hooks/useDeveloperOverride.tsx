@@ -3,14 +3,30 @@ import { Alert } from 'react-native';
 
 import { ConsumerProps } from '../components';
 
-export const useDeveloperOverride = (times: number) => {
-  const { isEnabled, setIsEnabled } = useContext(ConsumerProps);
+export interface IUseDeveloperOverride {
+  times?: number;
+  numDaysToExpire?: number;
+}
+
+export const useDeveloperOverride = (props?: IUseDeveloperOverride) => {
+  const times = props?.times || 10;
+  const numDaysToExpire = props?.numDaysToExpire || 0;
+
+  const {
+    setRNFRPermission,
+    RNFRPermission: { isEnabled },
+  } = useContext(ConsumerProps);
   const [counter, setCounter] = useState<number>(0);
 
   useEffect(() => {
     if (counter < times) return;
 
-    setIsEnabled(!isEnabled);
+    setRNFRPermission({
+      isEnabled: !isEnabled,
+      expires: new Date(
+        new Date().valueOf() + numDaysToExpire * 1000 * 60 * 60 * 24
+      ).toISOString(),
+    });
   }, [counter]);
 
   useEffect(() => {
