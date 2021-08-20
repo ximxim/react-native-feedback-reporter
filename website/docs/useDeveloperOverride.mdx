@@ -1,0 +1,69 @@
+---
+id: useDeveloperOverride
+title: useDeveloperOverride
+sidebar_label: useDeveloperOverride
+---
+
+The `useDeveloperOverride` hook let's add an easter egg in the app to enable RNFR.
+
+The default behaviour is going to expect the user to tap on an element 10 times and the perference expires the next time the app is launched.
+
+**Example**:
+
+```js
+import React, { FunctionComponent } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
+import { useDeveloperOverride } from 'react-native-feedback-reporter';
+
+export const EasterEggComponent: FunctionComponent<unknown> = () => {
+  const { increment } = useDeveloperOverride();
+
+  return (
+    <TouchableOpacity onPress={increment}>
+      <Text>Touch this text 10 times to enable</Text>
+    </TouchableOpacity>
+  );
+};
+```
+
+## Options
+
+### times
+
+Sometimes we want to change the amount of times a user would have to tap an element to enable RNFR. We can use the `times` prop to customize it:
+
+```js
+import React, { FunctionComponent } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
+import { useDeveloperOverride } from 'react-native-feedback-reporter';
+
+export const EasterEggComponent: FunctionComponent<unknown> = () => {
+  const { increment } = useDeveloperOverride({ times: 5 });
+
+  return (
+    <TouchableOpacity onPress={increment}>
+      <Text>Touch this text 5 times to enable</Text>
+    </TouchableOpacity>
+  );
+};
+```
+
+### numDaysToExpire
+
+Sometimes we want to change how long to remember user preference. We can use the `numDaysToExpire` prop to customize it:
+
+```js
+import React, { FunctionComponent } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
+import { useDeveloperOverride } from 'react-native-feedback-reporter';
+
+export const EasterEggComponent: FunctionComponent<unknown> = () => {
+  const { increment } = useDeveloperOverride({ numDaysToExpire: 1 });
+
+  return (
+    <TouchableOpacity onPress={increment}>
+      <Text>Touch this text 10 times to enable</Text>
+    </TouchableOpacity>
+  );
+};
+```
