@@ -23,9 +23,13 @@ export const useDeveloperOverride = (props?: IUseDeveloperOverride) => {
 
     setRNFRPermission({
       isEnabled: !isEnabled,
-      expires: new Date(
-        new Date().valueOf() + numDaysToExpire * 1000 * 60 * 60 * 24
-      ).toISOString(),
+      expires: numDaysToExpire
+        ? numDaysToExpire < 999
+          ? new Date(
+              new Date().valueOf() + numDaysToExpire * 1000 * 60 * 60 * 24
+            ).toISOString()
+          : undefined
+        : new Date(new Date().getTime() + 30 * 60000).toISOString(),
     });
   }, [counter]);
 

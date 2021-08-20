@@ -6,7 +6,7 @@ sidebar_label: useDeveloperOverride
 
 The `useDeveloperOverride` hook let's add an easter egg in the app to enable RNFR.
 
-The default behaviour is going to expect the user to tap on an element 10 times and the perference expires the next time the app is launched.
+The default behaviour is going to expect the user to tap on an element 10 times and the perference expires after 30 minutes of activation.
 
 **Example**:
 
@@ -51,6 +51,8 @@ export const EasterEggComponent: FunctionComponent<unknown> = () => {
 ### numDaysToExpire
 
 Sometimes we want to change how long to remember user preference. We can use the `numDaysToExpire` prop to customize it:
+
+Note: In order to set the preference to never expire, pass `999` as `numDaysToExpire` value.
 
 ```js
 import React, { FunctionComponent } from 'react';
