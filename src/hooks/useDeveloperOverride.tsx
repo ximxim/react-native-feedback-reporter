@@ -44,6 +44,6 @@ export const useDeveloperOverride = (props?: IUseDeveloperOverride) => {
   }, [isEnabled, counter]);
 
   return {
-    increment: () => setCounter((count) => count + 1),
+    increment: () => !isEnabled && setCounter((count) => count + 1),
   };
 };
