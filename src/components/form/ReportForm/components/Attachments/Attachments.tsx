@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableWithoutFeedback } from 'react-native';
 
 import { Checkbox } from '../../../../data';
 import { Box, Typography } from '../../../../ui';
@@ -35,7 +35,10 @@ export const Attachments = forwardRef<any, IAttachmentsProps>(
               defaultValue={!file.exempt}
               onChange={handleChange(index)}
             />
-            <TouchableOpacity onLongPress={console.log} delayLongPress={5000}>
+            <TouchableWithoutFeedback
+              onLongPress={console.log}
+              delayLongPress={5000}
+            >
               <Box
                 p="8px"
                 mr="8px"
@@ -48,7 +51,7 @@ export const Attachments = forwardRef<any, IAttachmentsProps>(
                   {file.filename.split('.').pop()?.toUpperCase()}
                 </Typography>
               </Box>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
           </Box>
         ))}
       </View>

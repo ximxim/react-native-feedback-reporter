@@ -12,7 +12,7 @@ export const IconWrapper = styled.View`
   justify-content: center;
 `;
 
-export const Icon = styled.View<{ isChecked: boolean; theme: RNFRThemeType }>`
+export const Icon = styled.View<{ isChecked: boolean } & RNFRThemeType>`
   height: 22px;
   width: 22px;
   align-items: center;
@@ -20,18 +20,19 @@ export const Icon = styled.View<{ isChecked: boolean; theme: RNFRThemeType }>`
   border-color: black;
   border-width: 1px;
   border-radius: 4px;
-  background-color: ${({ isChecked }) => (isChecked ? 'black' : 'transparent')};
+  background-color: ${({ isChecked, theme }) =>
+    isChecked ? theme.colors.brandSecondary : 'transparent'};
 `;
 
-export const Check = styled.View<{ theme: RNFRThemeType }>`
+export const Check = styled.View<RNFRThemeType>`
   transform: rotate(45deg);
   height: 14px;
   width: 7px;
   margin-bottom: 3px;
   border-bottom-width: 2px;
-  border-bottom-color: white;
+  border-bottom-color: ${({ theme }) => theme.colors.brandPrimary};
   border-right-width: 2px;
-  border-right-color: white;
+  border-right-color: ${({ theme }) => theme.colors.brandPrimary};
 `;
 
 export const IconPulse = styled(Animated.View)`
