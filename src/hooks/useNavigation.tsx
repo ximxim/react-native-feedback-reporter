@@ -44,6 +44,7 @@ export const useNavigation = (
         // @ts-ignore: ref typescript is weird and old so ignoring it
         scrollViewRef.current,
         (_left, _top, _width, elHeight) => {
+          console.log('elHeight', elHeight);
           if (elHeight <= 0 || elHeight === height) return;
           setHeight(elHeight);
         },
