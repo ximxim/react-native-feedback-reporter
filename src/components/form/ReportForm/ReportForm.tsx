@@ -16,7 +16,7 @@ import {
   BottomButton,
   Attachments,
   SubmissionTitle,
-  ScreenShotPreview,
+  Preview,
 } from './components';
 import {
   IReportFormProps,
@@ -136,7 +136,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     [FormOrderEnum.Description]: <Description />,
     [FormOrderEnum.AdditionalInformation]: additionalInformation?.(getValues()),
     [FormOrderEnum.ScreenShotAndExternalSource]: (
-      <ScreenShotPreview {...{ files, setFiles }} />
+      <Preview {...{ files, setFiles }} />
     ),
     [FormOrderEnum.Integrations]: (
       <Integrations

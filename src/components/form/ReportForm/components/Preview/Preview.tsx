@@ -2,18 +2,16 @@ import { useFormContext } from 'react-hook-form';
 import { FlatList, StyleSheet } from 'react-native';
 import React, { FunctionComponent, useContext, useCallback } from 'react';
 
-import { ImageAttachments, IImageAttachmentsProps } from '../ImageAttachments';
+import { ImageAttachments } from '../ImageAttachments';
 import type { IReportFormValues } from '../../ReportForm.types';
-import * as Styled from './ScreenShotPreview.styles';
-import type { IPreviewTab } from './ScreenShotPreview.types';
+import * as Styled from './Preview.styles';
+import type { IPreviewTab, IPreviewProps } from './Preview.types';
 
 import { GlobalProps } from '../../../../contexts';
 import { useNavigation } from '../../../../../hooks';
 import { ScreenshotPreview, Box, Tab } from '../../../../ui';
 
-interface IScreenShotPreviewProps extends IImageAttachmentsProps {}
-
-export const ScreenShotPreview: FunctionComponent<IScreenShotPreviewProps> = ({
+export const Preview: FunctionComponent<IPreviewProps> = ({
   files,
   setFiles,
 }) => {
