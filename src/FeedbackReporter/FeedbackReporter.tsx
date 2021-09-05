@@ -31,7 +31,12 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   const modalHeaderLeftState = useModalHeaderLeftState();
 
   return (
-    <ConsumerProps.Provider value={{ RNFRPermission, setRNFRPermission }}>
+    <ConsumerProps.Provider
+      value={{
+        setRNFRPermission,
+        RNFRPermission: { ...RNFRPermission, isEnabled },
+      }}
+    >
       <Wrapper
         ref={viewRef}
         collapsable={false}
