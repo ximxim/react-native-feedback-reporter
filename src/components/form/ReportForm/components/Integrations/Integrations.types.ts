@@ -5,6 +5,7 @@ export interface IIntegrationsProps {
   components: {
     [IntegrationsEnum.JIRA]: NavigationElementType;
     [IntegrationsEnum.Slack]: NavigationElementType;
+    [IntegrationsEnum.Attachments]: NavigationElementType;
   };
   enabledIntegrationsCount: number;
 }
@@ -16,5 +17,5 @@ export interface IIntegrationTab extends Partial<ITabProps> {
 export enum IntegrationsEnum {
   JIRA = 'Jira',
   Slack = 'Slack',
-  Share = 'Share',
+  Attachments = 'Attachments',
 }

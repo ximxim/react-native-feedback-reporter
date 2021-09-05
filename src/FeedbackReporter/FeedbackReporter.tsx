@@ -57,7 +57,7 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
               }),
             });
           } catch (error) {
-            console.log(error.message);
+            console.log((error as Error).message);
           }
         }}
         {...props.containerViewProps}

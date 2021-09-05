@@ -12,10 +12,27 @@ export const IconWrapper = styled.View`
   justify-content: center;
 `;
 
-// TODO: use icon
-// export const Icon = styled(MaterialIcon)<{ hasError: boolean }>`
-//     color: ${({ theme, hasError }) => hasError ? theme.colors.brandDanger : theme.colors.brandSecondary};
-// `;
+export const Icon = styled.View<{ isChecked: boolean; theme: RNFRThemeType }>`
+  height: 22px;
+  width: 22px;
+  align-items: center;
+  justify-content: center;
+  border-color: black;
+  border-width: 1px;
+  border-radius: 4px;
+  background-color: ${({ isChecked }) => (isChecked ? 'black' : 'transparent')};
+`;
+
+export const Check = styled.View<{ theme: RNFRThemeType }>`
+  transform: rotate(45deg);
+  height: 14px;
+  width: 7px;
+  margin-bottom: 3px;
+  border-bottom-width: 2px;
+  border-bottom-color: white;
+  border-right-width: 2px;
+  border-right-color: white;
+`;
 
 export const IconPulse = styled(Animated.View)`
   width: 1px;

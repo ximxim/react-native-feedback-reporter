@@ -15,26 +15,25 @@ export const Integrations: FunctionComponent<IIntegrationsProps> = ({
   components,
   enabledIntegrationsCount,
 }) => {
-  const { jira, slack } = useContext(GlobalProps);
+  const { jira, slack, hideAttachments } = useContext(GlobalProps);
   const data: IIntegrationTab[] = [
+    { name: IntegrationsEnum.Attachments },
     { name: IntegrationsEnum.JIRA },
     { name: IntegrationsEnum.Slack },
   ].filter((d) => {
     return (
       (jira && d.name === IntegrationsEnum.JIRA) ||
-      (slack && d.name === IntegrationsEnum.Slack)
+      (slack && d.name === IntegrationsEnum.Slack) ||
+      (!hideAttachments && d.name === IntegrationsEnum.Attachments)
     );
   });
   const integrationComponents = data.map((integration) => ({
-    component:
-      integration.name === IntegrationsEnum.Share
-        ? components.Slack
-        : components[integration.name],
+    component: components[integration.name],
   }));
 
   const { Navigation, setPageNumber, pageNumber } = useNavigation(
     { data: integrationComponents },
-    [enabledIntegrationsCount]
+    [enabledIntegrationsCount, hideAttachments]
   );
 
   return (

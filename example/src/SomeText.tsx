@@ -4,7 +4,7 @@ import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDeveloperOverride } from 'react-native-feedback-reporter';
 
 export const SomeText: FunctionComponent<unknown> = () => {
-  const { increment } = useDeveloperOverride();
+  const { increment } = useDeveloperOverride({ numDaysToExpire: 999 });
 
   return (
     <TouchableOpacity onPress={increment}>

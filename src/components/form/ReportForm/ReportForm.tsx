@@ -14,6 +14,7 @@ import {
   Integrations,
   Description,
   BottomButton,
+  Attachments,
   SubmissionTitle,
   ScreenShotPreview,
 } from './components';
@@ -27,7 +28,7 @@ import {
 import * as Styled from './ReportForm.style';
 import { IntegrationsEnum } from './components/Integrations/Integrations.types';
 
-import type { IFile } from '../../../utils';
+import type { IFile } from '../../..//utils';
 import { GlobalProps } from '../../contexts';
 import { useStorage, useRNShare, useCreatePackage } from '../../../hooks';
 import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
@@ -35,13 +36,13 @@ import { useJIRAIntegration, useSlackIntegration } from '../../../integrations';
 export const ReportForm: FunctionComponent<IReportFormProps> = ({
   handleClose,
 }) => {
+  const [files, setFiles] = useState<IFile[]>([]);
   const { setItem, getItem } = useStorage({
     key: 'FEEDBACK_REPORTER_AUTH_STATE',
   });
   const scrollViewRef = useRef<ScrollView>(null);
-  const [files, setFiles] = useState<IFile[]>([]);
-  const { createPackage } = useCreatePackage({ files });
-  useRNShare({ files });
+  const { filesToUpload, setFilesToUpload } = useCreatePackage();
+  useRNShare({ filesToUpload });
   const {
     JIRAComponents,
     submitToJIRA,
@@ -117,7 +118,6 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       disabled={disableReporting}
       isLoading={formState.isSubmitting}
       onPress={handleSubmit(async () => {
-        const filesToUpload = await createPackage();
         submitToJIRA?.(filesToUpload);
         submitToSlack?.(filesToUpload);
         const index = data.findIndex((item) => item.name === 'submission');
@@ -142,6 +142,12 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
       <Integrations
         enabledIntegrationsCount={enabledIntegrationsCount}
         components={{
+          [IntegrationsEnum.Attachments]: (ref: any) => (
+            <Attachments
+              ref={ref}
+              {...{ files: filesToUpload, setFiles: setFilesToUpload }}
+            />
+          ),
           [IntegrationsEnum.JIRA]: JIRAComponents,
           [IntegrationsEnum.Slack]: slackComponents,
         }}

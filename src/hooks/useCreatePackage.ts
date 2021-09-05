@@ -1,20 +1,17 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { NativeModules } from 'react-native';
 import { useFormContext } from 'react-hook-form';
 
-import { IFile, writeFiles, IUploadFile } from '../utils';
+import { writeFiles, IUploadFile } from '../utils';
 import { useZipBreadcrumbs } from './useZipBreadcrumbs';
 import { GlobalProps, IReportFormValues } from '../components';
-
-interface IUseRNShareProps {
-  files: IFile[];
-}
 
 const module = NativeModules.FeedbackReporter;
 const filename = 'screenshot.png';
 const filepath = `${module.TemporaryDirectoryPath}/${filename}`;
 
-export const useCreatePackage = ({ files }: IUseRNShareProps) => {
+export const useCreatePackage = () => {
+  const [files, setFiles] = useState<IUploadFile[]>([]);
   const { devNotes } = useContext(GlobalProps);
   const { getValues } = useFormContext<IReportFormValues>();
   const { uri: content } = getValues();
@@ -36,7 +33,7 @@ export const useCreatePackage = ({ files }: IUseRNShareProps) => {
       devNotes,
     });
 
-    return [
+    setFiles([
       ...filesToUpload,
       {
         name: 'file',
@@ -44,8 +41,12 @@ export const useCreatePackage = ({ files }: IUseRNShareProps) => {
         filename: 'breadcrumbs.zip',
         filetype: 'zip',
       },
-    ] as IUploadFile[];
+    ]);
   };
 
-  return { createPackage };
+  useEffect(() => {
+    createPackage();
+  }, []);
+
+  return { filesToUpload: files, setFilesToUpload: setFiles };
 };

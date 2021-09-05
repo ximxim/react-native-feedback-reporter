@@ -4,18 +4,17 @@ import { GestureResponderEvent, Animated } from 'react-native';
 import * as Styled from './Checkbox.style';
 import type { ICheckboxPickerProps } from './Checkbox.types';
 
-import { Typography, Container, Spacing } from '../../ui';
+import { Typography, Box, Spacing } from '../../ui';
 
 export const Checkbox = ({
   label,
   error,
-  // value,
   onChange,
   onPress,
+  defaultValue,
   ...otherTouchableOpacityProps
 }: ICheckboxPickerProps) => {
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-  const scale = useRef(new Animated.Value(0)).current;
+  const [isChecked, setIsChecked] = useState<boolean>(defaultValue || false);
   const opacity = useRef(new Animated.Value(0)).current;
   const hasError = !!error;
   const hasLabel = !!label;
@@ -33,20 +32,8 @@ export const Checkbox = ({
       duration,
       useNativeDriver,
     });
-    const scaleUp = Animated.timing(scale, {
-      toValue: 35,
-      duration,
-      useNativeDriver,
-    });
-    const scaleDown = Animated.timing(scale, {
-      toValue: 0,
-      duration,
-      useNativeDriver,
-    });
 
-    Animated.parallel([fadeIn, scaleUp]).start(() =>
-      fadeOut.start(() => scaleDown.start())
-    );
+    Animated.parallel([fadeIn]).start(() => fadeOut.start());
 
     setIsChecked(!isChecked);
     onPress && onPress(event);
@@ -58,7 +45,9 @@ export const Checkbox = ({
 
   const Label = hasLabel && (
     <Spacing margin={10} isHorizontal>
-      <Typography variant="caption">{label}</Typography>
+      <Typography variant="caption" mb={0}>
+        {label}
+      </Typography>
     </Spacing>
   );
 
@@ -70,32 +59,19 @@ export const Checkbox = ({
     </Spacing>
   );
 
-  // const Icon = (
-  //   <Styled.Icon
-  //     {...{ hasError, size: 22 }}
-  //     name={isChecked ? 'check-box': 'check-box-outline-blank'}
-  //   />
-  // );
-
-  const Pulse = isChecked && (
-    <Styled.IconPulse
-      style={{
-        transform: [{ scale }],
-        opacity,
-      }}
-    />
+  const Icon = (
+    <Styled.Icon isChecked={isChecked}>
+      {isChecked && <Styled.Check />}
+    </Styled.Icon>
   );
 
   return (
-    <Container>
+    <Box>
       <Styled.Wrapper {...otherTouchableOpacityProps} onPress={handlePress}>
-        <Styled.IconWrapper>
-          {/* {Icon} */}
-          {Pulse}
-        </Styled.IconWrapper>
+        <Styled.IconWrapper>{Icon}</Styled.IconWrapper>
         {Label}
       </Styled.Wrapper>
       {Error}
-    </Container>
+    </Box>
   );
 };
