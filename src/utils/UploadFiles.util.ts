@@ -10,6 +10,7 @@ export interface IUploadFile {
   filename: string;
   filetype: string;
   exempt?: boolean;
+  preview?: boolean;
 }
 
 interface IUploadFilesProps {

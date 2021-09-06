@@ -136,7 +136,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     [FormOrderEnum.Description]: <Description />,
     [FormOrderEnum.AdditionalInformation]: additionalInformation?.(getValues()),
     [FormOrderEnum.ScreenShotAndExternalSource]: (
-      <Preview {...{ files, setFiles }} />
+      <Preview {...{ files, setFiles, filesToUpload }} />
     ),
     [FormOrderEnum.Integrations]: (
       <Integrations
@@ -145,7 +145,10 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
           [IntegrationsEnum.Attachments]: (ref: any) => (
             <Attachments
               ref={ref}
-              {...{ files: filesToUpload, setFiles: setFilesToUpload }}
+              {...{
+                files: filesToUpload,
+                setFiles: setFilesToUpload,
+              }}
             />
           ),
           [IntegrationsEnum.JIRA]: JIRAComponents,

@@ -22,6 +22,16 @@ export const Attachments = forwardRef<any, IAttachmentsProps>(
       [files]
     );
 
+    const handlePreview = useCallback(
+      (index: number) => () =>
+        setFiles(
+          files.map((file, i) =>
+            index === i ? { ...file, preview: true } : { ...file }
+          )
+        ),
+      [files]
+    );
+
     return (
       <View ref={ref}>
         {files.map((file, index) => (
@@ -36,7 +46,7 @@ export const Attachments = forwardRef<any, IAttachmentsProps>(
               onChange={handleChange(index)}
             />
             <TouchableWithoutFeedback
-              onLongPress={console.log}
+              onLongPress={handlePreview(index)}
               delayLongPress={5000}
             >
               <Box
