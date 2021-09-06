@@ -1,5 +1,10 @@
 import { FlatList, StyleSheet } from 'react-native';
-import React, { FunctionComponent, useCallback } from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useRef,
+  useEffect,
+} from 'react';
 
 import { MainPreview } from './MainPreview';
 import { FilePreview } from './FilePreview';
@@ -14,11 +19,14 @@ export const Preview: FunctionComponent<IPreviewProps> = ({
   setFiles,
   filesToUpload,
 }) => {
+  const TabsRef = useRef<FlatList>(null);
   const data: IPreviewTab[] = [
     { name: 'Preview' },
     ...filesToUpload
       .filter((file) => file.preview)
-      .map((file) => ({ ...file, name: file.filename })),
+      .map((file) => ({ ...file, name: file.filename }))
+      // @ts-ignore
+      .sort((a, b) => new Date(a.preview) - new Date(b.preview)),
   ];
   const PreviewComp = useCallback(
     (ref: any) => <MainPreview ref={ref} {...{ files, setFiles }} />,
@@ -39,10 +47,19 @@ export const Preview: FunctionComponent<IPreviewProps> = ({
     [data]
   );
 
+  useEffect(() => {
+    (async () => {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      setPageNumber(data.length - 1);
+      TabsRef.current?.scrollToEnd();
+    })();
+  }, [filesToUpload]);
+
   return (
     <>
       {data.length > 1 && (
         <FlatList
+          ref={TabsRef}
           data={data}
           horizontal
           showsHorizontalScrollIndicator={false}

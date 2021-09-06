@@ -21,10 +21,11 @@ export interface IFile {
 
 interface IWriteFilesProps {
   files: IFile[];
-  devNotes: DevNotesType;
+  devNotes?: DevNotesType;
+  skipRedux?: boolean;
 }
 
-export const writeFiles = async ({ files, devNotes }: IWriteFilesProps): Promise<IUploadFile[]> => {
+export const writeFiles = async ({ files, devNotes = '', skipRedux = false }: IWriteFilesProps): Promise<IUploadFile[]> => {
   const filesToUpload = files.map(({ filepath, ...file }) => ({
     ...file,
     filepath: filepath.startsWith('file://')
@@ -37,7 +38,7 @@ export const writeFiles = async ({ files, devNotes }: IWriteFilesProps): Promise
    */
   const reduxContent = toBase64(getExportContent());
 
-  if (reduxContent) {
+  if (reduxContent && !skipRedux) {
     await module.writeFile(reduxStatePath, reduxContent, {
       encoding: 'base64',
     });
@@ -63,7 +64,7 @@ export const writeFiles = async ({ files, devNotes }: IWriteFilesProps): Promise
       encoding: 'base64',
     });
     const devNotesFile = {
-      devNotesContent,
+      content: devNotesContent,
       name: 'file',
       filename: 'devnotes.txt',
       filepath: devNotesPath,

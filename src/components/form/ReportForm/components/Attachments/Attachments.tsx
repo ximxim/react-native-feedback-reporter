@@ -1,5 +1,5 @@
-import React, { forwardRef, useCallback } from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native';
+import React, { forwardRef, useCallback, useEffect } from 'react';
+import { View, TouchableWithoutFeedback, LayoutAnimation } from 'react-native';
 
 import { Checkbox } from '../../../../data';
 import { Box, Typography } from '../../../../ui';
@@ -12,25 +12,19 @@ interface IAttachmentsProps {
 
 export const Attachments = forwardRef<any, IAttachmentsProps>(
   ({ files, setFiles }, ref) => {
-    const handleChange = useCallback(
-      (index: number) => (value: boolean) =>
+    const handlePatch = useCallback(
+      (index: number, patchFile: Partial<IUploadFile>) =>
         setFiles(
           files.map((file, i) =>
-            index === i ? { ...file, exempt: !value } : { ...file }
+            index === i ? { ...file, ...patchFile } : { ...file }
           )
         ),
       [files]
     );
 
-    const handlePreview = useCallback(
-      (index: number) => () =>
-        setFiles(
-          files.map((file, i) =>
-            index === i ? { ...file, preview: true } : { ...file }
-          )
-        ),
-      [files]
-    );
+    useEffect(() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }, [files]);
 
     return (
       <View ref={ref}>
@@ -43,11 +37,11 @@ export const Attachments = forwardRef<any, IAttachmentsProps>(
             <Checkbox
               label={file.filename}
               defaultValue={!file.exempt}
-              onChange={handleChange(index)}
+              onChange={(value) => handlePatch(index, { exempt: !value })}
             />
             <TouchableWithoutFeedback
-              onLongPress={handlePreview(index)}
               delayLongPress={5000}
+              onLongPress={() => handlePatch(index, { preview: new Date() })}
             >
               <Box
                 p="8px"

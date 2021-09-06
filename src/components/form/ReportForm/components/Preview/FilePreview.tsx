@@ -1,8 +1,14 @@
-import { View } from 'react-native';
+import type { View } from 'react-native';
 import React, { forwardRef, useCallback } from 'react';
 
-import { Typography, ScreenshotPreview } from '../../../../ui';
-import type { IUploadFile } from '../../../../../utils';
+import { JSONTree } from './Preview.styles';
+
+import { Typography, ScreenshotPreview, Box } from '../../../../ui';
+import {
+  IUploadFile,
+  fromBase64,
+  getCurrentReduxState,
+} from '../../../../../utils';
 
 interface IFilePreviewProps {
   file: IUploadFile;
@@ -15,9 +21,34 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
         return <ScreenshotPreview uri={file.filepath} />;
       }
 
+      if (!file.content) {
+        return <Typography>No content</Typography>;
+      }
+
+      if (file.filetype.toLowerCase().startsWith('text')) {
+        return <Typography>{fromBase64(file.content).trim()}</Typography>;
+      }
+
+      if (file.filetype.toLowerCase().startsWith('application/json')) {
+        return (
+          <JSONTree
+            hideRoot
+            data={
+              file.name === 'state.json'
+                ? getCurrentReduxState()
+                : JSON.parse(fromBase64(file.content))
+            }
+          />
+        );
+      }
+
       return <Typography>File type not supported</Typography>;
     }, [file]);
 
-    return <View ref={ref}>{render()}</View>;
+    return (
+      <Box ref={ref} px="8px">
+        {render()}
+      </Box>
+    );
   }
 );

@@ -41,7 +41,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     key: 'FEEDBACK_REPORTER_AUTH_STATE',
   });
   const scrollViewRef = useRef<ScrollView>(null);
-  const { filesToUpload, setFilesToUpload } = useCreatePackage();
+  const { filesToUpload, setFilesToUpload } = useCreatePackage({ files });
   useRNShare({ filesToUpload });
   const {
     JIRAComponents,

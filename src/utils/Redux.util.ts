@@ -76,6 +76,7 @@ const defaultOptions: ReactNativeFeedbackReporterEnhancerOptions = {
 
 const timeline: unknown[] = [];
 let preloadedState: Object | undefined;
+let currentReduxState: any = {};
 
 export function createReduxEnhancer(
   enhancerOptions?: Partial<ReactNativeFeedbackReporterEnhancerOptions>
@@ -112,6 +113,7 @@ export function createReduxEnhancer(
         timeline.push(transformedAction);
       }
 
+      currentReduxState = newState;
       return newState;
     };
 
@@ -126,3 +128,5 @@ export const getExportContent = () =>
         preloadedState: JSON.stringify(preloadedState),
       })
     : null;
+
+export const getCurrentReduxState = () => currentReduxState;
