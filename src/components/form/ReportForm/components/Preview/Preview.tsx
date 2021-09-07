@@ -30,7 +30,7 @@ export const Preview: FunctionComponent<IPreviewProps> = ({
   ];
   const PreviewComp = useCallback(
     (ref: any) => <MainPreview ref={ref} {...{ files, setFiles }} />,
-    []
+    [files]
   );
   const FileViewer = useCallback(
     (file: IUploadFile) => (ref: any) => <FilePreview ref={ref} file={file} />,
