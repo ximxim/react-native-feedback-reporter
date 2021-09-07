@@ -53,7 +53,7 @@ export const Preview: FunctionComponent<IPreviewProps> = ({
       setPageNumber(data.length - 1);
       TabsRef.current?.scrollToEnd();
     })();
-  }, [filesToUpload]);
+  }, [data.length]);
 
   return (
     <>
