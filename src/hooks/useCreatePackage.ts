@@ -25,7 +25,16 @@ export const useCreatePackage = ({ files }: IUseCreatePackageProps) => {
     if (!files.length) return;
 
     (async () => {
-      const writtenFiles = await writeFiles({ files, skipRedux: true });
+      const filteredFiles = files.filter((file) => {
+        const found = filesToUpload.findIndex(
+          (f) => f.filename === file.filename
+        );
+        return found === -1;
+      });
+      const writtenFiles = await writeFiles({
+        files: filteredFiles,
+        skipRedux: true,
+      });
       setFilesToUpload([...filesToUpload, ...writtenFiles]);
     })();
   }, [files]);

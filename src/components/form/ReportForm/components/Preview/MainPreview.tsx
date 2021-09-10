@@ -4,11 +4,10 @@ import type { View } from 'react-native';
 
 import * as Styled from './Preview.styles';
 
-import type { IImageAttachmentsProps } from '../ImageAttachments';
-import { ImageAttachments } from '../ImageAttachments';
 import { ScreenshotPreview } from '../../../../ui';
 import { GlobalProps } from '../../../../contexts';
 import type { IReportFormValues } from '../../ReportForm.types';
+import { ImageAttachments, IImageAttachmentsProps } from '../ImageAttachments';
 
 interface IMainPreviewProps extends IImageAttachmentsProps {}
 

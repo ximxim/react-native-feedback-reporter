@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 
@@ -21,7 +21,16 @@ export const ImageAttachments: FunctionComponent<IImageAttachmentsProps> = ({
   files,
   setFiles,
 }) => {
-  const onChange = (val: IFile[]) => setFiles(val);
+  const onChange = useCallback(
+    (val: IFile[]) => {
+      const filteredFiles = val.filter((file) => {
+        const found = files.findIndex((f) => f.filename === file.filename);
+        return found === -1;
+      });
+      setFiles([...files, ...filteredFiles]);
+    },
+    [files]
+  );
 
   return (
     <Wrapper nestedScrollEnabled>
