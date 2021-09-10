@@ -4,6 +4,7 @@ import React, {
   RefObject,
   useEffect,
   createRef,
+  useCallback,
   DependencyList,
 } from 'react';
 import { ScrollView, View, Dimensions, LayoutAnimation } from 'react-native';
@@ -12,7 +13,8 @@ const { width } = Dimensions.get('screen');
 
 export type NavigationElementType = (
   ref: RefObject<View>,
-  setPageNumber: (index: number) => void
+  setPageNumber: (index: number) => void,
+  updateNavigationView: () => void
 ) => JSX.Element;
 
 interface IData {
@@ -28,6 +30,7 @@ export const useNavigation = (
   dependancyList: DependencyList = []
 ) => {
   const [pageNumber, setPageNumber] = useState<number>(0);
+  const [counter, setCounter] = useState<number>(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const [height, setHeight] = useState<number>();
   const elRefs = useRef<RefObject<View>[]>(data.map(() => createRef()));
@@ -37,7 +40,7 @@ export const useNavigation = (
   }, [height]);
 
   useEffect(() => {
-    if (data.length == elRefs.current.length) return;
+    if (data.length === elRefs.current.length) return;
     data.slice(elRefs.current.length).map(() => {
       elRefs.current.push(createRef());
     });
@@ -47,12 +50,10 @@ export const useNavigation = (
     (async () => {
       await new Promise((resolve) => setTimeout(resolve, 200));
 
-      console.log(elRefs.current[pageNumber], elRefs, pageNumber);
       elRefs.current[pageNumber].current?.measureLayout(
         // @ts-ignore: ref typescript is weird and old so ignoring it
         scrollViewRef.current,
         (_left, _top, _width, elHeight) => {
-          console.log(_left, _top, _width, elHeight);
           if (elHeight <= 0 || elHeight === height) return;
           setHeight(elHeight);
         },
@@ -60,6 +61,10 @@ export const useNavigation = (
       );
     })();
   });
+
+  const updateNavigationView = useCallback(() => setCounter(counter + 1), [
+    counter,
+  ]);
 
   useEffect(() => {
     scrollViewRef.current?.scrollTo({
@@ -82,7 +87,11 @@ export const useNavigation = (
     >
       {data?.map(({ component }, index) => (
         <View style={{ width }}>
-          {component(elRefs.current[index], setPageNumber)}
+          {component(
+            elRefs.current[index],
+            setPageNumber,
+            updateNavigationView
+          )}
         </View>
       ))}
     </ScrollView>

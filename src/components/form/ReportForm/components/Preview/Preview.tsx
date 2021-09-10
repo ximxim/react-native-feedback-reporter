@@ -33,7 +33,11 @@ export const Preview: FunctionComponent<IPreviewProps> = ({
     [files]
   );
   const FileViewer = useCallback(
-    (file: IUploadFile) => (ref: any) => <FilePreview ref={ref} file={file} />,
+    (file: IUploadFile) => (
+      ref: any,
+      _setPageNumber: any,
+      updateNavigationView: () => void
+    ) => <FilePreview {...{ ref, file, updateNavigationView }} />,
     []
   );
   const previewComponents = data.map((integration) => ({

@@ -12,10 +12,11 @@ import {
 
 interface IFilePreviewProps {
   file: IUploadFile;
+  updateNavigationView: () => void;
 }
 
 export const FilePreview = forwardRef<View, IFilePreviewProps>(
-  ({ file }, ref) => {
+  ({ file, updateNavigationView }, ref) => {
     const render = useCallback(() => {
       if (file.filetype.toLowerCase().startsWith('image')) {
         return <ScreenshotPreview uri={file.filepath} />;
@@ -46,7 +47,7 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
     }, [file]);
 
     return (
-      <Box ref={ref} px="8px">
+      <Box ref={ref} px="8px" onTouchEnd={updateNavigationView}>
         {render()}
       </Box>
     );
