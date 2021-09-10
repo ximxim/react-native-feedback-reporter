@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useRef,
   ReactNode,
+  useMemo,
 } from 'react';
 import { ScrollView } from 'react-native';
 
@@ -41,7 +42,14 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     key: 'FEEDBACK_REPORTER_AUTH_STATE',
   });
   const scrollViewRef = useRef<ScrollView>(null);
-  const { filesToUpload, setFilesToUpload } = useCreatePackage({ files });
+  const {
+    filesToUpload: allFilesToUpload,
+    setFilesToUpload,
+  } = useCreatePackage({ files });
+  const filesToUpload = useMemo(
+    () => allFilesToUpload.filter((f) => !f.exempt),
+    [allFilesToUpload]
+  );
   useRNShare({ filesToUpload });
   const {
     JIRAComponents,
@@ -136,7 +144,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     [FormOrderEnum.Description]: <Description />,
     [FormOrderEnum.AdditionalInformation]: additionalInformation?.(getValues()),
     [FormOrderEnum.ScreenShotAndExternalSource]: (
-      <Preview {...{ files, setFiles, filesToUpload }} />
+      <Preview {...{ files, setFiles, allFilesToUpload }} />
     ),
     [FormOrderEnum.Integrations]: (
       <Integrations
@@ -145,10 +153,7 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
           [IntegrationsEnum.Attachments]: (ref: any) => (
             <Attachments
               ref={ref}
-              {...{
-                files: filesToUpload,
-                setFiles: setFilesToUpload,
-              }}
+              {...{ allFilesToUpload, setFilesToUpload }}
             />
           ),
           [IntegrationsEnum.JIRA]: JIRAComponents,

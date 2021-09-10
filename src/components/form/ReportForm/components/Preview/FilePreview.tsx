@@ -3,7 +3,7 @@ import React, { forwardRef, useCallback } from 'react';
 
 import { JSONTree } from './Preview.styles';
 
-import { Typography, ScreenshotPreview, Box } from '../../../../ui';
+import { Typography, ScreenshotPreview, Box, Alert } from '../../../../ui';
 import {
   IUploadFile,
   fromBase64,
@@ -22,7 +22,7 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
       }
 
       if (!file.content) {
-        return <Typography>No content</Typography>;
+        return <Alert alert="File not supported" />;
       }
 
       if (file.filetype.toLowerCase().startsWith('text')) {
@@ -42,7 +42,7 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
         );
       }
 
-      return <Typography>File type not supported</Typography>;
+      return <Alert alert="File not supported" />;
     }, [file]);
 
     return (

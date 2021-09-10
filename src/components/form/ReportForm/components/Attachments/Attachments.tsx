@@ -6,29 +6,29 @@ import { Box, Typography } from '../../../../ui';
 import type { IUploadFile } from '../../../../../utils';
 
 interface IAttachmentsProps {
-  files: IUploadFile[];
-  setFiles: (files: IUploadFile[]) => void;
+  allFilesToUpload: IUploadFile[];
+  setFilesToUpload: (files: IUploadFile[]) => void;
 }
 
 export const Attachments = forwardRef<any, IAttachmentsProps>(
-  ({ files, setFiles }, ref) => {
+  ({ allFilesToUpload, setFilesToUpload }, ref) => {
     const handlePatch = useCallback(
       (index: number, patchFile: Partial<IUploadFile>) =>
-        setFiles(
-          files.map((file, i) =>
+        setFilesToUpload(
+          allFilesToUpload.map((file, i) =>
             index === i ? { ...file, ...patchFile } : { ...file }
           )
         ),
-      [files]
+      [allFilesToUpload]
     );
 
     useEffect(() => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    }, [files]);
+    }, [allFilesToUpload]);
 
     return (
       <View ref={ref}>
-        {files.map((file, index) => (
+        {allFilesToUpload.map((file, index) => (
           <Box
             flexDirection="row"
             alignItems="center"

@@ -7,5 +7,5 @@ export interface IPreviewTab extends Partial<ITabProps> {
 }
 
 export interface IPreviewProps extends IImageAttachmentsProps {
-  filesToUpload: IUploadFile[];
+  allFilesToUpload: IUploadFile[];
 }

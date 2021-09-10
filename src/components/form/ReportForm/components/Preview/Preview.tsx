@@ -17,12 +17,12 @@ import type { IUploadFile } from '../../../../../utils';
 export const Preview: FunctionComponent<IPreviewProps> = ({
   files,
   setFiles,
-  filesToUpload,
+  allFilesToUpload,
 }) => {
   const TabsRef = useRef<FlatList>(null);
   const data: IPreviewTab[] = [
     { name: 'Preview' },
-    ...filesToUpload
+    ...allFilesToUpload
       .filter((file) => file.preview)
       .map((file) => ({ ...file, name: file.filename }))
       // @ts-ignore
