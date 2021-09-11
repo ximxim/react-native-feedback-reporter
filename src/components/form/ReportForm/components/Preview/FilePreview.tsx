@@ -1,10 +1,11 @@
-import type { View } from 'react-native';
-import React, { forwardRef, useCallback } from 'react';
+import { View, Dimensions } from 'react-native';
+import React, { forwardRef, useCallback, useState, useRef } from 'react';
 
 import { JSONTree } from './Preview.styles';
 
 import { Typography, ScreenshotPreview, Box, Alert } from '../../../../ui';
 import {
+  mergeRefs,
   IUploadFile,
   fromBase64,
   getCurrentReduxState,
@@ -15,8 +16,13 @@ interface IFilePreviewProps {
   updateNavigationView: () => void;
 }
 
+const { height } = Dimensions.get('screen');
+
 export const FilePreview = forwardRef<View, IFilePreviewProps>(
   ({ file, updateNavigationView }, ref) => {
+    const [minHeight, setMinHeight] = useState<number>(0);
+    const viewRef = useRef<View>(null);
+
     const render = useCallback(() => {
       if (file.filetype.toLowerCase().startsWith('image')) {
         return <ScreenshotPreview uri={file.filepath} />;
@@ -32,14 +38,16 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
 
       if (file.filetype.toLowerCase().startsWith('application/json')) {
         return (
-          <JSONTree
-            hideRoot
-            data={
-              file.name === 'state.json'
-                ? getCurrentReduxState()
-                : JSON.parse(fromBase64(file.content))
-            }
-          />
+          <Box onTouchEnd={updateNavigationView}>
+            <JSONTree
+              hideRoot
+              data={
+                file.name === 'state.json'
+                  ? getCurrentReduxState()
+                  : JSON.parse(fromBase64(file.content))
+              }
+            />
+          </Box>
         );
       }
 
@@ -47,7 +55,20 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
     }, [file]);
 
     return (
-      <Box ref={ref} px="8px" onTouchEnd={updateNavigationView}>
+      <Box
+        ref={mergeRefs(ref, viewRef)}
+        px="8px"
+        pb="8px"
+        minHeight={minHeight}
+        onTouchEnd={updateNavigationView}
+        onLayout={() => {
+          viewRef.current?.measureInWindow((_x, y) => {
+            if (height < y) return;
+
+            setMinHeight(height - y - 50);
+          });
+        }}
+      >
         {render()}
       </Box>
     );

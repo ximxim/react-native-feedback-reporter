@@ -5,3 +5,4 @@ export * from './UploadFiles.util';
 export * from './Base64.util';
 export * from './Metrics.util';
 export * from './WriteFiles.util';
+export * from './mergeRefs.utils';
