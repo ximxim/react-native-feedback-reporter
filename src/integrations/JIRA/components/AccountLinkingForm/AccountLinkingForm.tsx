@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Linking, ScrollView } from 'react-native';
+import { Linking } from 'react-native';
 import { useQuery } from 'react-query';
 
 import type {
@@ -19,10 +19,11 @@ import { getJIRASelf } from '../../queries';
 import { initJIRAApi } from '../../JIRAApi.service';
 
 import {
+  Box,
   TextInput,
   Typography,
-  ButtonWithLabel,
   GlobalProps,
+  ButtonWithLabel,
 } from '../../../../components';
 
 export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = () => {
@@ -77,7 +78,7 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
   }, [register]);
 
   return (
-    <ScrollView scrollEnabled={false}>
+    <Box pb={32}>
       <TextInput
         label="Username"
         hideErrorMessage
@@ -96,7 +97,7 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
         placeholder={errors.token?.message}
         onChangeText={(text) => setValue('token', text)}
       />
-      <Typography variant="caption" mx={8}>
+      <Typography variant="caption" mx="8px">
         How to create a JIRA api token?{' '}
         <Typography
           ml={2}
@@ -113,6 +114,6 @@ export const AccountLinkingForm: FunctionComponent<IAccountLinkingFormProps> = (
       <ButtonWithLabel onPress={onSubmit} isLoading={isLoading}>
         Link Account
       </ButtonWithLabel>
-    </ScrollView>
+    </Box>
   );
 };
