@@ -386,6 +386,9 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
 
 
   private fun processZip(entries: ArrayList<String>, destFile: String, parameters: ZipParameters, promise: Promise) {
+    if (entries.size == 0) {
+      promise.reject("400", "nothing to zip")
+    }
     Thread(Runnable {
       try {
         val zipFile = ZipFile(destFile)

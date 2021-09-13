@@ -40,7 +40,7 @@ export const useCreatePackage = ({ files }: IUseCreatePackageProps) => {
   }, [files]);
 
   const createPackage = async () => {
-    const breadcrumbsFilePath = await createZipBreadcrumbs();
+    const breadcrumbsFile = await createZipBreadcrumbs();
     const writtenFiles = await writeFiles({
       files: [
         ...files,
@@ -55,15 +55,11 @@ export const useCreatePackage = ({ files }: IUseCreatePackageProps) => {
       devNotes,
     });
 
-    setFilesToUpload([
-      ...writtenFiles,
-      {
-        name: 'file',
-        filepath: breadcrumbsFilePath,
-        filename: 'breadcrumbs.zip',
-        filetype: 'zip',
-      },
-    ]);
+    if (breadcrumbsFile) {
+      writtenFiles.push(breadcrumbsFile);
+    }
+
+    setFilesToUpload(writtenFiles);
   };
 
   useEffect(() => {

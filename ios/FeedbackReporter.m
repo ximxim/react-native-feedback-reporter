@@ -316,6 +316,12 @@ RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
             [newPaths addObject:toPath];
         }
     }
+    
+    if ([newPaths count] == 0) {
+        reject(@"400", @"nothing to zip", nil);
+        return;
+    }
+    
     BOOL success = [SSZipArchive createZipFileAtPath:destinationPath withFilesAtPaths:newPaths];
 
     if (success) {
