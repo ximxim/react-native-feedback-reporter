@@ -25,7 +25,7 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
 
     const render = useCallback(() => {
       if (file.filetype.toLowerCase().startsWith('image')) {
-        return <ScreenshotPreview uri={file.filepath} />;
+        return <ScreenshotPreview uri={`file://${file.filepath}`} />;
       }
 
       if (!file.content) {
