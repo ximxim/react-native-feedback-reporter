@@ -9,7 +9,7 @@ export const ScreenShotWrapper = styled.View`
   margin-top: ${metrics.margin}px;
 `;
 
-export const JSONTree = styled(RNJSONTree).attrs(
+export const JSONTree = styled<any>(RNJSONTree).attrs(
   ({ theme }: RNFRThemeType) => ({
     theme: {
       label: {
