@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useEffect } from 'react';
-import { View, TouchableWithoutFeedback, LayoutAnimation } from 'react-native';
+import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
 
 import { Checkbox } from '../../../../data';
 import { Box, Typography } from '../../../../ui';
@@ -35,13 +35,15 @@ export const Attachments = forwardRef<any, IAttachmentsProps>(
             justifyContent="space-between"
           >
             <Checkbox
-              label={file.filename}
+              label={
+                file.friendlyName ||
+                file.filename.split('.').reverse().pop()?.toUpperCase()
+              }
               defaultValue={!file.exempt}
               onChange={(value) => handlePatch(index, { exempt: !value })}
             />
-            <TouchableWithoutFeedback
-              delayLongPress={5000}
-              onLongPress={() => handlePatch(index, { preview: new Date() })}
+            <TouchableOpacity
+              onPress={() => handlePatch(index, { preview: new Date() })}
             >
               <Box
                 p="8px"
@@ -55,7 +57,7 @@ export const Attachments = forwardRef<any, IAttachmentsProps>(
                   {file.filename.split('.').pop()?.toUpperCase()}
                 </Typography>
               </Box>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
           </Box>
         ))}
       </View>

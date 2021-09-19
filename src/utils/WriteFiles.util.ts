@@ -17,6 +17,7 @@ export interface IFile {
   filename: string;
   filepath: string;
   filetype: string;
+  friendlyName?: string;
 }
 
 interface IWriteFilesProps {
@@ -48,6 +49,7 @@ export const writeFiles = async ({ files, devNotes = '', skipRedux = false }: IW
       filename: 'state.json',
       filepath: reduxStatePath,
       filetype: 'application/json',
+      friendlyName: 'Redux State',
     };
     filesToUpload.push(reduxStateFile);
   }
@@ -63,12 +65,13 @@ export const writeFiles = async ({ files, devNotes = '', skipRedux = false }: IW
     await module.writeFile(devNotesPath, devNotesContent, {
       encoding: 'base64',
     });
-    const devNotesFile = {
+    const devNotesFile: IFile = {
       content: devNotesContent,
       name: 'file',
       filename: 'devnotes.txt',
       filepath: devNotesPath,
       filetype: 'text/plain',
+      friendlyName: 'Developer Notes',
     };
     filesToUpload.push(devNotesFile);
   }

@@ -11,6 +11,7 @@ export interface IUploadFile {
   filetype: string;
   exempt?: boolean;
   preview?: Date;
+  friendlyName?: string;
 }
 
 interface IUploadFilesProps {

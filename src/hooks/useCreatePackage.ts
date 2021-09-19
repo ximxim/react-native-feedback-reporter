@@ -50,6 +50,7 @@ export const useCreatePackage = ({ files }: IUseCreatePackageProps) => {
           filename,
           filepath,
           filetype: 'image/png',
+          friendlyName: 'Screenshot',
         },
       ],
       devNotes,

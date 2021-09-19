@@ -15,6 +15,7 @@ export const useZipBreadcrumbs = () => {
         filepath: breadcrumbsFilePath,
         filename: 'breadcrumbs.zip',
         filetype: 'zip',
+        friendlyName: 'Breadcrumbs',
       };
     } catch (ex) {
       return;
