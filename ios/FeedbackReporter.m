@@ -249,7 +249,7 @@ RCT_EXPORT_METHOD(captureRef:(nonnull NSNumber *)target
       reject(RCTErrorUnspecified, [NSString stringWithFormat:@"No view found with reactTag: %@", target], nil);
       return;
     }
-      
+
     CGPoint tapPoint = [RCTConvert CGPoint:options];
 
     // Capture image
@@ -321,11 +321,12 @@ RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
         reject(@"400", @"nothing to zip", nil);
         return;
     }
-    
-    BOOL success = [SSZipArchive createZipFileAtPath:destinationPath withFilesAtPaths:newPaths];
 
+    BOOL success = [SSZipArchive createZipFileAtPath:destinationPath withFilesAtPaths:newPaths];
     if (success) {
-        resolve(destinationPath);
+        NSMutableDictionary* result = [[NSMutableDictionary alloc] initWithDictionary: @{@"path": destinationPath,
+                                                                                     @"content": newPaths}];
+        resolve(result);
     } else {
         NSError *error = nil;
         reject(@"zip_error", @"unable to zip", error);
@@ -348,7 +349,7 @@ RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
     // set stroking color and draw circle
     [[UIColor colorWithRed: 0.69 green: 0.69 blue: 0.69 alpha: 1.00] setStroke];
     [[UIColor colorWithRed: 0.69 green: 0.69 blue: 0.69 alpha: 0.50] setFill];
-    
+
     CGContextSetShadowWithColor(ctx, CGSizeMake(-0.0f,  0.0f), 5.0f, [UIColor lightGrayColor].CGColor);
 
     // make circle rect 5 px from border
@@ -357,7 +358,7 @@ RCT_EXPORT_METHOD(zipBreadcrumbs:(NSString *)destinationPath
                tapPoint.y - radius,
                 radius * 2,
                 radius * 2);
-    
+
     // draw circle
     CGContextFillEllipseInRect(ctx, circleRect);
 
@@ -381,7 +382,7 @@ RCT_EXPORT_METHOD(clearTmpDirectory) {
             [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] error:NULL];
         }
     }
-    
+
     NSArray* rnTempDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:rctTempDir error:NULL];
     for (NSString *file in rnTempDirectory) {
         NSString *filePath = [[rctTempDir stringByAppendingString:@"/"] stringByAppendingString:file];

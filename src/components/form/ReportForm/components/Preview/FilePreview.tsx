@@ -32,6 +32,10 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
         return <Alert alert="File not supported" />;
       }
 
+      if (Array.isArray(file.content)) {
+        return <ScreenshotPreview uri={file.content} />;
+      }
+
       if (file.filetype.toLowerCase().startsWith('text')) {
         return <Typography>{fromBase64(file.content).trim()}</Typography>;
       }

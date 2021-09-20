@@ -9,10 +9,11 @@ const directory = `${module.TemporaryDirectoryPath}/breadcrumbs.zip`;
 export const useZipBreadcrumbs = () => {
   const handleZipBreadcrumbs = async (): Promise<IFile | undefined> => {
     try {
-      const breadcrumbsFilePath = await zipBreadcrumbs(directory);
+      const { path, content } = await zipBreadcrumbs(directory);
       return {
         name: 'file',
-        filepath: breadcrumbsFilePath,
+        content,
+        filepath: path,
         filename: 'breadcrumbs.zip',
         filetype: 'zip',
         friendlyName: 'Breadcrumbs',

@@ -8,14 +8,11 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.os.Build
-import android.os.FileUtils
 import android.util.Base64
 import android.util.Log
 import android.util.SparseArray
 import android.view.View
 import androidx.annotation.NonNull
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.DeviceEventManagerModule
@@ -392,17 +389,23 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
     Thread(Runnable {
       try {
         val zipFile = ZipFile(destFile)
+        val files: WritableArray = Arguments.createArray()
+
         for (i in 0 until entries.size) {
           val f = File(entries[i])
           if (f.exists()) {
             val newFile = File(cacheDir.absolutePath.plus("/").plus((i + 1).toString()).plus(".png"))
             f.renameTo(newFile)
+            files.pushString("file://${newFile.absolutePath}")
             zipFile.addFile(newFile, parameters)
           } else {
             promise.reject(null, "File or folder does not exist")
           }
         }
-        promise.resolve(destFile)
+        val result = Arguments.createMap()
+        result.putString("path", destFile)
+        result.putArray("content", files)
+        promise.resolve(result)
       } catch (ex: java.lang.Exception) {
         promise.reject(null, ex.message)
         return@Runnable
