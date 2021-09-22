@@ -6,11 +6,16 @@ export interface IPostJIRAIssueResponse {
   self: string;
 }
 
+export interface IPostJiraMeta {
+  labels?: string[];
+}
+
 interface IPostJIRAIssueProps {
   title: string;
   projectId: string;
   issueTypeId: string;
   description: string;
+  meta?: IPostJiraMeta;
 }
 
 export const postJIRAIssue = ({
@@ -18,6 +23,7 @@ export const postJIRAIssue = ({
   issueTypeId,
   description,
   title,
+  meta,
 }: IPostJIRAIssueProps) => {
   const content = [];
   content.push({
@@ -41,7 +47,8 @@ export const postJIRAIssue = ({
         version: 1,
         content,
       },
-      labels: ['feedback-reporter'],
+      ...meta,
+      labels: ['rnfr', ...(meta?.labels || [])],
     },
   });
 };

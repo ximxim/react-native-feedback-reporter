@@ -69,6 +69,9 @@ export default function App() {
           JIRAComponents.JIRAIssueTypes,
           JIRAComponents.JIRAAccountLinking,
         ],
+        meta: {
+          labels: ['test', 'this'],
+        },
       }}
       extraSource="react-native-image-crop-picker"
       devNotes={async () => {

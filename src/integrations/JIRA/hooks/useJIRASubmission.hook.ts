@@ -44,6 +44,7 @@ export const useJIRASubmission = () => {
       projectId,
       issueTypeId,
       description,
+      meta: jira.meta,
     });
   };
 

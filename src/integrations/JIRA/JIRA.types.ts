@@ -1,3 +1,4 @@
+import type { IPostJiraMeta } from './mutations/postJIRAIssue';
 interface IOptional {
   defaultValue?: string;
 }
@@ -9,6 +10,7 @@ export interface JIRAIntegrationProps {
   projectField?: IOptional;
   issueTypeField?: IOptional;
   order?: JIRAComponents[];
+  meta?: IPostJiraMeta;
 }
 
 export interface JIRAIntegrationValues {
