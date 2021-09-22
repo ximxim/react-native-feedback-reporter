@@ -185,6 +185,14 @@ Use this prop to order jira components, exclude any control that you wish to hid
 | ---- | ---- |
 | array of enums(`'jira_switch'`, `'jira_projects'`, `'jira_issue_types'`, `'jira_account_linking'`) | `['jira_switch', 'jira_projects', 'jira_issue_types', 'jira_account_linking']` |
 
+### `meta`
+
+Use this prop to pass meta data that can modify the jira issue. Look at the options [here](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post-example)
+
+| Type | Default |
+| ---- | ---- |
+| { labels: string[] } | undefined |
+
 **Example**:
 
 ```js
@@ -205,6 +213,9 @@ import { FeedbackReporter, JIRAComponents } from 'react-native-feedback-reporter
       JIRAComponents.JIRAIssueTypes,
       JIRAComponents.JIRAAccountLinking,
     ],
+    meta: {
+      labels: ['test', 'this'],
+    },
   }}
 />
 ```
