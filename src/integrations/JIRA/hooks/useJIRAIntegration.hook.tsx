@@ -6,17 +6,22 @@ import { useJIRASubmission } from './useJIRASubmission.hook';
 import { useJIRAComponents } from './useJIRAComponents.hook';
 
 import {
-  Alert,
   Typography,
   GlobalProps,
+  AttachmentAlert,
   SubmissionOrderEnum,
 } from '../../../components';
 
 export const useJIRAIntegration = () => {
   const { isEnabled, JIRAComponents } = useJIRAComponents();
-  const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
+  const {
+    issue,
+    isDone,
+    isLoading,
+    isAttaching,
+    submitToJIRA,
+  } = useJIRASubmission();
   const { jira, authState } = useContext(GlobalProps);
-  const isJIRAIssueCreated = jira ? !!issue : true;
 
   useEffect(() => {
     if (!jira) return;
@@ -42,14 +47,7 @@ export const useJIRAIntegration = () => {
           {issue.key}
         </Typography>
       </Typography>
-      <Alert
-        alert={
-          isAttaching
-            ? 'Uploading attachments in the background. Feel free to continue using the app. Dismissing this screen will not stop the uploads'
-            : 'Attachments uploaded'
-        }
-        isLoading={isAttaching}
-      />
+      <AttachmentAlert isAttaching={isAttaching} />
     </>
   );
 
@@ -58,9 +56,9 @@ export const useJIRAIntegration = () => {
   return {
     submitToJIRA: handleSubmit,
     JIRAComponents,
-    isJIRAIssueCreated,
+    isJIRALoading: isLoading,
+    isJIRAUploadDone: isDone,
     isJIRAEnabled: isEnabled,
-    isJIRAAttaching: isAttaching,
     JIRAConfirmationComponents: {
       [SubmissionOrderEnum.Jira]: JIRAConfirmationComponents,
     },

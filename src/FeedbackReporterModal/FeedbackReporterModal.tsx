@@ -1,8 +1,13 @@
-import React, { useEffect, useContext, FunctionComponent } from 'react';
+import React, {
+  useEffect,
+  useContext,
+  useCallback,
+  FunctionComponent,
+} from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ThemeProvider } from 'styled-components';
-import { Modal, NativeModules } from 'react-native';
+import { Modal, NativeModules, Alert } from 'react-native';
 
 import { theme } from '../theme';
 import { ScreenShot } from '../utils';
@@ -28,11 +33,29 @@ export const FeedbackReporterModal: FunctionComponent<unknown> = () => {
     reValidateMode: 'onChange',
     resolver: yupResolver(ReportFormValidation({ ...props })),
   });
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
+    if (props.isBusy) {
+      Alert.alert('Are you sure?', 'RNFR is busy at the moment', [
+        { text: 'No' },
+        {
+          text: 'Yes',
+          onPress: () => {
+            props.setIsBusy(false);
+            closeFlow();
+          },
+        },
+      ]);
+      return;
+    }
+
+    closeFlow();
+  }, [props.isBusy]);
+
+  const closeFlow = useCallback(() => {
     clearTmpDirectory();
     props.setIsModalOpen(false);
     reportFormProps.reset();
-  };
+  }, [props.setIsModalOpen, reportFormProps.reset]);
 
   useEffect(() => {
     reportFormProps.register({ name: 'uri' });

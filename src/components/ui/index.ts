@@ -10,4 +10,5 @@ export * from './ModalHeader';
 export * from './BottomWrapper';
 export * from './CollapsibleView';
 export * from './ButtonWithLabel';
+export * from './AttachmentAlert';
 export * from './ScreenshotPreview';

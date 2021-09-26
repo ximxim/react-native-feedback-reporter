@@ -54,17 +54,17 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   const {
     JIRAComponents,
     submitToJIRA,
+    isJIRALoading,
     isJIRAEnabled,
-    isJIRAAttaching,
-    isJIRAIssueCreated,
+    isJIRAUploadDone,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
   const {
     submitToSlack,
     slackComponents,
     isSlackEnabled,
-    isSlackAttaching,
-    isSlackMessageCreated,
+    isSlackLoading,
+    isSlackUploadDone,
     slackConfirmationComponents,
   } = useSlackIntegration();
   const {
@@ -74,9 +74,12 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     formState,
     getValues,
   } = useFormContext<IReportFormValues>();
-  const { additionalInformation, authState, setAuthState } = useContext(
-    GlobalProps
-  );
+  const {
+    additionalInformation,
+    authState,
+    setAuthState,
+    setIsBusy,
+  } = useContext(GlobalProps);
   const enabledIntegrationsCount = [isJIRAEnabled, isSlackEnabled].filter(
     (b) => b
   ).length;
@@ -125,22 +128,16 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
   useEffect(() => {
     if (!formState.isSubmitted) return;
 
-    if (isJIRAEnabled && !(isJIRAIssueCreated && isJIRAAttaching)) return;
+    if (isJIRAEnabled && !isJIRAUploadDone) return;
 
-    if (isSlackEnabled && !(isSlackMessageCreated && isSlackAttaching)) return;
+    if (isSlackEnabled && !isSlackUploadDone) return;
 
-    const index = data.findIndex((item) => item.name === 'submission');
-    scrollViewRef.current?.scrollTo({
-      x: Styled.width * index,
-      animated: true,
-    });
+    setIsBusy(false);
   }, [
     isJIRAEnabled,
     isSlackEnabled,
-    isJIRAAttaching,
-    isSlackAttaching,
-    isJIRAIssueCreated,
-    isSlackMessageCreated,
+    isJIRAUploadDone,
+    isSlackUploadDone,
     formState.isSubmitted,
   ]);
 
@@ -150,10 +147,16 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     <BottomButton
       label={disableReporting ? 'Unable to report' : 'Report'}
       disabled={disableReporting}
-      isLoading={formState.isSubmitting || formState.isSubmitted}
+      isLoading={formState.isSubmitting || isJIRALoading || isSlackLoading}
       onPress={handleSubmit(async () => {
+        setIsBusy(true);
         submitToJIRA?.(filesToUpload);
         submitToSlack?.(filesToUpload);
+        const index = data.findIndex((item) => item.name === 'submission');
+        scrollViewRef.current?.scrollTo({
+          x: Styled.width * index,
+          animated: true,
+        });
       })}
     />
   );

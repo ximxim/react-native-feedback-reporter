@@ -25,6 +25,7 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
   ...props
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBusy, setIsBusy] = useState(false);
   const { RNFRPermission, setRNFRPermission, isEnabled } = useRNFRPermission();
   const viewRef = useRef<View>(null);
   const authState = useAuthState();
@@ -67,6 +68,8 @@ export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
           <GlobalProps.Provider
             value={{
               mode,
+              isBusy,
+              setIsBusy,
               isModalOpen,
               setIsModalOpen,
               ...props,

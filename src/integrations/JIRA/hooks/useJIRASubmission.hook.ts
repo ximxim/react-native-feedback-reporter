@@ -9,10 +9,14 @@ import { IReportFormValues, GlobalProps } from '../../../components';
 
 export const useJIRASubmission = () => {
   const [filesToUpload, setFilesToUpload] = useState<IUploadFile[]>([]);
-  const { mutate: postIssue, data: issueRes } = useMutation(postJIRAIssue);
-  const { mutate: postIssueAttachments, isLoading: isAttaching } = useMutation(
-    postJIRAIssueAttachents
+  const { mutate: postIssue, data: issueRes, isLoading } = useMutation(
+    postJIRAIssue
   );
+  const {
+    mutate: postIssueAttachments,
+    isLoading: isAttaching,
+    data: attachments,
+  } = useMutation(postJIRAIssueAttachents);
   const { getValues } = useFormContext<IReportFormValues>();
   const { jira } = useContext(GlobalProps);
 
@@ -48,5 +52,11 @@ export const useJIRASubmission = () => {
     });
   };
 
-  return { issue: issueRes?.data, submitToJIRA, isAttaching };
+  return {
+    issue: issueRes?.data,
+    submitToJIRA,
+    isAttaching,
+    isLoading,
+    isDone: attachments?.statusCode === 200,
+  };
 };

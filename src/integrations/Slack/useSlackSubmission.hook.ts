@@ -13,15 +13,21 @@ import { IReportFormValues, GlobalProps } from '../../components';
 
 export const useSlackSubmission = () => {
   const [filesToUpload, setFilesToUpload] = useState<IUploadFile[]>([]);
-  const { data: joinConversationRes, mutate: joinConversation } = useMutation(
-    postSlackConversationJoin
-  );
-  const { mutate: postMessage, data: messageRes } = useMutation(
-    postSlackMessage
-  );
-  const { mutate: postFile, isLoading: isAttaching } = useMutation(
-    postSlackFile
-  );
+  const {
+    data: joinConversationRes,
+    mutate: joinConversation,
+    isLoading: isJoiningConversation,
+  } = useMutation(postSlackConversationJoin);
+  const {
+    mutate: postMessage,
+    data: messageRes,
+    isLoading: isPostingMessage,
+  } = useMutation(postSlackMessage);
+  const {
+    mutate: postFile,
+    isLoading: isAttaching,
+    data: attachments,
+  } = useMutation(postSlackFile);
   const { getValues } = useFormContext<IReportFormValues>();
   const { slack } = useContext(GlobalProps);
   const { slackChannel } = getValues();
@@ -62,5 +68,7 @@ export const useSlackSubmission = () => {
     submitToSlack,
     isAttaching,
     ts: messageRes?.data.ts,
+    isDone: attachments?.statusCode === 200,
+    isLoading: isPostingMessage || isJoiningConversation,
   };
 };

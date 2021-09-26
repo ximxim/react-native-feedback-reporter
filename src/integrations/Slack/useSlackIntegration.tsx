@@ -12,6 +12,7 @@ import {
   Alert,
   Typography,
   GlobalProps,
+  AttachmentAlert,
   IReportFormValues,
   SubmissionOrderEnum,
 } from '../../components';
@@ -19,7 +20,13 @@ import {
 export const useSlackIntegration = () => {
   const slackChannels = useSlackChannels();
   const Switch = useSlackSwitch();
-  const { submitToSlack, ts, isAttaching } = useSlackSubmission();
+  const {
+    ts,
+    isDone,
+    isLoading,
+    isAttaching,
+    submitToSlack,
+  } = useSlackSubmission();
   const { slack } = useContext(GlobalProps);
   const { formState } = useFormContext<IReportFormValues>();
   const { watch } = useFormContext<IReportFormValues>();
@@ -56,14 +63,7 @@ export const useSlackIntegration = () => {
         Slack
       </Typography>
       <Typography textAlign="center">message sent</Typography>
-      <Alert
-        alert={
-          isAttaching
-            ? 'Uploading attachments in the background. Feel free to continue using the app. Dismissing this screen will not stop the uploads'
-            : 'Attachments uploaded'
-        }
-        isLoading={isAttaching}
-      />
+      <AttachmentAlert isAttaching={isAttaching} />
     </>
   );
 
@@ -80,11 +80,11 @@ export const useSlackIntegration = () => {
     submitToSlack: handleSubmit,
     slackComponents,
     slackFailureComponents,
-    isSlackAttaching: isAttaching,
     isSlackEnabled: isEnabled,
+    isSlackLoading: isLoading,
+    isSlackUploadDone: isDone,
     slackConfirmationComponents: {
       [SubmissionOrderEnum.Slack]: slackConfirmationComponents,
     },
-    isSlackMessageCreated: !!ts,
   };
 };
