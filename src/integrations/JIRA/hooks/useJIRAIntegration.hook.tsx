@@ -60,6 +60,7 @@ export const useJIRAIntegration = () => {
     JIRAComponents,
     isJIRAIssueCreated,
     isJIRAEnabled: isEnabled,
+    isJIRAAttaching: isAttaching,
     JIRAConfirmationComponents: {
       [SubmissionOrderEnum.Jira]: JIRAConfirmationComponents,
     },

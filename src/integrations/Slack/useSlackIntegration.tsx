@@ -80,6 +80,7 @@ export const useSlackIntegration = () => {
     submitToSlack: handleSubmit,
     slackComponents,
     slackFailureComponents,
+    isSlackAttaching: isAttaching,
     isSlackEnabled: isEnabled,
     slackConfirmationComponents: {
       [SubmissionOrderEnum.Slack]: slackConfirmationComponents,

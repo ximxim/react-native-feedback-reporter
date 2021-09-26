@@ -55,12 +55,16 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     JIRAComponents,
     submitToJIRA,
     isJIRAEnabled,
+    isJIRAAttaching,
+    isJIRAIssueCreated,
     JIRAConfirmationComponents,
   } = useJIRAIntegration();
   const {
     submitToSlack,
     slackComponents,
     isSlackEnabled,
+    isSlackAttaching,
+    isSlackMessageCreated,
     slackConfirmationComponents,
   } = useSlackIntegration();
   const {
@@ -118,21 +122,38 @@ export const ReportForm: FunctionComponent<IReportFormProps> = ({
     })();
   }, []);
 
+  useEffect(() => {
+    if (!formState.isSubmitted) return;
+
+    if (isJIRAEnabled && !(isJIRAIssueCreated && isJIRAAttaching)) return;
+
+    if (isSlackEnabled && !(isSlackMessageCreated && isSlackAttaching)) return;
+
+    const index = data.findIndex((item) => item.name === 'submission');
+    scrollViewRef.current?.scrollTo({
+      x: Styled.width * index,
+      animated: true,
+    });
+  }, [
+    isJIRAEnabled,
+    isSlackEnabled,
+    isJIRAAttaching,
+    isSlackAttaching,
+    isJIRAIssueCreated,
+    isSlackMessageCreated,
+    formState.isSubmitted,
+  ]);
+
   const disableReporting = !submitToSlack && !submitToJIRA;
 
   const Submit = (
     <BottomButton
       label={disableReporting ? 'Unable to report' : 'Report'}
       disabled={disableReporting}
-      isLoading={formState.isSubmitting}
+      isLoading={formState.isSubmitting || formState.isSubmitted}
       onPress={handleSubmit(async () => {
         submitToJIRA?.(filesToUpload);
         submitToSlack?.(filesToUpload);
-        const index = data.findIndex((item) => item.name === 'submission');
-        scrollViewRef.current?.scrollTo({
-          x: Styled.width * index,
-          animated: true,
-        });
       })}
     />
   );
