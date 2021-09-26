@@ -7,11 +7,17 @@ interface IPostSlackThreadAttachmentsProps {
   channel?: string;
 }
 
+interface IPostSlackAttachmentResponse {
+  statusCode: number;
+}
+
 export const postSlackFile = async ({
   ts,
   channel,
   filesToUpload,
-}: IPostSlackThreadAttachmentsProps) => {
+}: IPostSlackThreadAttachmentsProps): Promise<
+  IPostSlackAttachmentResponse[]
+> => {
   return uploadFiles({
     submitIndividually: true,
     toUrl: `${slackApi.defaults.baseURL}files.upload?thread_ts=${ts}&channels=${

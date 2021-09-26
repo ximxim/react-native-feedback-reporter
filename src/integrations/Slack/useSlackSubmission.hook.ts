@@ -68,7 +68,7 @@ export const useSlackSubmission = () => {
     submitToSlack,
     isAttaching,
     ts: messageRes?.data.ts,
-    isDone: attachments?.statusCode === 200,
+    isDone: Array.isArray(attachments),
     isLoading: isPostingMessage || isJoiningConversation,
   };
 };
