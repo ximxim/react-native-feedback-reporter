@@ -3,6 +3,7 @@ import React, { forwardRef, useCallback, useState, useRef } from 'react';
 
 import { JSONTree } from './Preview.styles';
 
+import type { ILogs } from '../../../../contexts';
 import { Typography, ScreenshotPreview, Box, Alert } from '../../../../ui';
 import {
   mergeRefs,
@@ -30,6 +31,27 @@ export const FilePreview = forwardRef<View, IFilePreviewProps>(
 
       if (!file.content) {
         return <Alert alert="File not supported" />;
+      }
+
+      if (file.filetype.toLowerCase().startsWith('logs')) {
+        return ((file.content as unknown) as ILogs[]).map(
+          ({ timestamp, level, message }) => (
+            <Typography
+              color={(() => {
+                switch (level) {
+                  case 'error':
+                    return 'brandDanger';
+                  case 'debug':
+                    return 'brandMuted';
+                  default:
+                    return 'brandSecondary';
+                }
+              })()}
+            >
+              {timestamp} - {level.toUpperCase()} - {message}
+            </Typography>
+          )
+        );
       }
 
       if (Array.isArray(file.content)) {

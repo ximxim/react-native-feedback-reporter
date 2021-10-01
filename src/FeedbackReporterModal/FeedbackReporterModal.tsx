@@ -9,11 +9,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ThemeProvider } from 'styled-components';
 import { Modal, NativeModules, Alert } from 'react-native';
 
+import { useLogs } from '../hooks';
 import { theme } from '../theme';
 import { ScreenShot } from '../utils';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import {
+  Logs,
   Popover,
   ReportForm,
   ModalHeader,
@@ -28,6 +30,7 @@ const module = NativeModules.FeedbackReporter;
 const clearTmpDirectory = module.clearTmpDirectory;
 
 export const FeedbackReporterModal: FunctionComponent<unknown> = () => {
+  const logsValues = useLogs();
   const props = useContext(GlobalProps);
   const reportFormProps = useForm<IReportFormValues>({
     reValidateMode: 'onChange',
@@ -94,19 +97,21 @@ export const FeedbackReporterModal: FunctionComponent<unknown> = () => {
           onRequestClose={handleClose}
           {...modalProps}
         >
-          <Popover>
-            <FormProvider {...reportFormProps}>
-              <Styled.Wrapper>
-                <ModalHeader
-                  left={props.modalHeaderLeftState}
-                  heading={'Wanna talk about it?'}
-                  right={{ label: 'Close', onPress: handleClose }}
-                  {...header}
-                />
-                <ReportForm handleClose={handleClose} />
-              </Styled.Wrapper>
-            </FormProvider>
-          </Popover>
+          <Logs.Provider value={logsValues}>
+            <Popover>
+              <FormProvider {...reportFormProps}>
+                <Styled.Wrapper>
+                  <ModalHeader
+                    left={props.modalHeaderLeftState}
+                    heading={'Wanna talk about it?'}
+                    right={{ label: 'Close', onPress: handleClose }}
+                    {...header}
+                  />
+                  <ReportForm handleClose={handleClose} />
+                </Styled.Wrapper>
+              </FormProvider>
+            </Popover>
+          </Logs.Provider>
         </Modal>
       </ThemeProvider>
     </QueryClientProvider>

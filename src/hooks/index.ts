@@ -7,3 +7,4 @@ export * from './useCreatePackage';
 export * from './useZipBreadcrumbs';
 export * from './useDeveloperOverride';
 export * from './useModalHeaderLeftState';
+export * from './useLogs';

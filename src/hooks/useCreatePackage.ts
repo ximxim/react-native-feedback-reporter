@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { writeFiles, IUploadFile, IFile } from '../utils';
 import { useZipBreadcrumbs } from './useZipBreadcrumbs';
-import { GlobalProps, IReportFormValues } from '../components';
+import { GlobalProps, IReportFormValues, Logs } from '../components';
 
 const module = NativeModules.FeedbackReporter;
 const filename = 'screenshot.png';
@@ -17,6 +17,7 @@ interface IUseCreatePackageProps {
 export const useCreatePackage = ({ files }: IUseCreatePackageProps) => {
   const [filesToUpload, setFilesToUpload] = useState<IUploadFile[]>([]);
   const { devNotes } = useContext(GlobalProps);
+  const { addLog } = useContext(Logs);
   const { watch } = useFormContext<IReportFormValues>();
   const createZipBreadcrumbs = useZipBreadcrumbs();
   const content = watch('uri');
@@ -34,6 +35,7 @@ export const useCreatePackage = ({ files }: IUseCreatePackageProps) => {
       const writtenFiles = await writeFiles({
         files: filteredFiles,
         skipRedux: true,
+        addLog,
       });
       setFilesToUpload([...filesToUpload, ...writtenFiles]);
     })();
@@ -54,6 +56,7 @@ export const useCreatePackage = ({ files }: IUseCreatePackageProps) => {
         },
       ],
       devNotes,
+      addLog,
     });
 
     if (breadcrumbsFile) {

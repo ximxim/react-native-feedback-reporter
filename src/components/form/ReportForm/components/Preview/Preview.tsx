@@ -4,6 +4,8 @@ import React, {
   useCallback,
   useRef,
   useEffect,
+  useState,
+  useContext,
 } from 'react';
 
 import { MainPreview } from './MainPreview';
@@ -11,6 +13,7 @@ import { FilePreview } from './FilePreview';
 import type { IPreviewTab, IPreviewProps } from './Preview.types';
 
 import { Box, Tab } from '../../../../ui';
+import { Logs } from '../../../../contexts';
 import { useNavigation } from '../../../../../hooks';
 import type { IUploadFile } from '../../../../../utils';
 
@@ -19,17 +22,31 @@ export const Preview: FunctionComponent<IPreviewProps> = ({
   setFiles,
   allFilesToUpload,
 }) => {
+  const [shouldShowLogs, setShouldShowLogs] = useState<boolean>(false);
+  const { logs } = useContext(Logs);
   const TabsRef = useRef<FlatList>(null);
   const data: IPreviewTab[] = [
     { name: 'Preview' },
+    ...(shouldShowLogs
+      ? [{ name: 'Logs', content: logs, filetype: 'logs' } as any]
+      : []),
     ...allFilesToUpload
       .filter((file) => file.preview)
       .map((file) => ({ ...file, name: file.filename }))
       // @ts-ignore
       .sort((a, b) => new Date(a.preview) - new Date(b.preview)),
   ];
+  const handleMainPreviewLongPress = useCallback(() => {
+    setShouldShowLogs(true);
+  }, []);
   const PreviewComp = useCallback(
-    (ref: any) => <MainPreview ref={ref} {...{ files, setFiles }} />,
+    (ref: any) => (
+      <MainPreview
+        ref={ref}
+        {...{ files, setFiles }}
+        onLongPress={handleMainPreviewLongPress}
+      />
+    ),
     [files]
   );
   const FileViewer = useCallback(
