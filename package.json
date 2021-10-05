@@ -1,6 +1,6 @@
 {
   "name": "react-native-feedback-reporter",
-  "version": "0.4.11",
+  "version": "0.4.12",
   "description": "RNFR is on a mission to help developers get useful information from testers to help debug issues by automatically gathering of information and integrating with popular tools.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
