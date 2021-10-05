@@ -66,7 +66,7 @@ export const writeFiles = async ({
     }
   } catch (ex) {
     addLog({ level: 'error', message: 'Failed to write redux file' });
-    addLog({ level: 'error', message: (ex as string) });
+    addLog({ level: 'error', message: JSON.stringify(ex) });
   }
 
   /**
@@ -96,7 +96,7 @@ export const writeFiles = async ({
     }
   } catch (ex) {
     addLog({ level: 'error', message: 'Failed to write dev notes file' });
-    addLog({ level: 'error', message: (ex as string) });
+    addLog({ level: 'error', message: JSON.stringify(ex) });
   }
 
   /**
@@ -113,7 +113,7 @@ export const writeFiles = async ({
           });
         } catch (ex) {
           addLog({ level: 'error', message: `Failed to write ${file.filename}` });
-          addLog({ level: 'error', message: (ex as string) });
+          addLog({ level: 'error', message: JSON.stringify(ex) });
         }
       })
   );
