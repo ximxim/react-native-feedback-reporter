@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import android.util.SparseArray
@@ -355,29 +356,37 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
 
   @ReactMethod
   fun setValue(key: String, value: String, promise: Promise) {
-    val storage = RNFRStorage(reactContext);
-    val result = storage.setValue(key, value);
-    val code = result.getInt("code");
-    val error = result.getString("error");
+    if (Build.VERSION.SDK_INT >= 23) {
+      val storage = RNFRStorage(reactContext);
+      val result = storage.setValue(key, value);
+      val code = result.getInt("code");
+      val error = result.getString("error");
 
-    if (code == 200) {
-      promise.resolve(result);
+      if (code == 200) {
+        promise.resolve(result);
+      } else {
+        promise.reject(null, error);
+      }
     } else {
-      promise.reject(null, error);
+      promise.reject(null, "unsupported function below SDK 23");
     }
   }
 
   @ReactMethod
   fun getValue(key: String, promise: Promise) {
-    val storage = RNFRStorage(reactContext);
-    val result = storage.getValue(key);
-    val code = result.getInt("code");
-    val error = result.getString("error");
+    if (Build.VERSION.SDK_INT >= 23) {
+      val storage = RNFRStorage(reactContext);
+      val result = storage.getValue(key);
+      val code = result.getInt("code");
+      val error = result.getString("error");
 
-    if (code == 200) {
-      promise.resolve(result);
+      if (code == 200) {
+        promise.resolve(result);
+      } else {
+        promise.reject(null, error);
+      }
     } else {
-      promise.reject(null, error);
+      promise.reject(null, "unsupported function below SDK 23");
     }
   }
 
