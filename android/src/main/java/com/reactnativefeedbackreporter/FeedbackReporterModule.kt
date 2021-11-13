@@ -78,7 +78,7 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       var outputFile: File = createTempFile(context)
       val activity = currentActivity
       val uiManager = reactContext.getNativeModule(UIManagerModule::class.java)
-      uiManager.addUIBlock(ViewShot(
+      uiManager?.addUIBlock(ViewShot(
         tag, breadcrumbs, tapPoint, outputFile, reactContext, activity, promise)
       )
     } catch (ex: Throwable) {
@@ -316,18 +316,18 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       fOut = FileOutputStream(file)
 
       // 100 means no compression, the lower you go, the stronger the compression
-      image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+      image!!.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
       fOut!!.flush()
-      fOut.close()
+      fOut!!.close()
 
       // MediaStore.Images.Media.insertImage(reactContext.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
       val map = Arguments.createMap()
       map.putString("path", "file://$fullPath/$fileName")
-      map.putDouble("width", image.width.toDouble())
-      map.putDouble("height", image.height.toDouble())
+      map.putDouble("width", image!!.width.toDouble())
+      map.putDouble("height", image!!.height.toDouble())
       promise.resolve(map)
     } catch (e: java.lang.Exception) {
-      Log.e("E_RNThumnail_ERROR", e.message)
+      // Log.e("E_RNThumnail_ERROR", e.message)
       promise.reject("E_RNThumnail_ERROR", e)
     }
   }
