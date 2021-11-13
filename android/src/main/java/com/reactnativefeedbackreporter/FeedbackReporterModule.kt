@@ -78,7 +78,7 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       var outputFile: File = createTempFile(context)
       val activity = currentActivity
       val uiManager = reactContext.getNativeModule(UIManagerModule::class.java)
-      uiManager.addUIBlock(ViewShot(
+      uiManager?.addUIBlock(ViewShot(
         tag, breadcrumbs, tapPoint, outputFile, reactContext, activity, promise)
       )
     } catch (ex: Throwable) {
