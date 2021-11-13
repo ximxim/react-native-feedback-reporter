@@ -1,97 +1,86 @@
-import { Modal } from 'react-native';
-import { useForm, FormProvider } from 'react-hook-form';
-import { ThemeProvider } from 'styled-components';
-import { yupResolver } from '@hookform/resolvers/yup';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import { View, NativeModules, Dimensions, Platform } from 'react-native';
+import React, { FunctionComponent, useRef, useState } from 'react';
 
-import { theme } from '../theme';
-import { ScreenShot } from '../utils';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { Wrapper } from './FeedbackReporter.style';
 
 import {
-  ReportForm,
-  GlobalProps,
-  ModalHeader,
-  IReportFormValues,
-  ReportFormValidation,
+  useAuthState,
+  useModalHeaderLeftState,
+  useRNFRPermission,
+} from '../hooks';
+import {
   IFeedbackReporterProps,
+  GlobalProps,
+  ConsumerProps,
 } from '../components';
-import * as Styled from './FeedbackReporter.style';
+import { FeedbackReporterModal } from '../FeedbackReporterModal';
 
-const queryClient = new QueryClient();
+const module = NativeModules.FeedbackReporter;
+const captureRef = module.captureRef;
+const { scale } = Dimensions.get('screen');
 
 export const FeedbackReporter: FunctionComponent<IFeedbackReporterProps> = ({
+  children,
   mode = 'onScreenShot',
   ...props
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const reportFormProps = useForm<IReportFormValues>({
-    reValidateMode: 'onChange',
-    resolver: yupResolver(ReportFormValidation({ mode, ...props })),
-  });
-  const linkAccountsFormProps = useForm<IReportFormValues>({
-    reValidateMode: 'onChange',
-    resolver: yupResolver(ReportFormValidation({ mode, ...props })),
-  });
-  const handleClose = () => {
-    setIsModalOpen(false);
-    reportFormProps.reset();
-  };
-
-  useEffect(() => {
-    reportFormProps.register({ name: 'uri' });
-
-    return () => reportFormProps.unregister(['uri']);
-  }, [reportFormProps.register]);
-
-  useEffect(() => {
-    if (mode !== 'onScreenShot') return;
-    ScreenShot.startListener((res?: { uri: string; code: number }) => {
-      if (res?.code === 200) {
-        setIsModalOpen(true);
-        reportFormProps.setValue('uri', res.uri);
-      }
-    });
-  }, [mode]);
-
-  let selectedTheme;
-
-  if (!props.theme) {
-    selectedTheme = theme.base;
-  } else if (typeof props.theme === 'string') {
-    selectedTheme = theme[props.theme];
-  } else {
-    selectedTheme = props.theme;
-  }
-
-  const { header, ...modalProps } = props.modalProps || { header: {} };
+  const [isBusy, setIsBusy] = useState(false);
+  const { RNFRPermission, setRNFRPermission, isEnabled } = useRNFRPermission();
+  const viewRef = useRef<View>(null);
+  const authState = useAuthState();
+  const modalHeaderLeftState = useModalHeaderLeftState();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <GlobalProps.Provider value={{ mode, isModalOpen, ...props }}>
-        <ThemeProvider theme={selectedTheme}>
-          <Modal
-            visible={isModalOpen}
-            animationType="slide"
-            onDismiss={handleClose}
-            onRequestClose={handleClose}
-            {...modalProps}
+    <ConsumerProps.Provider
+      value={{
+        setRNFRPermission,
+        RNFRPermission: { ...RNFRPermission, isEnabled },
+      }}
+    >
+      <Wrapper
+        ref={viewRef}
+        collapsable={false}
+        onTouchStart={async ({ nativeEvent }) => {
+          if (!isEnabled || props.disableBreadrumbs || !viewRef || isModalOpen)
+            return;
+
+          try {
+            // @ts-ignore: _nativeTag causes ts error
+            await captureRef(viewRef.current._nativeTag, {
+              x: Platform.select({
+                android: nativeEvent.pageX * scale,
+                default: nativeEvent.pageX,
+              }),
+              y: Platform.select({
+                android: nativeEvent.pageY * scale,
+                default: nativeEvent.pageY,
+              }),
+            });
+          } catch (error) {
+            console.log((error as Error).message);
+          }
+        }}
+        {...props.containerViewProps}
+      >
+        {children}
+        {isEnabled && (
+          <GlobalProps.Provider
+            value={{
+              mode,
+              isBusy,
+              setIsBusy,
+              isModalOpen,
+              setIsModalOpen,
+              ...props,
+              ...authState,
+              ...modalHeaderLeftState,
+            }}
           >
-            <FormProvider {...reportFormProps}>
-              <FormProvider {...linkAccountsFormProps}>
-                <Styled.Wrapper>
-                  <ModalHeader
-                    heading={'Wanna talk about it?'}
-                    right={{ label: 'Close', onPress: handleClose }}
-                    {...header}
-                  />
-                  <ReportForm handleClose={handleClose} />
-                </Styled.Wrapper>
-              </FormProvider>
-            </FormProvider>
-          </Modal>
-        </ThemeProvider>
-      </GlobalProps.Provider>
-    </QueryClientProvider>
+            <FeedbackReporterModal />
+          </GlobalProps.Provider>
+        )}
+      </Wrapper>
+    </ConsumerProps.Provider>
   );
 };

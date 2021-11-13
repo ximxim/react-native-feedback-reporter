@@ -7,7 +7,9 @@ import type {
   ISegmentOptionsWrapperProps,
 } from './SegmentSelector.types';
 
-export const OptionsWrapper = styled(View)<ISegmentOptionsWrapperProps>`
+export const OptionsWrapper = styled(View)<
+  ISegmentOptionsWrapperProps & RNFRThemeType
+>`
   border-width: 1px;
   border-radius: 4px;
   flex-direction: row;
@@ -17,7 +19,7 @@ export const OptionsWrapper = styled(View)<ISegmentOptionsWrapperProps>`
     hasError ? theme.colors.brandDanger : theme.colors.brandSecondary};
 `;
 
-export const Option = styled(TouchableOpacity)<IOptionProps>`
+export const Option = styled(TouchableOpacity)<IOptionProps & RNFRThemeType>`
   flex-grow: 1;
   padding: 6px 16px;
   overflow: hidden;
@@ -26,7 +28,9 @@ export const Option = styled(TouchableOpacity)<IOptionProps>`
   border-right-width: ${({ isLast }) => (isLast ? 0 : 1)}px;
 `;
 
-export const OptionPulse = styled(Animated.View)<IOptionPulseProps>`
+export const OptionPulse = styled(Animated.View)<
+  IOptionPulseProps & RNFRThemeType
+>`
   width: 1px;
   height: 1px;
   align-self: center;
@@ -35,7 +39,7 @@ export const OptionPulse = styled(Animated.View)<IOptionPulseProps>`
     hasError ? theme.colors.brandDanger : theme.colors.brandSecondary};
 `;
 
-export const OptionLabel = styled.Text<IOptionLabelProps>`
+export const OptionLabel = styled.Text<IOptionLabelProps & RNFRThemeType>`
   z-index: 1;
   font-size: 16px;
   text-align: center;

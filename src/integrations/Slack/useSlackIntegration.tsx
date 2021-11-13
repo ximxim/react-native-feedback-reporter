@@ -1,30 +1,40 @@
 import { useFormContext } from 'react-hook-form';
-import React, { useContext, useEffect } from 'react';
-import { LayoutAnimation } from 'react-native';
+import { LayoutAnimation, View } from 'react-native';
+import React, { useContext, useEffect, useCallback } from 'react';
 
 import { SlackChannelsSelector } from './components';
 import { useSlackSubmission } from './useSlackSubmission.hook';
 import { useSlackChannels, useSlackSwitch } from './hooks';
+import { SlackComponents as SlackComponentsEnum } from './Slack.types';
 
 import { initSlackApi } from './slackApi.service';
 import {
   Alert,
   Typography,
   GlobalProps,
+  AttachmentAlert,
   IReportFormValues,
-  FormOrderEnum,
-  LinkingOrderEnum,
   SubmissionOrderEnum,
 } from '../../components';
 
 export const useSlackIntegration = () => {
   const slackChannels = useSlackChannels();
   const Switch = useSlackSwitch();
-  const { submitToSlack, ts, isAttaching } = useSlackSubmission();
+  const {
+    ts,
+    isDone,
+    isLoading,
+    isAttaching,
+    submitToSlack,
+  } = useSlackSubmission();
   const { slack } = useContext(GlobalProps);
   const { formState } = useFormContext<IReportFormValues>();
   const { watch } = useFormContext<IReportFormValues>();
   const isEnabled = watch('slackSwitch');
+  const order = slack?.order || [
+    SlackComponentsEnum.SlackSwitch,
+    SlackComponentsEnum.SlackChannelsSelector,
+  ];
 
   useEffect(() => {
     if (!slack) return;
@@ -35,16 +45,17 @@ export const useSlackIntegration = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isEnabled]);
 
-  const slackAccountComponents = {
-    [LinkingOrderEnum.Slack]: null,
-  };
-
-  const slackComponents = {
-    [FormOrderEnum.SlackSwitch]: Switch,
-    [FormOrderEnum.SlackChannelsSelector]: isEnabled && (
+  const components = {
+    [SlackComponentsEnum.SlackSwitch]: Switch,
+    [SlackComponentsEnum.SlackChannelsSelector]: isEnabled && (
       <SlackChannelsSelector options={slackChannels} />
     ),
   };
+
+  const slackComponents = useCallback(
+    (ref: any) => <View ref={ref}>{order.map((key) => components[key])}</View>,
+    [components]
+  );
 
   const slackConfirmationComponents = ts && (
     <>
@@ -52,14 +63,7 @@ export const useSlackIntegration = () => {
         Slack
       </Typography>
       <Typography textAlign="center">message sent</Typography>
-      <Alert
-        alert={
-          isAttaching
-            ? 'Uploading attachments in the background. Feel free to continue using the app. Dismissing this screen will not stop the uploads'
-            : 'Attachments uploaded'
-        }
-        isLoading={isAttaching}
-      />
+      <AttachmentAlert isAttaching={isAttaching} />
     </>
   );
 
@@ -76,10 +80,11 @@ export const useSlackIntegration = () => {
     submitToSlack: handleSubmit,
     slackComponents,
     slackFailureComponents,
-    slackAccountComponents,
+    isSlackEnabled: isEnabled,
+    isSlackLoading: isLoading,
+    isSlackUploadDone: isDone,
     slackConfirmationComponents: {
       [SubmissionOrderEnum.Slack]: slackConfirmationComponents,
     },
-    isSlackMessageCreated: !!ts,
   };
 };

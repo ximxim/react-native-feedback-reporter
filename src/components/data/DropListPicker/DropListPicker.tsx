@@ -105,8 +105,8 @@ export const DropListPicker = ({
       </Styled.LabelWrapper>
       <Typography
         variant="body1"
-        mx={14}
-        my={18.5}
+        px={14}
+        py={18.5}
         color={hasValue ? 'brandSecondary' : 'transparent'}
       >
         {options.find((option) => option.key === keySelected)?.value}

@@ -9,26 +9,14 @@ import type {
 export enum FormOrderEnum {
   Title = 'title',
   Description = 'description',
-  JIRAProjects = 'jira_projects',
-  JIRAIssueTypes = 'jira_issue_types',
+  Integrations = 'integrations',
   AdditionalInformation = 'additional_information',
-  JIRASwitch = 'jira_switch',
-  SlackSwitch = 'slack_switch',
-  SlackChannelsSelector = 'slack_channels_selector',
   ScreenShotAndExternalSource = 'screen_shot_and_external_sources',
 }
 
 export enum SubmissionOrderEnum {
   Reporting = 'reporting',
   Jira = 'jira',
-  Slack = 'slack',
-}
-
-export enum LinkingOrderEnum {
-  Title = 'title',
-  JIRAUsername = 'jira_username',
-  JIRAPassword = 'jira_password',
-  JIRAInfo = 'jira_info',
   Slack = 'slack',
 }
 
@@ -48,8 +36,8 @@ export interface IReportFormValues
   description: string;
 }
 
-export interface IScreens extends KeyboardAvoidingScrollViewProps {
-  name: 'bugReport' | 'submission' | 'linkAccounts';
+export interface IScreens extends Partial<KeyboardAvoidingScrollViewProps> {
+  name: 'bugReport' | 'submission';
   components: Record<string, ReactNode>;
-  order: FormOrderEnum[] | SubmissionOrderEnum[] | LinkingOrderEnum[];
+  order: FormOrderEnum[] | SubmissionOrderEnum[];
 }

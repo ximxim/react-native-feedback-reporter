@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { ModalProps } from 'react-native';
+import type { ModalProps, ViewProps } from 'react-native';
 
 import type { theme } from '../../../theme';
 import type { IModalHeaderProps } from '../../ui';
@@ -9,10 +9,11 @@ import type {
   SlackIntegrationProps,
 } from '../../../integrations';
 
-interface IAsyncStorageProps {
-  getItem: (key: string) => Promise<unknown>;
-  setItem: (key: string, value: string) => Promise<unknown>;
-}
+export type DevNotesType =
+  | string
+  | undefined
+  | (() => string)
+  | (() => Promise<string>);
 
 export interface IFeedbackReporterProps {
   mode?: 'onScreenShot';
@@ -25,7 +26,7 @@ export interface IFeedbackReporterProps {
   /**
    * Dev notes
    */
-  devNotes?: string | (() => Promise<string>) | (() => string);
+  devNotes?: DevNotesType;
 
   /**
    * JIRA Integration
@@ -58,7 +59,17 @@ export interface IFeedbackReporterProps {
   order?: FormOrderEnum[];
 
   /**
-   * Async storage plugin
+   * Container view props
    */
-  asyncStorage?: IAsyncStorageProps;
+  containerViewProps?: ViewProps;
+
+  /**
+   * disableBreadrumbs
+   */
+  disableBreadrumbs?: boolean;
+
+  /**
+   * hideAttachments
+   */
+  hideAttachments?: boolean;
 }

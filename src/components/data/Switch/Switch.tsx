@@ -1,9 +1,10 @@
 import React, { useState, useEffect, FunctionComponent } from 'react';
+import { View } from 'react-native';
 
 import * as Styled from './Switch.style';
 import type { ISwitchProps } from './Switch.types';
 
-import { Typography, Container, Spacing } from '../../ui';
+import { Typography, Spacing } from '../../ui';
 
 export const Switch: FunctionComponent<ISwitchProps> = ({
   label,
@@ -49,12 +50,12 @@ export const Switch: FunctionComponent<ISwitchProps> = ({
   );
 
   return (
-    <Container>
+    <View>
       <Styled.Wrapper>
         <Styled.IconWrapper>{Icon}</Styled.IconWrapper>
         {Label}
       </Styled.Wrapper>
       {Error}
-    </Container>
+    </View>
   );
 };

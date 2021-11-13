@@ -1,0 +1,345 @@
+---
+id: FeedbackReporter
+title: FeedbackReporter
+sidebar_label: FeedbackReporter
+---
+
+<!-- ------------------------ MODE ------------------------ -->
+
+## `mode`
+
+Use this prop to set when feedback reporter modal should appear.
+
+| Type |
+| ---- |
+| 'onScreenShot' |
+
+**Example**:
+
+```js
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter mode='onScreenShot'/>
+```
+
+<br />
+<br />
+
+<!-- ------------------------ THEME ------------------------ -->
+
+## `theme`
+
+Use this prop to customize the `colors` and `fonts`. See [theme documentation](theme) for more information.
+
+**Example**:
+
+```js
+import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  theme={{
+    ...theme.base,
+    colors: {
+      ...theme.base.colors,
+      brandPrimary: '#feda4a',
+      brandSecondary: 'black',
+    },
+  }}
+/>
+```
+
+<br />
+<br />
+
+<!-- ------------------------ MODAL PROPS ------------------------ -->
+
+## `modalProps`
+
+Use this prop to override the modal behaviour and elements in the modal header.
+
+### `header`
+
+| Prop | Type |
+| ---- | ---- |
+| left | `{ label?: string; onPress?: () => void; component?: ReactNode; }` |
+| heading | string |
+| right | `{ label?: string; onPress?: () => void; component?: ReactNode; }` |
+
+**Example**:
+
+```js
+import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  modalProps={{
+    header: { heading: 'Custom Heading' },
+    // other react native modal props: https://reactnative.dev/docs/modal
+  }}
+/>
+```
+
+<br />
+<br />
+
+<!-- ------------------------ SLACK ------------------------ -->
+
+## `slack`
+
+Use this prop to enable slack integration. See [slack documentation](slack) for more information.
+
+### `botToken *`
+
+See [slack documentation](slack) on how to get `botToken`.
+
+| Type |
+| ---- |
+| string |
+
+### `channel`
+
+Use this prop to set default slack public channel.
+
+| Type |
+| ---- |
+| string |
+
+### `order`
+
+Use this prop to order slack components, exclude any control that you wish to hide from this array.
+
+| Type | Default |
+| ---- | ---- |
+| array of enums(`'slack_switch'`, `'slack_channels_selector'`) | `['slack_switch', 'slack_channels_selector']` |
+
+**Example**:
+
+```js
+import { FeedbackReporter, SlackComponents } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  slack={{
+    channel: 'random',
+    botToken: SLACK_BOT_TOKEN,
+    order: [
+      SlackComponents.SlackSwitch,
+      SlackComponents.SlackChannelsSelector,
+    ],
+  }}
+/>
+```
+
+<br />
+<br />
+
+<!-- ------------------------ JIRA ------------------------ -->
+
+## `jira`
+
+Use this prop to enable slack integration. See [JIRA documentation](jira) for more information.
+
+### `domain *`
+
+See [JIRA documentation](jira) on how to get `domain`.
+
+| Type |
+| ---- |
+| string |
+
+### `username`
+
+See [JIRA documentation](jira) on how to get `username`.
+
+| Type |
+| ---- |
+| string |
+
+### `token`
+
+See [JIRA documentation](jira) on how to get `token`.
+
+| Type |
+| ---- |
+| string |
+
+### `projectField`
+
+Use this prop to set a default project to submit JIRA issue to.
+
+| Type |
+| ---- |
+| `{ defaultValue: string }` |
+
+### `issueTypeField`
+
+Use this prop to set a default issue type to submit JIRA issue using.
+
+| Type |
+| ---- |
+| `{ defaultValue: string }` |
+
+### `order`
+
+Use this prop to order jira components, exclude any control that you wish to hide from this array.
+
+| Type | Default |
+| ---- | ---- |
+| array of enums(`'jira_switch'`, `'jira_projects'`, `'jira_issue_types'`, `'jira_account_linking'`) | `['jira_switch', 'jira_projects', 'jira_issue_types', 'jira_account_linking']` |
+
+### `meta`
+
+Use this prop to pass meta data that can modify the jira issue. Look at the options [here](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post-example)
+
+| Type | Default |
+| ---- | ---- |
+| { labels: string[] } | undefined |
+
+**Example**:
+
+```js
+import { FeedbackReporter, JIRAComponents } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  jira={{
+    domain: JIRA_DOMAIN, // https://{ORGANIZATION}.atlassian.net
+    issueTypeField: {
+      defaultValue: 'story',
+    },
+    projectField: {
+      defaultValue: 'apitest',
+    },
+    order: [
+      JIRAComponents.JIRASwitch,
+      JIRAComponents.JIRAProjects,
+      JIRAComponents.JIRAIssueTypes,
+      JIRAComponents.JIRAAccountLinking,
+    ],
+    meta: {
+      labels: ['test', 'this'],
+    },
+  }}
+/>
+```
+
+<br />
+<br />
+
+<!-- ------------------------ EXTRA SOURCE ------------------------ -->
+
+## `extraSource`
+
+Use this prop to enable extra attachments using [react-native-image-crop-picker](https://github.com/ivpusic/react-native-image-crop-picker) package.
+
+| Type |
+| ---- |
+| `'react-native-image-crop-picker'` |
+
+**Example**:
+
+```js
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  extraSource="react-native-image-crop-picker"
+/>
+```
+
+<br />
+<br />
+
+<!-- ------------------------ DEV NOTES ------------------------ -->
+
+## `devNotes`
+
+Use this prop to add developer notes to any feedback report.
+
+**Note: Following sample uses react-native-device-info library to capture device information.**
+
+| Type |
+| ---- |
+| `string` or `(() => Promise<string>)` or `(() => string)` |
+
+
+**Example**:
+
+```js
+import DeviceInfo from 'react-native-device-info';
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter
+  devNotes={async () => {
+    const [
+      deviceName,
+      ipAddress,
+      manufacturer,
+      powerState,
+    ] = await Promise.all([
+      DeviceInfo.getDeviceName(),
+      DeviceInfo.getIpAddress(),
+      DeviceInfo.getManufacturer(),
+      DeviceInfo.getPowerState(),
+    ]);
+
+    return `
+Brand: ${DeviceInfo.getBrand()}
+Build Number: ${DeviceInfo.getBuildNumber()}
+Bundle ID: ${DeviceInfo.getBundleId()}
+Device ID: ${DeviceInfo.getDeviceId()}
+Device Name: ${deviceName}
+IP Address: ${ipAddress}
+Manufacturer: ${manufacturer}
+Model: ${DeviceInfo.getModel()}
+Power State: ${JSON.stringify(powerState)}
+Readable Version: ${DeviceInfo.getReadableVersion()}
+System Name: ${DeviceInfo.getSystemName()}
+Systerm Version: ${DeviceInfo.getSystemVersion()}
+Unique ID: ${DeviceInfo.getUniqueId()}
+Version: ${DeviceInfo.getVersion()}
+    `;
+  }}
+/>
+```
+
+<br />
+<br />
+
+<!-- ------------------------ DISABLE BREADCRUMBS ------------------------ -->
+
+## `disableBreadrumbs`
+
+Use this prop to disable breadcrumbs collection.
+
+| Type |
+| ---- |
+| `boolean` |
+
+**Example**:
+
+```js
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter disableBreadrumbs />
+```
+
+<br />
+<br />
+
+<!-- ------------------------ HIDE ATTACHMENTS ------------------------ -->
+
+## `hideAttachments`
+
+Use this prop to hide attachments tab.
+
+| Type |
+| ---- |
+| `boolean` |
+
+**Example**:
+
+```js
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+<FeedbackReporter hideAttachments />
+```
+
+<br />
+<br />

@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacity, Dimensions, NativeModules } from 'react-native';
-import RNImagePicker from 'react-native-image-crop-picker';
 
 import { metrics } from '../../../../../utils';
 import type { IFile } from '../../../../../utils';
@@ -53,8 +52,9 @@ export const ImagePicker: FunctionComponent<{
   return (
     <TouchableOpacity
       onPress={async () => {
+        const RNImagePicker = NativeModules.ImageCropPicker;
         const res = await RNImagePicker.openPicker({ multiple: true });
-        const files = res.map(({ filename, path, mime: filetype }) => ({
+        const files = res.map(({ filename, path, mime: filetype }: any) => ({
           name: 'file',
           filename: filename || new Date().toString(),
           filepath: path,

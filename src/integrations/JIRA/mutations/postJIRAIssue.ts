@@ -6,12 +6,16 @@ export interface IPostJIRAIssueResponse {
   self: string;
 }
 
+export interface IPostJiraMeta {
+  labels?: string[];
+}
+
 interface IPostJIRAIssueProps {
   title: string;
-  devNotes?: string;
   projectId: string;
   issueTypeId: string;
   description: string;
+  meta?: IPostJiraMeta;
 }
 
 export const postJIRAIssue = ({
@@ -19,7 +23,7 @@ export const postJIRAIssue = ({
   issueTypeId,
   description,
   title,
-  devNotes,
+  meta,
 }: IPostJIRAIssueProps) => {
   const content = [];
   content.push({
@@ -32,18 +36,6 @@ export const postJIRAIssue = ({
     ],
   });
 
-  if (devNotes) {
-    content.push({
-      type: 'paragraph',
-      content: [
-        {
-          text: devNotes,
-          type: 'text',
-        },
-      ],
-    });
-  }
-
   return JIRAApi.post<IPostJIRAIssueResponse>('issue', {
     update: {},
     fields: {
@@ -55,7 +47,8 @@ export const postJIRAIssue = ({
         version: 1,
         content,
       },
-      labels: ['feedback-reporter'],
+      ...meta,
+      labels: ['rnfr', ...(meta?.labels || [])],
     },
   });
 };

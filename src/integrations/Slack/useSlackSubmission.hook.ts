@@ -8,30 +8,38 @@ import {
   postSlackConversationJoin,
 } from './mutations';
 
-import type { IFile } from '../../utils';
+import type { IUploadFile } from '../../utils';
 import { IReportFormValues, GlobalProps } from '../../components';
 
 export const useSlackSubmission = () => {
-  const [files, setFiles] = useState<IFile[]>([]);
-  const { data: joinConversationRes, mutate: joinConversation } = useMutation(
-    postSlackConversationJoin
-  );
-  const { mutate: postMessage, data: messageRes } = useMutation(
-    postSlackMessage
-  );
-  const { mutate: postFile, isLoading: isAttaching } = useMutation(
-    postSlackFile
-  );
+  const [filesToUpload, setFilesToUpload] = useState<IUploadFile[]>([]);
+  const {
+    data: joinConversationRes,
+    mutate: joinConversation,
+    isLoading: isJoiningConversation,
+  } = useMutation(postSlackConversationJoin);
+  const {
+    mutate: postMessage,
+    data: messageRes,
+    isLoading: isPostingMessage,
+  } = useMutation(postSlackMessage);
+  const {
+    mutate: postFile,
+    isLoading: isAttaching,
+    data: attachments,
+  } = useMutation(postSlackFile);
   const { getValues } = useFormContext<IReportFormValues>();
-  const { slack, devNotes } = useContext(GlobalProps);
-  const { uri: content, slackChannel } = getValues();
+  const { slack } = useContext(GlobalProps);
+  const { slackChannel } = getValues();
 
   useEffect(() => {
     const ts = messageRes?.data.ts;
 
     if (!ts || !slack) return;
 
-    postFile({ files, content, ts, channel: slackChannel });
+    (async () => {
+      postFile({ filesToUpload, ts, channel: slackChannel });
+    })();
   }, [messageRes]);
 
   useEffect(() => {
@@ -39,20 +47,17 @@ export const useSlackSubmission = () => {
 
     (async () => {
       const { title, description } = getValues();
-      const generatedDevNotes =
-        typeof devNotes === 'string' ? devNotes : await devNotes?.();
 
       postMessage({
         title,
         description,
         channel: slackChannel,
-        devNotes: generatedDevNotes,
       });
     })();
   }, [joinConversationRes]);
 
-  const submitToSlack = async (files: IFile[]) => {
-    setFiles(files);
+  const submitToSlack = async (files: IUploadFile[]) => {
+    setFilesToUpload(files);
 
     if (!slack) return;
 
@@ -63,5 +68,7 @@ export const useSlackSubmission = () => {
     submitToSlack,
     isAttaching,
     ts: messageRes?.data.ts,
+    isDone: Array.isArray(attachments),
+    isLoading: isPostingMessage || isJoiningConversation,
   };
 };

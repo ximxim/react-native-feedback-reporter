@@ -1,34 +1,56 @@
-import React from 'react';
-import { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { useStorage } from '../../../hooks';
 import { IReportFormValues, GlobalProps, Switch } from '../../../components';
 
 export const useJIRASwitch = () => {
-  const { jira } = useContext(GlobalProps);
+  const [isReady, setIsReady] = useState<boolean>(false);
+  const { jira, authState } = useContext(GlobalProps);
+  const { setItem, getItem } = useStorage({
+    key: 'FEEDBACK_REPORTER_JIRA_SWITCH',
+  });
   const {
-    setValue,
     register,
+    setValue,
+    getValues,
     unregister,
   } = useFormContext<IReportFormValues>();
 
   useEffect(() => {
-    if (!jira) return;
+    (async () => {
+      if (!jira) return;
 
-    register('JIRASwitch');
-    setValue('JIRASwitch', !!jira);
+      register('JIRASwitch');
 
+      if (!(authState.jira?.token || jira.token)) {
+        return setValue('JIRASwitch', false);
+      }
+
+      try {
+        const value = await getItem();
+        setValue('JIRASwitch', value ? value === 'true' : !!jira);
+      } catch (e) {
+        setValue('JIRASwitch', !!jira);
+      } finally {
+        setIsReady(true);
+      }
+    })();
     return () => {
       unregister(['JIRASwitch']);
     };
-  }, [register]);
+  }, [register, authState]);
 
   return (
-    !!jira && (
+    !!jira &&
+    isReady && (
       <Switch
-        onChange={(val) => setValue('JIRASwitch', val)}
+        onChange={(val) => {
+          setItem(val ? 'true' : 'false');
+          setValue('JIRASwitch', val);
+        }}
         label="Enable JIRA integration"
-        defaultValue={!!jira}
+        defaultValue={getValues('JIRASwitch')}
       />
     )
   );

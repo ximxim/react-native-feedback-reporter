@@ -1,58 +1,32 @@
 import React, { useContext, useEffect } from 'react';
-import { Linking, LayoutAnimation } from 'react-native';
-import { useFormContext } from 'react-hook-form';
+import { Linking } from 'react-native';
 
 import { initJIRAApi } from '../JIRAApi.service';
-import { ProjectSelector, IssueTypeSelector } from '../components';
 import { useJIRASubmission } from './useJIRASubmission.hook';
-import { useJIRAProjects } from './useJIRAProjects.hook';
-import { useJIRAIssueType } from './useJIRAIssueType.hook';
-import { useJIRASwitch } from './useJIRASwitch.hook';
+import { useJIRAComponents } from './useJIRAComponents.hook';
 
 import {
-  Alert,
   Typography,
   GlobalProps,
-  FormOrderEnum,
-  LinkingOrderEnum,
-  IReportFormValues,
+  AttachmentAlert,
   SubmissionOrderEnum,
 } from '../../../components';
 
 export const useJIRAIntegration = () => {
-  const projectOptions = useJIRAProjects();
-  const issueTypeOptions = useJIRAIssueType();
-  const Switch = useJIRASwitch();
-  const { issue, submitToJIRA, isAttaching } = useJIRASubmission();
-  const { jira } = useContext(GlobalProps);
-  const isJIRAIssueCreated = jira ? !!issue : true;
-  const { watch } = useFormContext<IReportFormValues>();
-  const isEnabled = watch('JIRASwitch');
+  const { isEnabled, JIRAComponents } = useJIRAComponents();
+  const {
+    issue,
+    isDone,
+    isLoading,
+    isAttaching,
+    submitToJIRA,
+  } = useJIRASubmission();
+  const { jira, authState } = useContext(GlobalProps);
 
   useEffect(() => {
     if (!jira) return;
-    initJIRAApi(jira);
-  }, []);
-
-  useEffect(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  }, [isEnabled]);
-
-  const JIRAAccountComponents = {
-    [LinkingOrderEnum.JIRAUsername]: null,
-    [LinkingOrderEnum.JIRAPassword]: null,
-    [LinkingOrderEnum.JIRAInfo]: null,
-  };
-
-  const JIRAComponents = {
-    [FormOrderEnum.JIRASwitch]: Switch,
-    [FormOrderEnum.JIRAProjects]: isEnabled && (
-      <ProjectSelector options={projectOptions} />
-    ),
-    [FormOrderEnum.JIRAIssueTypes]: isEnabled && (
-      <IssueTypeSelector options={issueTypeOptions} />
-    ),
-  };
+    initJIRAApi({ ...jira, jira: authState.jira });
+  }, [authState]);
 
   const JIRAConfirmationComponents = issue && (
     <>
@@ -73,14 +47,7 @@ export const useJIRAIntegration = () => {
           {issue.key}
         </Typography>
       </Typography>
-      <Alert
-        alert={
-          isAttaching
-            ? 'Uploading attachments in the background. Feel free to continue using the app. Dismissing this screen will not stop the uploads'
-            : 'Attachments uploaded'
-        }
-        isLoading={isAttaching}
-      />
+      <AttachmentAlert isAttaching={isAttaching} />
     </>
   );
 
@@ -89,8 +56,9 @@ export const useJIRAIntegration = () => {
   return {
     submitToJIRA: handleSubmit,
     JIRAComponents,
-    isJIRAIssueCreated,
-    JIRAAccountComponents,
+    isJIRALoading: isLoading,
+    isJIRAUploadDone: isDone,
+    isJIRAEnabled: isEnabled,
     JIRAConfirmationComponents: {
       [SubmissionOrderEnum.Jira]: JIRAConfirmationComponents,
     },

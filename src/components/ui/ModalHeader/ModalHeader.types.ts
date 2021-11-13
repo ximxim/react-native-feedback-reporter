@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react';
 import type { ViewProps } from 'react-native';
 
-interface IButtonProps {
+export interface IModalButtonProps {
   label?: string;
   onPress?: () => void;
   component?: ReactNode;
 }
 
 export interface IModalHeaderProps extends ViewProps {
-  left?: IButtonProps;
+  left?: IModalButtonProps;
   heading: string;
-  right?: IButtonProps;
+  right?: IModalButtonProps;
 }

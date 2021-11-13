@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 
 import type { IWrapperProps } from './Avatar.types';
 
-export const Wrapper = styled(View)<IWrapperProps>`
+export const Wrapper = styled(View)<IWrapperProps & RNFRThemeType>`
   overflow: hidden;
   align-items: center;
   justify-content: center;
@@ -18,7 +18,7 @@ export const Image = styled.Image<{ size: number }>`
   height: ${({ size }) => size}px;
 `;
 
-export const Initials = styled.Text<{ size: number }>`
+export const Initials = styled.Text<{ size: number } & RNFRThemeType>`
   font-size: ${({ size }) => size / 2}px;
   color: ${({ theme }) => theme.colors.brandPrimary};
 `;

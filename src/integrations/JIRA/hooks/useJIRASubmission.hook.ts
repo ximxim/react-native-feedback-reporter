@@ -4,34 +4,36 @@ import { useMutation } from 'react-query';
 
 import { postJIRAIssue, postJIRAIssueAttachents } from '../mutations';
 
-import type { IFile } from '../../../utils';
+import type { IUploadFile } from '../../../utils';
 import { IReportFormValues, GlobalProps } from '../../../components';
 
 export const useJIRASubmission = () => {
-  const [files, setFiles] = useState<IFile[]>([]);
-  const { mutate: postIssue, data: issueRes } = useMutation(postJIRAIssue);
-  const { mutate: postIssueAttachments, isLoading: isAttaching } = useMutation(
-    postJIRAIssueAttachents
+  const [filesToUpload, setFilesToUpload] = useState<IUploadFile[]>([]);
+  const { mutate: postIssue, data: issueRes, isLoading } = useMutation(
+    postJIRAIssue
   );
+  const {
+    mutate: postIssueAttachments,
+    isLoading: isAttaching,
+    data: attachments,
+  } = useMutation(postJIRAIssueAttachents);
   const { getValues } = useFormContext<IReportFormValues>();
-  const { jira, devNotes } = useContext(GlobalProps);
+  const { jira } = useContext(GlobalProps);
 
   useEffect(() => {
     // TODO: handle ticket creation failure
     if (!issueRes?.data.key || !jira) return;
-    const { uri } = getValues();
 
     postIssueAttachments({
-      files,
-      content: uri,
+      filesToUpload,
       key: issueRes.data.key,
     });
   }, [issueRes]);
 
-  const submitToJIRA = async (fs: IFile[]) => {
+  const submitToJIRA = async (fs: IUploadFile[]) => {
     if (!jira) return;
 
-    setFiles(fs);
+    setFilesToUpload(fs);
     const {
       title,
       description,
@@ -39,21 +41,22 @@ export const useJIRASubmission = () => {
       JIRAIssueType: issueTypeId,
     } = getValues();
 
-    console.log(projectId, issueTypeId);
-
     if (!jira || !projectId || !issueTypeId) return;
-
-    const generatedDevNotes =
-      typeof devNotes === 'string' ? devNotes : await devNotes?.();
 
     postIssue({
       title,
       projectId,
       issueTypeId,
       description,
-      devNotes: generatedDevNotes,
+      meta: jira.meta,
     });
   };
 
-  return { issue: issueRes?.data, submitToJIRA, isAttaching };
+  return {
+    issue: issueRes?.data,
+    submitToJIRA,
+    isAttaching,
+    isLoading,
+    isDone: attachments?.statusCode === 200,
+  };
 };

@@ -1,0 +1,102 @@
+---
+id: usage
+title: Usage
+sidebar_label: Usage
+---
+
+### Basic
+
+```jsx
+import * as React from 'react';
+import { FeedbackReporter } from 'react-native-feedback-reporter';
+
+export default function App() {
+  return (
+    <FeedbackReporter>
+      <App />
+    </FeedbackReporter>
+  );
+}
+```
+
+### Advanced
+
+```jsx
+import * as React from 'react';
+import DeviceInfo from 'react-native-device-info';
+import { JIRA_DOMAIN, SLACK_BOT_TOKEN } from '@env';
+import { FeedbackReporter, theme } from 'react-native-feedback-reporter';
+
+export default function App() {
+  const handleShow = () => console.log('Modal appeared');
+
+  return (
+    <FeedbackReporter
+      theme={{
+        ...theme.base,
+        colors: {
+          ...theme.base.colors,
+          brandPrimary: '#feda4a',
+          brandSecondary: 'black',
+        },
+      }}
+      modalProps={{
+        onShow: handleShow,
+        header: { heading: 'Custom Heading' },
+      }}
+      slack={{
+        channel: 'random',
+        botToken: SLACK_BOT_TOKEN, // Read Slack inegration doc to get this token for your slack team
+      }}
+      jira={{
+        domain: JIRA_DOMAIN, // https://{ORGANIZATION}.atlassian.net
+        issueTypeField: {
+          defaultValue: 'story',
+          isVisible: false,
+        },
+        projectField: {
+          defaultValue: 'apitest',
+        },
+      }}
+      extraSource="react-native-image-crop-picker"
+      devNotes={async () => {
+        const [
+          deviceName,
+          ipAddress,
+          manufacturer,
+          powerState,
+        ] = await Promise.all([
+          DeviceInfo.getDeviceName(),
+          DeviceInfo.getIpAddress(),
+          DeviceInfo.getManufacturer(),
+          DeviceInfo.getPowerState(),
+        ]);
+
+        return `
+Brand: ${DeviceInfo.getBrand()}
+Build Number: ${DeviceInfo.getBuildNumber()}
+Bundle ID: ${DeviceInfo.getBundleId()}
+Device ID: ${DeviceInfo.getDeviceId()}
+Device Name: ${deviceName}
+IP Address: ${ipAddress}
+Manufacturer: ${manufacturer}
+Model: ${DeviceInfo.getModel()}
+Power State: ${JSON.stringify(powerState)}
+Readable Version: ${DeviceInfo.getReadableVersion()}
+System Name: ${DeviceInfo.getSystemName()}
+Systerm Version: ${DeviceInfo.getSystemVersion()}
+Unique ID: ${DeviceInfo.getUniqueId()}
+Version: ${DeviceInfo.getVersion()}
+        `;
+      }}
+    >
+      <App />
+    </FeedbackReporter>
+  );
+}
+```
+
+### More
+
+For more examples, [head over to API section.](FeedbackReporter)
+

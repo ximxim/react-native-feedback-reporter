@@ -1,7 +1,10 @@
 import { Animated } from 'react-native';
 import styled from 'styled-components/native';
 
-export const Wrapper = styled.View<{ isFocused: boolean; hasError: boolean }>`
+export const Wrapper = styled.View<
+  { isFocused: boolean; hasError: boolean } & RNFRThemeType
+>`
+  flex-grow: 1;
   margin: 8px;
   border-width: 1px;
   border-radius: 4px;
@@ -13,9 +16,9 @@ export const Wrapper = styled.View<{ isFocused: boolean; hasError: boolean }>`
   }};
 `;
 
-export const TextInput = styled.TextInput.attrs(({ theme }) => ({
+export const TextInput = styled.TextInput.attrs(({ theme }: RNFRThemeType) => ({
   placeholderTextColor: theme.colors.brandMuted,
-}))<{ hasValue: boolean }>`
+}))<{ hasValue: boolean } & RNFRThemeType>`
   font-size: 16px;
   font-weight: 400;
   padding: 18.5px 14px;

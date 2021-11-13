@@ -1,0 +1,38 @@
+---
+id: install
+title: Installation
+sidebar_label: Installation
+---
+
+### Get library
+
+With npm:
+```bash
+npm install react-native-feedback-reporter react-native-share
+```
+
+With Yarn:
+```bash
+yarn add react-native-feedback-reporter react-native-share
+```
+
+### Link
+
+#### Android & iOS
+
+- **React Native 0.60+**
+
+[CLI autolink feature](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) links the module while building the app. Follow setup steps for [react-native-share](https://react-native-share.github.io/react-native-share/docs/install).
+
+On iOS, use CocoaPods to add the native `FeedbackReporter` to your project:
+
+```bash
+npx pod-install
+```
+
+- **React Native <= 0.59**
+
+
+```bash
+react-native link react-native-feedback-reporter
+```
