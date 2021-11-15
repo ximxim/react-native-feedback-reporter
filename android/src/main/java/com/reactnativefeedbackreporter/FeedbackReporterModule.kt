@@ -316,18 +316,20 @@ class FeedbackReporterModule(val reactContext: ReactApplicationContext) : ReactC
       fOut = FileOutputStream(file)
 
       // 100 means no compression, the lower you go, the stronger the compression
-      image!!.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+      image?.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
       fOut!!.flush()
-      fOut!!.close()
+      fOut.close()
 
       // MediaStore.Images.Media.insertImage(reactContext.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
       val map = Arguments.createMap()
       map.putString("path", "file://$fullPath/$fileName")
-      map.putDouble("width", image!!.width.toDouble())
-      map.putDouble("height", image!!.height.toDouble())
+      if (image != null) {
+        map.putDouble("width", image.width.toDouble())
+        map.putDouble("height", image.height.toDouble())
+      }
       promise.resolve(map)
     } catch (e: java.lang.Exception) {
-      // Log.e("E_RNThumnail_ERROR", e.message)
+      e.message?.let { Log.e("E_RNThumnail_ERROR", it) }
       promise.reject("E_RNThumnail_ERROR", e)
     }
   }
